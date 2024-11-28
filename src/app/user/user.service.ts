@@ -28,7 +28,7 @@ export class UserService implements OnDestroy {
 	};
 	register = (email: string, password: string) => {
 		try {
-			return signInWithEmailAndPassword(auth, email, password);
+			return createUserWithEmailAndPassword(auth, email, password);
 		} catch (err) {
 			console.log('Register Error:' + (err as Error).message);
 		}
