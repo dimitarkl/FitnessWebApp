@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { UserService } from '../user.service';
-import { Router } from '@angular/router';
-import { auth } from '../../../lib/firebase';
+import { Router, RouterLink } from '@angular/router';
+
 @Component({
 	selector: 'app-login',
 	standalone: true,
-	imports: [FormsModule],
+	imports: [RouterLink, FormsModule],
 	templateUrl: './login.component.html',
 	styleUrl: './login.component.css',
 })
