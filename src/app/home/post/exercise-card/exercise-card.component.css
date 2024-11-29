@@ -11,8 +11,7 @@
 	margin-right: 40px;
 }
 .card-content {
-	margin-left: 5px;
-	margin-right: 5px;
+	margin: 10px;
 	display: flex;
 	flex-direction: row;
 	margin-bottom: 10px;

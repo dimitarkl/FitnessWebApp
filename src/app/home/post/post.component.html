@@ -16,23 +16,15 @@
 					</g>
 				</svg>
 
-				<h1>Card One</h1>
+				<h1 class="text-3xl">{{ card?.username }}</h1>
 			</div>
-			<div class="card-main-content">
-				<p>
-					Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-					Fugiat sequi eum, consectetur labore sapiente iusto quisquam
-					nesciunt aut quas id eaque nihil quibusdam dolor odio modi,
-					voluptates ducimus cum facere. Lorem, ipsum dolor sit amet
-					consectetur adipisicing elit. Fugiat sequi eum, consectetur
-					labore sapiente iusto quisquam nesciunt aut quas id eaque
-					nihil quibusdam dolor odio modi, voluptates ducimus cum
-					facere. Lorem, ipsum dolor sit amet consectetur adipisicing
-					elit. Fugiat sequi eum, consectetur labore sapiente iusto
-					quisquam nesciunt aut quas id eaque nihil quibusdam dolor
-					odio modi, voluptates ducimus cum facere.
-				</p>
+			<div class="card-description">
+				<p>{{ card?.workout }}</p>
 			</div>
+			<app-exercise-card />
+			<app-exercise-card />
+			<app-exercise-card />
+			<p>Click To Check The Full Workout</p>
 		</div>
 	</div>
 </div>
