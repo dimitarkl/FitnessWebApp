@@ -11,11 +11,18 @@ import { CreateExerciseComponent } from './create-exercise/create-exercise.compo
 })
 export class CreateWorkoutComponent {
 	hidden = false;
+	exercises = [
+		{ name: 'benchPress' },
+		{ name: 'pullUps' },
+		{ name: 'push ups' },
 	];
 	create = (form: NgForm) => {
 		console.log(form);
 	};
 	switchForm = () => {
 		this.hidden = !this.hidden;
+	};
+	addExercise = () => {
+		this.exercises.push({ name: 'benchPress' });
 	};
 }

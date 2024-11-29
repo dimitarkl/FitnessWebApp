@@ -7,6 +7,11 @@
 		(ngSubmit)="create(form)">
 		<fieldset>
 			<h2>Workout</h2>
+			@for(exercise of exercises;track exercise.name){
+			<app-create-exercise
+				[name]="exercise.name"
+				[addExercise]="addExercise" />
+			}
 
 			<button
 				[disabled]="form.invalid"
