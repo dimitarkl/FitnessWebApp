@@ -1,0 +1,31 @@
+.card-container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	box-sizing: border-box;
+	outline-color: black;
+	outline: 10px;
+	margin-bottom: 10px;
+	margin-top: 10px;
+	margin-left: 40px;
+	margin-right: 40px;
+}
+.card-content {
+	margin-left: 5px;
+	margin-right: 5px;
+	display: flex;
+	flex-direction: row;
+	margin-bottom: 10px;
+	text-align: center;
+	font-size: large;
+	color: white;
+}
+.card {
+	background-color: #0000e4;
+	border-radius: 10px;
+	box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.5);
+}
+h1 {
+	font-size: x-large;
+	margin-left: 10px;
+}
