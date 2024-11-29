@@ -1,0 +1,15 @@
+.error-message {
+	background-color: #ff4c4c;
+	color: white;
+	padding: 15px 20px;
+	border-radius: 5px;
+	box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+	font-size: 1.2rem;
+	text-align: center;
+	position: fixed;
+	top: 15%;
+	left: 50%;
+	transform: translateX(-50%);
+	width: 100%;
+	max-width: 300px;
+}
