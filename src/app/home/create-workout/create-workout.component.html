@@ -1,0 +1,28 @@
+<div
+	class="fixed bottom-20 left-1/2 transform -translate-x-1/2 text-center bg-black">
+	@if(!hidden){
+	<form
+		class="register-form text-slate-50"
+		#form="ngForm"
+		(ngSubmit)="create(form)">
+		<fieldset>
+			<h2>Workout</h2>
+
+			<button
+				[disabled]="form.invalid"
+				[style]="{
+					backgroundColor: form.invalid ? 'grey' : '#234465'
+				}"
+				class="m-2"
+				(click)="switchForm()">
+				END
+			</button>
+		</fieldset>
+	</form>
+	}@else{
+	<button
+		(click)="switchForm()"
+		class="text-5xl heigh text-slate-50 bg-blue-500 py-2 px-4 rounded-lg m-10 font-extrabold">
+		Start Workout</button
+	>}
+</div>
