@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { UserService } from '../user.service';
 import { Router, RouterLink } from '@angular/router';
+import { auth } from '../../../lib/firebase';
 
 @Component({
 	selector: 'app-login',
@@ -21,7 +22,6 @@ export class LoginComponent {
 		const { email, password } = form.value;
 		this.userService
 			.login(email, password)
-			?.then(() => this.router.navigate(['/']));
-		console.log(`Email: ${email} and password: ${password}`);
+			?.then(() => console.log(auth.currentUser)); //this.router.navigate(['/']));
 	}
 }

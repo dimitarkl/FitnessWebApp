@@ -1,7 +1,11 @@
 <nav class="navbar">
 	<ul class="nav-links">
+		@if(loggedIn){
 		<li><a routerLink="/" class="nav-item">Home</a></li>
+		<li><a (click)="Logout()" class="nav-item">Logout</a></li>
+		} @else {
 		<li><a routerLink="/login" class="nav-item">Login</a></li>
 		<li><a routerLink="/register" class="nav-item">Register</a></li>
+		}
 	</ul>
 </nav>

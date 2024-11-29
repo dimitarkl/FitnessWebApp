@@ -1,10 +1,12 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Subscription, tap } from 'rxjs';
-import { UserForAuth } from '../types/user';
+import { BehaviorSubject, Observable, Subscription, tap } from 'rxjs';
 import {
+	browserLocalPersistence,
 	createUserWithEmailAndPassword,
+	onAuthStateChanged,
+	setPersistence,
 	signInWithEmailAndPassword,
+	User,
 } from 'firebase/auth';
 import { auth } from '../../lib/firebase';
 
@@ -12,27 +14,46 @@ import { auth } from '../../lib/firebase';
 	providedIn: 'root',
 })
 export class UserService implements OnDestroy {
-	private user$$ = new BehaviorSubject<UserForAuth | null>(null);
-	private user$ = this.user$$.asObservable();
+	private userSubject: BehaviorSubject<User | null> =
+		new BehaviorSubject<User | null>(null);
+	user$: Observable<User | null> = this.userSubject.asObservable();
 
-	USER_KEY = '[user]';
-	user: UserForAuth | null = null;
-	userSubscription: Subscription | null = null;
-	login = (email: string, password: string) => {
+	constructor() {
+		this.initializeAuthState();
+	}
+	private initializeAuthState(): void {
+		onAuthStateChanged(auth, user => {
+			this.userSubject.next(user);
+		});
+	}
+	login = async (email: string, password: string) => {
 		try {
+			await setPersistence(auth, browserLocalPersistence);
+
 			return signInWithEmailAndPassword(auth, email, password);
 		} catch (err) {
 			console.log('Login Error:' + (err as Error).message);
 		}
 		return;
 	};
-	register = (email: string, password: string) => {
+	register = async (email: string, password: string) => {
 		try {
+			await setPersistence(auth, browserLocalPersistence);
 			return createUserWithEmailAndPassword(auth, email, password);
 		} catch (err) {
 			console.log('Register Error:' + (err as Error).message);
 		}
 		return;
 	};
+	logout = async () => {
+		try {
+			await auth.signOut();
+		} catch (err) {
+			console.log('Logout Error:' + (err as Error).message);
+		}
+	};
+	get isLogged(): boolean {
+		return !!this.userSubject.value;
+	}
 	ngOnDestroy(): void {}
 }
