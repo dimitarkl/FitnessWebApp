@@ -12,4 +12,7 @@ export class CreateExerciseComponent {
 	@Input() name: string = '';
 	@Input() addExercise: () => void = () => {};
 	sets = 1;
+	add = () => {
+		this.sets++;
+	};
 }
