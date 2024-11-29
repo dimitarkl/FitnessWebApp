@@ -22,6 +22,6 @@ export class LoginComponent {
 		const { email, password } = form.value;
 		this.userService
 			.login(email, password)
-			?.then(() => console.log(auth.currentUser)); //this.router.navigate(['/']));
+			?.then(() => this.router.navigate(['/']));
 	}
 }
