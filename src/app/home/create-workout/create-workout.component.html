@@ -10,7 +10,8 @@
 			@for(exercise of exercises;track exercise.name){
 			<app-create-exercise
 				[name]="exercise.name"
-				[addExercise]="addExercise" />
+				[addExercise]="addExercise"
+				[last]="$index === exercises.length - 1" />
 			}
 
 			<button

@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { SetInputComponent } from '../set-input/set-input.component';
+import { SetInputComponent } from './set-input/set-input.component';
 
 @Component({
 	selector: 'app-create-exercise',
@@ -11,6 +11,7 @@ import { SetInputComponent } from '../set-input/set-input.component';
 export class CreateExerciseComponent {
 	@Input() name: string = '';
 	@Input() addExercise: () => void = () => {};
+	@Input() last: boolean = false;
 	sets = 1;
 	add = () => {
 		this.sets++;

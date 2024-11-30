@@ -17,7 +17,7 @@ export class CreateWorkoutComponent {
 		{ name: 'push ups' },
 	];
 	create = (form: NgForm) => {
-		console.log(form);
+		// console.log(form);
 	};
 	switchForm = () => {
 		this.hidden = !this.hidden;
