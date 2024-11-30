@@ -1,38 +1,60 @@
-<div class="flex flex-row m-2">
+<form
+	class="flex flex-row m-2 text-slate-950"
+	#form="ngForm"
+	(ngSubmit)="submitSet(form)">
+	<div class="field field-icon ml-2 mr-3">
+		@if(first){
+		<p for="exercise" class="block text-slate-50 m-0 p-0 border-0">Set</p>
+		}
+		<label class="text-slate-50">{{ idx + 1 }}</label>
+	</div>
+
 	<p class="field field-icon">
-		<label for="Exercise"></label>
+		@if(first){
+		<label for="exercise" class="block text-slate-50 m-0 p-0 border-0"
+			>Exercise</label
+		>
+		}
 		<input
-			class="w-30 mr-10"
-			name="exericese"
+			class="w-30"
+			name="exercise"
 			id="exercise"
 			placeholder="Bench Press"
 			ngModel
 			required />
-		<!-- TODO:add #inputExercise="ngModel" -->
 	</p>
-	<p class="field field-icon">
-		<label for="password"
-			><span><i class="fas fa-lock"></i></span
-		></label>
+
+	<p class="field field-icon ml-3">
+		@if(first){
+		<label for="weight" class="block text-slate-50 m-0 p-0 border-0"
+			>Weight</label
+		>
+		}
 		<input
-			class="w-10 mr-10 text-slate-950"
+			class="w-10 text-slate-950"
 			type="number"
 			name="weight"
 			id="weight"
 			placeholder="1"
 			ngModel
+			(ngModelChange)="submitSet(form)"
 			required />
-		<!-- TODO:add #inputWeight="ngModel" -->
 	</p>
-	<p class="field field-icon">
+
+	<p class="field field-icon ml-6">
+		@if(first){
+		<label for="reps" class="block text-slate-50 m-0 p-0 border-0"
+			>Reps</label
+		>
+		}
 		<input
-			class="w-10 mr-10 text-slate-950"
+			class="w-10 text-slate-950"
 			type="number"
 			name="reps"
 			id="reps"
 			placeholder="1"
 			ngModel
+			(ngModelChange)="submitSet(form)"
 			required />
-		<!-- TODO:add #inputReps="ngModel" -->
 	</p>
-</div>
+</form>
