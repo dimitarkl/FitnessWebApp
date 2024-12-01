@@ -30,7 +30,7 @@ export class CreateWorkoutComponent {
 		console.log(this.workoutObj);
 	};
 	workoutObj: WorkoutSend = {
-		owner: 'rTwGKZTHPrYDXsdWvDMDqJ8vTHw2',
+		ownerId: '',
 		exercises: [
 			{
 				name: 'benchPPress',

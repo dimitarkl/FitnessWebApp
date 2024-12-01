@@ -1,11 +1,11 @@
 type WorkoutSend = {
-	owner: string;
+	ownerId: string;
 	createdAt?: string;
 	exercises: Exercise[];
 };
 type WorkoutGet = {
 	id: string;
-	owner: string;
+	ownerId: string;
 	createdAt?: string;
 	exercises: Exercise[];
 };
