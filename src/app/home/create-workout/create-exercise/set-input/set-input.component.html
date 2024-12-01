@@ -25,7 +25,7 @@
 			id="exercise"
 			placeholder="Bench Press"
 			ngModel
-			required />
+			 />
 	</p>
 
 	<p class="field field-icon ml-3">
@@ -41,7 +41,7 @@
 			type="number"
 			name="weight"
 			id="weight"
-			placeholder="1"
+			placeholder="{{set?.weight}}"
 			ngModel
 			(ngModelChange)="submitSet(form)"
 			required />
@@ -58,7 +58,7 @@
 			type="number"
 			name="reps"
 			id="reps"
-			placeholder="1"
+			placeholder="{{set?.reps}}"
 			ngModel
 			(ngModelChange)="submitSet(form)"
 			required />

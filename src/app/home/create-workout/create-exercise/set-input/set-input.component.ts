@@ -1,5 +1,6 @@
-import { Component, Input } from '@angular/core';
-import { FormGroup, FormsModule, NgForm } from '@angular/forms';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { FormsModule, NgForm } from '@angular/forms';
+import { ExerciseSet } from '../../../../types/Workout';
 
 @Component({
 	selector: 'app-set-input',
@@ -11,9 +12,14 @@ import { FormGroup, FormsModule, NgForm } from '@angular/forms';
 export class SetInputComponent {
 	@Input() idx: number = 0;
 	@Input() first: boolean = false;
+	@Input() set: ExerciseSet | null = null;
+
+	@Output() setChange = new EventEmitter<ExerciseSet>();
+
 	submitSet = (form: NgForm) => {
-		// console.log(form);
-		const { weight, reps } = form.value;
-		console.log(`weight:${weight}  and reps${reps}`);
+		if (form.valid) {
+			const { weight, reps } = form.value;
+			this.setChange.emit((this.set = { weight, reps }));
+		}
 	};
 }

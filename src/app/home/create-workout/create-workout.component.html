@@ -4,14 +4,17 @@
 	<form
 		class="register-form text-slate-50"
 		#form="ngForm"
-		(ngSubmit)="create(form)">
+		(ngSubmit)="create()">
 		<fieldset>
 			<h2>Workout</h2>
-			@for(exercise of exercises;track exercise.name){
+			@for(exercise of workoutObj.exercises;track $index){
 			<app-create-exercise
-				[name]="exercise.name"
+				[name]="workoutObj.exercises[$index].name"
 				[addExercise]="addExercise"
-				[last]="$index === exercises.length - 1" />
+				[last]="$index === workoutObj.exercises.length - 1"
+				[exercise]="workoutObj.exercises[$index]"
+				[indx]="$index"
+				(setChange)="handleExerciseChange($event, $index)" />
 			}
 
 			<button
@@ -19,12 +22,20 @@
 				[style]="{
 					backgroundColor: form.invalid ? 'grey' : '#234465'
 				}"
-				class="m-2"
-				(click)="switchForm()">
-				END
+				class="m-2 h-12 px-6 rounded-lg">
+				END WORKOUT
 			</button>
 		</fieldset>
 	</form>
+	<button
+		[disabled]="form.invalid"
+		[style]="{
+			backgroundColor: form.invalid ? 'grey' : '#234465'
+		}"
+		class="m-2"
+		(click)="switchForm()">
+		Close
+	</button>
 	}@else{
 	<button
 		(click)="switchForm()"
