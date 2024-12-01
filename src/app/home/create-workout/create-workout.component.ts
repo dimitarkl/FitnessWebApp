@@ -12,13 +12,14 @@ import { WorkoutService } from './workout.service';
 })
 export class CreateWorkoutComponent {
 	hidden = false;
-	exercises = [
 	constructor(private workoutService: WorkoutService) {}
 
 	handleExerciseChange(updatedExercise: Exercise, index: number) {
 		this.workoutObj.exercises[index] = updatedExercise;
 	}
 
+	create = () => {
+		this.workoutService.sendWorkout(this.workoutObj);
 	};
 	switchForm = () => {
 		this.hidden = !this.hidden;
