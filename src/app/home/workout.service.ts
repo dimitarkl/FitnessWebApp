@@ -27,4 +27,41 @@ export class WorkoutService {
 			console.error('Error adding document: ', e);
 		}
 	};
+	getLastWorkouts = () => {
+		const q = query(
+			collection(db, 'exercises'),
+			orderBy('createdAt', 'desc'),
+			limit(5)
+		);
+		try {
+			const querySnapshot = getDocs(q);
+			const workouts: WorkoutGet[] = [];
+			querySnapshot.then(item => {
+				item.forEach(doc => {
+					const data = doc.data();
+					const workout: WorkoutGet = {
+						id: doc.id,
+						owner: data['owner'] || 'Unknown Owner',
+						createdAt: data['createdAt'] || 'Unknown Date',
+						exercises: (data['exercises'] || []).map(
+							(exercise: Exercise) => ({
+								name: exercise?.name || 'Unknown Exercise',
+								sets: (exercise?.sets || []).map(
+									(set: ExerciseSet) => ({
+										weight: set?.weight || 0,
+										reps: set?.reps || 0,
+									})
+								),
+							})
+						),
+					};
+					workouts.push(workout);
+				});
+			});
+			return workouts;
+		} catch (e) {
+			console.error('Error Fetching Workout' + (e as Error));
+			return null;
+		}
+	};
 }
