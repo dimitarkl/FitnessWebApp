@@ -16,15 +16,16 @@
 					</g>
 				</svg>
 
-				<h1 class="text-3xl">{{ card?.username }}</h1>
+				<h1 class="text-3xl">{{ workout?.owner }}</h1>
 			</div>
 			<div class="card-description">
-				<p>{{ card?.workout }}</p>
+				<p>PLACEHOLDER</p>
 			</div>
-			<app-exercise-card />
-			<app-exercise-card />
-			<app-exercise-card />
-			<p>Click To Check The Full Workout</p>
+			@for(exercise of workout?.exercises?.slice(0, 3);track $index){
+			<app-exercise-card [exercise]="exercise" />
+			} @if(more>0){
+			<p>Click To Check The Full Workout({{ more }} more left)</p>
+			}
 		</div>
 	</div>
 </div>

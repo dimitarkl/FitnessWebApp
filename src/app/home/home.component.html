@@ -3,6 +3,7 @@
 		FITNESS APP
 	</h1>
 </div>
-<app-post [card]="Card" />
-<app-post [card]="Card" />
+@for(workout of workouts;track workout.id){
+<app-post [workout]="workout" />
+}
 <app-create-workout />
