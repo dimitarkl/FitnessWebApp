@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { CreateExerciseComponent } from './create-exercise/create-exercise.component';
-import { Exercise, WorkoutFull } from '../../types/Workout';
-import { WorkoutService } from './workout.service';
+import { Exercise, WorkoutSend } from '../../types/Workout';
+import { WorkoutService } from '../workout.service';
 @Component({
 	selector: 'app-create-workout',
 	standalone: true,
@@ -23,12 +23,13 @@ export class CreateWorkoutComponent {
 	};
 	switchForm = () => {
 		this.hidden = !this.hidden;
+		this.workoutService.getLastWorkouts();
 	};
 	addExercise = () => {
 		this.workoutObj.exercises.push({ name: 'benchPress', sets: [] });
 		console.log(this.workoutObj);
 	};
-	workoutObj: WorkoutFull = {
+	workoutObj: WorkoutSend = {
 		owner: 'rTwGKZTHPrYDXsdWvDMDqJ8vTHw2',
 		exercises: [
 			{

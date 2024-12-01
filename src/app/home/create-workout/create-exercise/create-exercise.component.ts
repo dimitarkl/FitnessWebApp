@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { SetInputComponent } from './set-input/set-input.component';
-import { Exercise, ExerciseSet, WorkoutFull } from '../../../types/Workout';
+import { Exercise, ExerciseSet } from '../../../types/Workout';
 
 @Component({
 	selector: 'app-create-exercise',
