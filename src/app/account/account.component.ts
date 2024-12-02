@@ -5,6 +5,7 @@ import { WorkoutService } from '../home/workout.service';
 import { PostComponent } from '../home/post/post.component';
 import { WorkoutGet } from '../types/Workout';
 import { FormsModule, NgForm } from '@angular/forms';
+import { PreferencesService } from '../user/preferences.service';
 
 @Component({
 	selector: 'app-account',
@@ -16,9 +17,10 @@ import { FormsModule, NgForm } from '@angular/forms';
 export class AccountComponent implements OnInit {
 	constructor(
 		private userService: UserService,
-		private workoutService: WorkoutService
+		private workoutService: WorkoutService,
+		private prefService: PreferencesService
 	) {}
-	hidden = '';
+	hidden = 'invisible';
 	user: User | null = null;
 	workouts: WorkoutGet[] | null = null;
 	ngOnInit(): void {
@@ -31,13 +33,11 @@ export class AccountComponent implements OnInit {
 		});
 	};
 	getWorkouts = () => {
-		console.log(this.user);
 		if (this.user) {
 			this.workouts = this.workoutService.getUserWorkouts(
 				this.user.uid,
 				5
 			);
-			console.log(this.workoutService.getUserWorkouts(this.user.uid, 5));
 		} else {
 			console.log('Error User');
 			return;
@@ -45,6 +45,8 @@ export class AccountComponent implements OnInit {
 	};
 	submitAccount = (form: NgForm) => {
 		console.log('form submitted');
+		const { username } = form.value;
+		this.prefService.updateUsername(username);
 		console.log(form.value);
 	};
 	changeHidden = () => {
