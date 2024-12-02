@@ -3,17 +3,94 @@
 		src="//icons.veryicon.com/png/o/miscellaneous/youyinzhibo/guest.png"
 		alt="guest Icon" />
 	<div class="flex-col">
-		<h1 class="text-5xl md:text-7xl m-10 font-extrabold text-slate-50">
-			Username
+		<h1 class="text-5xl md:text-7xl ml-10 font-extrabold text-slate-50">
+			user:{{ user?.displayName }}
 		</h1>
-
 		<h1 class="text-3xl md:text-5xl m-10 font-extrabold text-slate-50">
 			{{ user?.email }}
 		</h1>
 	</div>
 </div>
+<div class="text-center flex flex-row justify-center">
+	<button
+		(click)="changeHidden()"
+		class="text-3xl md:text-5xl h-24 w-72 font-extrabold text-slate-50 mr-80 box-border outline outline-slate-50 outline-8">
+		Edit Profile
+	</button>
+</div>
 <div class="text-center flex flex-col justify-center items-center">
 	<h2 class="text-3xl md:text-5xl m-10 font-extrabold text-slate-50">
 		Workouts
 	</h2>
+	@for(workout of workouts;track workout.id){
+	<app-post [workout]="workout" />
+	}
+</div>
+
+<!-- Modal -->
+<div
+	id="editProfileModal"
+	class="{{
+		hidden
+	}} fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+	ng-show="ctrl.isModalOpen">
+	<div class="bg-white rounded-lg p-8 w-full max-w-lg relative">
+		<button
+			(click)="changeHidden()"
+			class="absolute top-4 right-4 text-slate-700 text-3xl font-bold">
+			&times;
+		</button>
+		<h2 class="text-2xl font-bold mb-4 text-gray-900">Edit Profile</h2>
+		<form #form="ngForm" (ngSubmit)="submitAccount(form)">
+			<div class="mb-4">
+				<label
+					class="block text-gray-700 text-sm font-bold mb-2"
+					for="photo"
+					>Select An Image</label
+				>
+				<input
+					accept="image/*"
+					class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+					type="file"
+					type="file"
+					name="photo"
+					id="photo"
+					ngModel
+					#inputPhoto="ngModel" />
+			</div>
+			<div class="mb-4">
+				<label
+					class="block text-gray-700 text-sm font-bold mb-2"
+					for="displayName"
+					>Display Name</label
+				>
+				<input
+					class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+					type="username"
+					name="username"
+					id="username"
+					placeholder="Joe"
+					ngModel
+					#inputUsername="ngModel" />
+			</div>
+			<div class="mb-4">
+				<label
+					class="block text-gray-700 text-sm font-bold mb-2"
+					for="email"
+					>Email</label
+				>
+				<!-- <input
+					class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+					id="email"
+					type="email"
+					placeholder="Enter your email" /> -->
+			</div>
+			<div class="flex items-center justify-between">
+				<button
+					class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+					Save
+				</button>
+			</div>
+		</form>
+	</div>
 </div>
