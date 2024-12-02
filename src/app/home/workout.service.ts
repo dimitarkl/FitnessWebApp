@@ -1,22 +1,38 @@
 import { Injectable } from '@angular/core';
-import { Exercise, ExerciseSet, Workout, WorkoutGet } from '../types/Workout';
+import {
+	Exercise,
+	ExerciseSet,
+	WorkoutSend,
+	WorkoutGet,
+} from '../types/Workout';
 import {
 	addDoc,
 	collection,
 	getDocs,
 	limit,
 	orderBy,
+	Query,
 	query,
 	serverTimestamp,
+	where,
 } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
+import { UserService } from '../user/user.service';
 
 @Injectable({
 	providedIn: 'root',
 })
 export class WorkoutService {
-	constructor() {}
-	sendWorkout = async (workout: Workout) => {
+	constructor(private userService: UserService) {}
+	sendWorkout = async (workout: WorkoutSend) => {
+		if (!this.userService.isLogged) return;
+		let userId = '';
+		this.userService.user$.subscribe(item => {
+			//TODO Add Error Message
+			if (!item) return;
+			userId = item?.uid;
+		});
+		workout.ownerId = userId;
 		try {
 			const docRef = await addDoc(collection(db, 'exercises'), {
 				...workout,
@@ -33,6 +49,23 @@ export class WorkoutService {
 			orderBy('createdAt', 'desc'),
 			limit(5)
 		);
+		const response = this.getDocuments(q);
+		return response;
+	};
+
+	getUserWorkouts = (id: string, amount: number) => {
+		console.log(id);
+		const q = query(
+			collection(db, 'exercises'),
+			where('ownerId', '==', id),
+			orderBy('createdAt', 'desc'),
+			limit(amount)
+		);
+		const response = this.getDocuments(q);
+		return response;
+	};
+
+	getDocuments = (q: Query) => {
 		try {
 			const querySnapshot = getDocs(q);
 			const workouts: WorkoutGet[] = [];
@@ -41,7 +74,7 @@ export class WorkoutService {
 					const data = doc.data();
 					const workout: WorkoutGet = {
 						id: doc.id,
-						owner: data['owner'] || 'Unknown Owner',
+						ownerId: data['ownerId'] || 'Unknown Owner',
 						createdAt: data['createdAt'] || 'Unknown Date',
 						exercises: (data['exercises'] || []).map(
 							(exercise: Exercise) => ({
