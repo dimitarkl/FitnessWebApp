@@ -3,6 +3,7 @@ import { PostComponent } from './post/post.component';
 import { CreateWorkoutComponent } from './create-workout/create-workout.component';
 import { WorkoutService } from './workout.service';
 import { WorkoutGet } from '../types/Workout';
+import { PreferencesService } from '../user/preferences.service';
 
 @Component({
 	selector: 'app-home',
@@ -14,13 +15,9 @@ import { WorkoutGet } from '../types/Workout';
 export class HomeComponent implements OnInit {
 	constructor(private workoutService: WorkoutService) {}
 	workouts: WorkoutGet[] | null = null;
+
 	ngOnInit(): void {
 		const response = this.workoutService.getLastWorkouts();
 		if (response != null) this.workouts = response;
-		console.log(response);
 	}
-	Card = {
-		username: 'Bradur',
-		workout: 'Full Body Workout',
-	};
 }

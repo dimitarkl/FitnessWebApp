@@ -16,7 +16,9 @@
 					</g>
 				</svg>
 
-				<h1 class="text-3xl">{{ workout?.ownerId }}</h1>
+				<h1 class="text-3xl">
+					{{ ownerUsername ? ownerUsername : 'Username Not Found' }}
+				</h1>
 			</div>
 			<div class="card-description">
 				<p>PLACEHOLDER</p>
