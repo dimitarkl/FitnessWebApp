@@ -8,6 +8,8 @@ import {
 import {
 	addDoc,
 	collection,
+	deleteDoc,
+	doc,
 	getDocs,
 	limit,
 	orderBy,
@@ -54,7 +56,6 @@ export class WorkoutService {
 	};
 
 	getUserWorkouts = (id: string, amount: number) => {
-		console.log(id);
 		const q = query(
 			collection(db, 'exercises'),
 			where('ownerId', '==', id),
@@ -95,6 +96,13 @@ export class WorkoutService {
 		} catch (e) {
 			console.error('Error Fetching Workout' + (e as Error));
 			return null;
+		}
+	};
+	deteleteWorkout = async (workoutId: string) => {
+		try {
+			await deleteDoc(doc(db, 'exercises', workoutId));
+		} catch (e) {
+			console.log('Error Deleting:' + (e as Error));
 		}
 	};
 }

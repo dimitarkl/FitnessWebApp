@@ -8,6 +8,9 @@ import {
 import { ExerciseCardComponent } from './exercise-card/exercise-card.component';
 import { WorkoutGet } from '../../types/Workout';
 import { PreferencesService } from '../../user/preferences.service';
+import { UserService } from '../../user/user.service';
+import { User } from 'firebase/auth';
+import { WorkoutService } from '../workout.service';
 
 @Component({
 	selector: 'app-post',
@@ -19,9 +22,18 @@ import { PreferencesService } from '../../user/preferences.service';
 export class PostComponent implements OnInit {
 	@Input() workout: WorkoutGet | null = null;
 
-	constructor(private prefService: PreferencesService) {}
+	constructor(
+		private prefService: PreferencesService,
+		private userService: UserService,
+		private workoutService: WorkoutService
+	) {}
 	ownerUsername = '';
+	user: User | null = null;
+	getUser = () => {
+		this.userService.user$.subscribe(i => (this.user = i));
+	};
 	ngOnInit(): void {
+		this.getUser();
 		this.more = this.workout?.exercises.length
 			? this.workout.exercises.length - 3
 			: 0;
@@ -30,5 +42,11 @@ export class PostComponent implements OnInit {
 				.getUsernameById(this.workout?.ownerId)
 				.then(response => (this.ownerUsername = response));
 	}
+	deletePost = () => {
+		if (this.workout)
+			this.workoutService
+				.deteleteWorkout(this.workout?.id)
+				.then(() => location.reload());
+	};
 	more: number = 0;
 }
