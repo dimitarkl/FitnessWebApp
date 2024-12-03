@@ -1,7 +1,8 @@
-<div class="card-container">
-	<div class="card">
-		<div class="card-content">
-			<div class="card-user">
+<div
+	class="card-container flex justify-center items-center box-border outline-black outline-10 mb-2.5 mt-2.5">
+	<div class="card w-[625px] bg-gray-600 rounded-lg shadow-md">
+		<div class="card-content m-2.5 text-white">
+			<div class="card-user flex flex-row mb-2.5">
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					enable-background="new 0 0 24 24"
@@ -16,11 +17,11 @@
 					</g>
 				</svg>
 
-				<h1 class="text-3xl">
+				<h1 class="font-bold text-2xl ml-2.5">
 					{{ ownerUsername ? ownerUsername : 'Username Not Found' }}
 				</h1>
 			</div>
-			<div class="card-description">
+			<div class="card-description ml-5">
 				<p>PLACEHOLDER</p>
 			</div>
 			@for(exercise of workout?.exercises?.slice(0, 3);track $index){
@@ -44,9 +45,9 @@
 				>}
 				<button
 					class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
-					Comment</button
-				>@if(workout?.ownerId==user?.uid){
-
+					Comment
+				</button>
+				@if(workout?.ownerId==user?.uid){
 				<button
 					class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
 					Edit
