@@ -28,10 +28,17 @@
 			} @if(more>0){
 			<p>Click To Check The Full Workout({{ more }} more left)</p>
 			}
-
+			<button (click)="showLikes()">
+				{{
+					workout && workout.likes
+						? workout.likes.length + ' Likes'
+						: '0 Likes'
+				}}
+			</button>
 			<div class="mt-4 flex space-x-4">
 				@if(workout?.ownerId!=user?.uid){
 				<button
+					(click)="likePost()"
 					class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
 					Like</button
 				>}

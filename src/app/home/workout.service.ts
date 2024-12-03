@@ -16,9 +16,10 @@ import {
 	Query,
 	query,
 	serverTimestamp,
+	setDoc,
 	where,
 } from 'firebase/firestore';
-import { db } from '../../lib/firebase';
+import { auth, db } from '../../lib/firebase';
 import { UserService } from '../user/user.service';
 
 @Injectable({
@@ -88,6 +89,7 @@ export class WorkoutService {
 								),
 							})
 						),
+						likes: data['likes'],
 					};
 					workouts.push(workout);
 				});
@@ -104,5 +106,22 @@ export class WorkoutService {
 		} catch (e) {
 			console.log('Error Deleting:' + (e as Error));
 		}
+	};
+	likePost = async (workoutId: string) => {
+		if (auth.currentUser) {
+			const body = {
+				likes: [auth.currentUser.uid],
+			};
+			try {
+				const response = await setDoc(
+					doc(db, 'exercises', workoutId),
+					body,
+					{ merge: true }
+				);
+				return response;
+			} catch (e) {
+				console.log('Error Updating User:' + (e as Error));
+			}
+		} else console.log('Error Updating User: User Not Found');
 	};
 }

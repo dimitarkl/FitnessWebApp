@@ -29,6 +29,7 @@ export class PostComponent implements OnInit {
 	) {}
 	ownerUsername = '';
 	user: User | null = null;
+	likesInv = 'invisible';
 	getUser = () => {
 		this.userService.user$.subscribe(i => (this.user = i));
 	};
@@ -47,6 +48,15 @@ export class PostComponent implements OnInit {
 			this.workoutService
 				.deteleteWorkout(this.workout?.id)
 				.then(() => location.reload());
+	};
+	likePost = () => {
+		if (this.workout)
+			this.workoutService
+				.likePost(this.workout.id)
+				.then(() => console.log('Done'));
+	};
+	showLikes = () => {
+		console.log('Show Likes');
 	};
 	more: number = 0;
 }

@@ -8,6 +8,7 @@ type WorkoutGet = {
 	ownerId: string;
 	createdAt?: string;
 	exercises: Exercise[];
+	likes?: string[];
 };
 
 type Exercise = {
