@@ -4,11 +4,12 @@ import { CreateWorkoutComponent } from './create-workout/create-workout.componen
 import { WorkoutService } from './workout.service';
 import { WorkoutGet } from '../types/Workout';
 import { PreferencesService } from '../user/preferences.service';
+import { RouterLink } from '@angular/router';
 
 @Component({
 	selector: 'app-home',
 	standalone: true,
-	imports: [PostComponent, CreateWorkoutComponent],
+	imports: [PostComponent, CreateWorkoutComponent, RouterLink],
 	templateUrl: './home.component.html',
 	styleUrl: './home.component.css',
 })

@@ -3,10 +3,11 @@ import { FormsModule, NgForm } from '@angular/forms';
 import { CreateExerciseComponent } from './create-exercise/create-exercise.component';
 import { Exercise, WorkoutSend } from '../../types/Workout';
 import { WorkoutService } from '../workout.service';
+import { RouterLink } from '@angular/router';
 @Component({
 	selector: 'app-create-workout',
 	standalone: true,
-	imports: [FormsModule, CreateExerciseComponent],
+	imports: [FormsModule, CreateExerciseComponent, RouterLink],
 	templateUrl: './create-workout.component.html',
 	styleUrl: './create-workout.component.css',
 })
