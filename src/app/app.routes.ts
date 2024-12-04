@@ -9,4 +9,6 @@ export const routes: Routes = [
 	{ path: 'login', component: LoginComponent },
 	{ path: 'register', component: RegisterComponent },
 	{ path: 'account', component: AccountComponent },
+	{ path: '404', component: NotFoundComponent },
+	{ path: '**', redirectTo: '/404' },
 ];
