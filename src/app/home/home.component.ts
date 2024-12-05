@@ -21,8 +21,11 @@ export class HomeComponent implements OnInit {
 	workouts: WorkoutGet[] | null = null;
 
 	ngOnInit(): void {
+		this.getWorkout();
+	}
+	getWorkout = () => {
 		const response = this.workoutService.getLastWorkouts();
 		if (response != null) this.workouts = response;
 		else this.errorService.setError('Error Getting Response');
-	}
+	};
 }

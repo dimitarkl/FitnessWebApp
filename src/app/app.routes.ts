@@ -6,6 +6,7 @@ import { AccountComponent } from './account/account.component';
 import { AuthGuard } from './guards/auth.guard';
 import { CreateWorkoutComponent } from './home/create-workout/create-workout.component';
 import { NotFoundComponent } from './not-found/not-found.component';
+import { WorkoutDetailsComponent } from './workout-details/workout-details.component';
 
 export const routes: Routes = [
 	{ path: '', component: HomeComponent },
@@ -20,6 +21,10 @@ export const routes: Routes = [
 		path: 'create',
 		component: CreateWorkoutComponent,
 		canActivate: [AuthGuard],
+	},
+	{
+		path: 'details',
+		children: [{ path: ':detailsId', component: WorkoutDetailsComponent }],
 	},
 	{ path: '404', component: NotFoundComponent },
 	{ path: '**', redirectTo: '/404' },
