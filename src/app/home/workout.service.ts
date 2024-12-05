@@ -21,12 +21,16 @@ import {
 } from 'firebase/firestore';
 import { auth, db } from '../../lib/firebase';
 import { UserService } from '../user/user.service';
+import { ErrorService } from '../error/error.service';
 
 @Injectable({
 	providedIn: 'root',
 })
 export class WorkoutService {
-	constructor(private userService: UserService) {}
+	constructor(
+		private userService: UserService,
+		private errorService: ErrorService
+	) {}
 	sendWorkout = async (workout: WorkoutSend) => {
 		if (!this.userService.isLogged) return;
 		let userId = '';
@@ -96,7 +100,7 @@ export class WorkoutService {
 			});
 			return workouts;
 		} catch (e) {
-			console.error('Error Fetching Workout' + (e as Error));
+			this.errorService.setError('Error Fetching Workout' + (e as Error));
 			return null;
 		}
 	};
@@ -120,8 +124,12 @@ export class WorkoutService {
 				);
 				return response;
 			} catch (e) {
-				console.log('Error Updating User:' + (e as Error));
+				this.errorService.setError(
+					'Error Updating User:' + (e as Error)
+				);
 			}
-		} else console.log('Error Updating User: User Not Found');
+		} else
+			this.errorService.setError('Error Updating User: User Not Found');
+	};
 	};
 }
