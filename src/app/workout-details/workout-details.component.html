@@ -24,6 +24,15 @@
 			<div class="card-description ml-5">
 				<p>PLACEHOLDER</p>
 			</div>
+			@for(exercise of workout?.exercises;track $index){
+			<app-exercise-card [exercise]="exercise" />
+			@for(set of exercise.sets;track $index){
+			<div class="flex flex-row justify-center">
+				<h1>Reps:{{ set.reps }}</h1>
+				<h1>------------</h1>
+				<h1>Weight:{{ set.weight }}</h1>
+			</div>
+			} }
 		</div>
 	</div>
 </div>

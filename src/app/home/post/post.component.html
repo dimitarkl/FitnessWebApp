@@ -27,7 +27,11 @@
 			@for(exercise of workout?.exercises?.slice(0, 3);track $index){
 			<app-exercise-card [exercise]="exercise" />
 			} @if(more>0){
-			<p>Click To Check The Full Workout({{ more }} more left)</p>
+			<div class="text-center">
+				<a routerLink="/details/{{ workout?.id }}">
+					Click To Check The Full Workout({{ more }} more left)
+				</a>
+			</div>
 			}
 			<button (click)="showLikes()">
 				{{

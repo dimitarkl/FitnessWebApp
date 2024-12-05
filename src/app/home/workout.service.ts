@@ -10,6 +10,8 @@ import {
 	collection,
 	deleteDoc,
 	doc,
+	documentId,
+	getDoc,
 	getDocs,
 	limit,
 	orderBy,
@@ -131,5 +133,39 @@ export class WorkoutService {
 		} else
 			this.errorService.setError('Error Updating User: User Not Found');
 	};
+	getWorkoutById = async (id: string) => {
+		try {
+			const q = query(
+				collection(db, 'exercises'),
+				where(documentId(), '==', id)
+			);
+			const querySnapshot = await getDoc(doc(db, 'exercises', id));
+
+			const data = querySnapshot.data();
+			let workout: WorkoutGet | null = null;
+			if (data) {
+				workout = {
+					id: querySnapshot.id,
+					ownerId: data['ownerId'] || 'Unknown Owner',
+					createdAt: data['createdAt'] || 'Unknown Date',
+					exercises: (data['exercises'] || []).map(
+						(exercise: Exercise) => ({
+							name: exercise?.name || 'Unknown Exercise',
+							sets: (exercise?.sets || []).map(
+								(set: ExerciseSet) => ({
+									weight: set?.weight || 0,
+									reps: set?.reps || 0,
+								})
+							),
+						})
+					),
+					likes: data['likes'],
+				};
+			} else this.errorService.setError('Error Fetching');
+			return workout;
+		} catch (e) {
+			this.errorService.setError('Error Fetching:' + (e as Error));
+			return null;
+		}
 	};
 }

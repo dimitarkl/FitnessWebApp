@@ -11,11 +11,12 @@ import { PreferencesService } from '../../user/preferences.service';
 import { UserService } from '../../user/user.service';
 import { User } from 'firebase/auth';
 import { WorkoutService } from '../workout.service';
+import { RouterLink } from '@angular/router';
 
 @Component({
 	selector: 'app-post',
 	standalone: true,
-	imports: [ExerciseCardComponent],
+	imports: [ExerciseCardComponent, RouterLink],
 	templateUrl: './post.component.html',
 	styleUrl: './post.component.css',
 })
