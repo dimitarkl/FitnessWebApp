@@ -24,21 +24,20 @@ export class CreateExerciseComponent implements OnInit {
 			console.error('Exercise is undefined or null');
 			return;
 		}
-
-		// Initialize the sets array if it is not already initialized
 		if (!this.exercise.sets) {
 			this.exercise.sets = [];
 		}
-
-		// Ensure the index is within the bounds of the sets array
 		if (index >= this.exercise.sets.length) {
 			console.error('Index out of bounds');
 			return;
 		}
-
 		this.exercise.sets[index] = updatedSet;
 		this.setChange.emit(this.exercise);
 	}
+	setName = (name: string) => {
+		if (this.exercise && name != '') this.exercise.name = name;
+		else console.log('Error Changing Exercise Name');
+	};
 
 	ngOnInit(): void {
 		this.checkSets();

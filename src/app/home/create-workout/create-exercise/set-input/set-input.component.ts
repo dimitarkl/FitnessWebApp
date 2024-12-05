@@ -15,11 +15,14 @@ export class SetInputComponent {
 	@Input() set: ExerciseSet | null = null;
 
 	@Output() setChange = new EventEmitter<ExerciseSet>();
+	@Output() setName = new EventEmitter<string>();
 
 	submitSet = (form: NgForm) => {
 		if (form.valid) {
-			const { weight, reps } = form.value;
-			this.setChange.emit((this.set = { weight, reps }));
+			const { weight, reps, exercise } = form.value;
+			//TODO FIX Logic
+			this.setName.emit(exercise);
+			this.setChange.emit({ weight, reps });
 		}
 	};
 }

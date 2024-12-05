@@ -27,8 +27,7 @@ export class CreateWorkoutComponent {
 		this.workoutService.getLastWorkouts();
 	};
 	addExercise = () => {
-		this.workoutObj.exercises.push({ name: 'benchPress', sets: [] });
-		console.log(this.workoutObj);
+		this.workoutObj.exercises.push({ name: 'Exercise', sets: [] });
 	};
 	workoutObj: WorkoutSend = {
 		ownerId: '',

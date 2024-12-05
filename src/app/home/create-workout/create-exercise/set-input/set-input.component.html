@@ -1,3 +1,4 @@
+
 <form
 	class="flex flex-row m-2 text-slate-950"
 	#form="ngForm"
@@ -19,13 +20,19 @@
 		}@else {
 			<p class="block invisible h-0">Exercise</p>
 			}
+			@if(first){	
 		<input
 			class="w-30"
 			name="exercise"
+			type="text"
 			id="exercise"
 			placeholder="Bench Press"
 			ngModel
-			 />
+			(ngModelChange)="submitSet(form)"
+			 />}@else{
+				<input
+			class="w-30 invisible"/>
+			 }
 	</p>
 
 	<p class="field field-icon ml-3">

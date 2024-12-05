@@ -5,11 +5,15 @@
 		[first]="$first"
 		[idx]="$index"
 		[set]="set ? set[$index] : null"
-		(setChange)="handleSetChange($event, $index)" />}
+		(setChange)="handleSetChange($event, $index)"
+		(setName)="setName($event)" />}
 
-	<button class="bg-white text-slate-950" (click)="add()">+Add Set</button>
+	<button class="bg-white text-slate-950" type="button" (click)="add()">
+		+Add Set
+	</button>
 	@if(last){
 	<button
+		type="button"
 		class="bg-blue-500 text-slate-950 font-extrabold"
 		(click)="addExercise()">
 		+Choose Next Exercise</button
