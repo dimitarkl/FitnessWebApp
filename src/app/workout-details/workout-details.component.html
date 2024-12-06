@@ -27,10 +27,26 @@
 			@for(exercise of workout?.exercises;track $index){
 			<app-exercise-card [exercise]="exercise" />
 			@for(set of exercise.sets;track $index){
-			<div class="flex flex-row justify-center">
-				<h1>Reps:{{ set.reps }}</h1>
-				<h1>------------</h1>
-				<h1>Weight:{{ set.weight }}</h1>
+			<div
+				class="grid grid-cols-3 gap-4 p-4 rounded-lg shadow-md text-center">
+				<div>
+					@if($index==0){
+					<h1 class="text-lg font-semibold">Set</h1>
+					}
+					<p>{{ $index + 1 }}</p>
+				</div>
+				<div>
+					@if($index==0){
+					<h1 class="text-lg font-semibold">Reps</h1>
+					}
+					<p>{{ set.reps }}</p>
+				</div>
+				<div>
+					@if($index==0){
+					<h1 class="text-lg font-semibold">Weight</h1>
+					}
+					<p>{{ set.weight }}</p>
+				</div>
 			</div>
 			} }
 		</div>

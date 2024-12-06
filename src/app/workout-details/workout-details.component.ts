@@ -22,9 +22,8 @@ export class WorkoutDetailsComponent implements OnInit {
 		this.getWorkout(id);
 	}
 	getWorkout = (id: string) => {
-		this.workoutService.getWorkoutById(id).then(response => {
-			console.log(this.workout + ':::' + response);
-			this.workout = response;
-		});
+		this.workoutService
+			.getWorkoutById(id)
+			.then(response => (this.workout = response));
 	};
 }
