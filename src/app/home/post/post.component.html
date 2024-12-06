@@ -29,7 +29,13 @@
 			} @if(more>0){
 			<div class="text-center">
 				<a routerLink="/details/{{ workout?.id }}">
-					Click To Check The Full Workout({{ more }} more left)
+					Click To See The Full Workout({{ more }} more left)
+				</a>
+			</div>
+			}@else {
+			<div class="text-center">
+				<a routerLink="/details/{{ workout?.id }}">
+					Click To See The Full Workout
 				</a>
 			</div>
 			}
