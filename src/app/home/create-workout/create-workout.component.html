@@ -1,37 +1,38 @@
-<div
-	class="fixed bottom-20 left-1/2 transform -translate-x-1/2 text-center bg-black">
-	<form
-		class="register-form text-slate-50"
-		#form="ngForm"
-		(ngSubmit)="create()">
-		<fieldset>
-			<h2>Workout</h2>
-			@for(exercise of workoutObj.exercises;track $index){
-			<app-create-exercise
-				[name]="workoutObj.exercises[$index].name"
-				[addExercise]="addExercise"
-				[last]="$index === workoutObj.exercises.length - 1"
-				[exercise]="workoutObj.exercises[$index]"
-				[indx]="$index"
-				(setChange)="handleExerciseChange($event, $index)" />
-			}
+<div class="flex justify-center items-center min-h-screen p-4">
+	<div class="text-center bg-gray-600 p-4 rounded-lg max-w-2xl">
+		<form
+			class="register-form text-slate-50"
+			#form="ngForm"
+			(ngSubmit)="create()">
+			<fieldset>
+				<h2>Workout</h2>
+				@for(exercise of workoutObj.exercises;track $index){
+				<app-create-exercise
+					[name]="workoutObj.exercises[$index].name"
+					[addExercise]="addExercise"
+					[last]="$index === workoutObj.exercises.length - 1"
+					[exercise]="workoutObj.exercises[$index]"
+					[indx]="$index"
+					(setChange)="handleExerciseChange($event, $index)" />
+				}
 
-			<button
-				[disabled]="form.invalid"
-				[style]="{
-					backgroundColor: form.invalid ? 'grey' : '#234465'
-				}"
-				class="m-2 h-12 px-6 rounded-lg">
-				END WORKOUT
-			</button>
-		</fieldset>
-	</form>
-	<a
-		[style]="{
-			backgroundColor: form.invalid ? 'grey' : '#234465'
-		}"
-		class="m-2"
-		routerLink="/">
-		Close
-	</a>
+				<button
+					[disabled]="form.invalid"
+					[style]="{
+						backgroundColor: form.invalid ? 'grey' : '#234465'
+					}"
+					class="m-2 h-12 px-6 rounded-lg">
+					END WORKOUT
+				</button>
+			</fieldset>
+		</form>
+		<a
+			[style]="{
+				backgroundColor: form.invalid ? 'grey' : '#234465'
+			}"
+			class="m-2"
+			routerLink="/">
+			Close
+		</a>
+	</div>
 </div>

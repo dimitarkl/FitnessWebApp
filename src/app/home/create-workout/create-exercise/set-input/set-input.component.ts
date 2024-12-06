@@ -21,6 +21,7 @@ export class SetInputComponent {
 		if (form.valid) {
 			const { weight, reps, exercise } = form.value;
 			//TODO FIX Logic
+			console.log(weight + ' ' + reps + ' ' + exercise);
 			this.setName.emit(exercise);
 			this.setChange.emit({ weight, reps });
 		}
