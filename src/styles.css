@@ -27,6 +27,10 @@ body {
 	--divider-grey: #444444; /* Slightly lighter grey than the background */
 }
 
+.bg-dark {
+	background-color: var(--background-color);
+}
+
 .bg-primary-green {
 	background-color: var(--primary-green);
 }
@@ -47,6 +51,10 @@ body {
 	background-color: var(--accent-green);
 }
 
+.bg-grey {
+	background-color: var(--grey);
+}
+
 .text-light {
 	color: var(--text-light);
 }
@@ -55,6 +63,20 @@ body {
 	color: var(--medium-grey);
 }
 
+.text-accent-green {
+	color: var(--accent-green);
+}
+
 .border-divider-grey {
 	border-color: var(--divider-grey);
+}
+
+.input-field {
+	background-color: var(--background-color);
+	color: var(--text-light);
+	border-color: var(--divider-grey);
+}
+
+.input-error {
+	border-color: red;
 }

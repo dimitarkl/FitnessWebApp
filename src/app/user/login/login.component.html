@@ -1,46 +1,54 @@
-<div class="login-form-wrapper">
-	<form class="login-form" #form="ngForm" (ngSubmit)="login(form)">
-		<fieldset>
-			<h2>Login Form</h2>
+<div
+	class="login-form-wrapper flex justify-center items-center min-h-screen bg-dark text-light p-4">
+	<form
+		class="login-form bg-medium-grey p-8 rounded-lg shadow-md w-full max-w-md"
+		#form="ngForm"
+		(ngSubmit)="login(form)">
+		<fieldset class="border-none">
+			<h2 class="text-2xl font-bold mb-6 text-center">Login Form</h2>
 
-			<p class="field field-icon">
-				<label for="email">
-					<span><i class="fas fa-envelope"></i></span>
+			<div class="field field-icon mb-4 relative">
+				<label
+					for="email"
+					class="absolute left-3 top-1/2 transform -translate-y-1/2">
+					<span><i class="text-accent-green"></i></span>
 				</label>
-				<!-- Implement email validation -->
 				<input
 					[class]="(
 			  (inputEmail?.touched && inputEmail?.errors?.['required']) || 
 			  (inputEmail?.touched && inputEmail?.errors?.['emailValidator'])
-			) ? 'input-error' : ''"
+			) ? 'input-error input-field' : 'input-field'"
 					type="email"
 					name="email"
 					id="email"
 					placeholder="john.doe@gmail.com"
 					ngModel
 					#inputEmail="ngModel"
-					required />
-			</p>
+					required
+					class="w-full p-2.5 border border-gray-300 rounded-md" />
+			</div>
 
 			@if(inputEmail?.touched){
-			<div>
+			<div class="text-red-500 mt-2 text-sm">
 				@if(inputEmail?.errors?.['required']){
-				<p class="error">Email is required!</p>
+				<p>Email is required!</p>
 				} @if(inputEmail?.errors?.['emailValidator']){
-				<p class="error">Email is not valid!</p>
+				<p>Email is not valid!</p>
 				}
 			</div>
 			}
 
-			<p class="field field-icon">
-				<label for="password"
-					><span><i class="fas fa-lock"></i></span
-				></label>
+			<div class="mb-4 relative">
+				<label
+					for="password"
+					class="absolute left-3 top-1/2 transform -translate-y-1/2">
+					<span><i class="fas fa-lock text-accent-green"></i></span>
+				</label>
 				<input
 					[class]="(
-            (inputPassword?.touched && inputPassword?.errors?.['required']) || 
-             (inputPassword?.touched && inputPassword?.errors?.['minlength']))
-             ? 'input-error': ''"
+			  (inputPassword?.touched && inputPassword?.errors?.['required']) || 
+			  (inputPassword?.touched && inputPassword?.errors?.['minlength'])
+			) ? 'input-error input-field' : 'input-field'"
 					type="password"
 					name="password"
 					id="password"
@@ -48,32 +56,30 @@
 					ngModel
 					#inputPassword="ngModel"
 					minlength="6"
-					required />
-			</p>
+					required
+					class="w-full p-2.5 border border-gray-300 rounded-md" />
+			</div>
 
 			@if(inputPassword?.touched){
-			<div>
+			<div class="text-red-500 mt-2 text-sm">
 				@if(inputPassword?.errors?.['required']){
-				<p class="error">Password is required!</p>
-				}
-				<!--  -->
-				@if(inputPassword?.errors?.['minlength']){
-				<p class="error">Password must be at least 6 characters!</p>
+				<p>Password is required!</p>
+				} @if(inputPassword?.errors?.['minlength']){
+				<p>Password must be at least 6 characters!</p>
 				}
 			</div>
 			}
 
 			<button
 				[disabled]="form.invalid"
-				[style]="{
-					backgroundColor: form.invalid ? 'grey' : '#234465'
-				}">
+				class="w-full py-3 mt-4 rounded bg-accent-green text-dark font-bold hover:bg-accent-green-dark disabled:bg-gray-400"
+				[ngClass]="{ 'bg-gray-500': form.invalid }">
 				Login
 			</button>
 
-			<p class="text-center">
-				Have an account?
-				<a routerLink="/register">Register</a>
+			<p class="text-center mt-4">
+				Don't an account?
+				<a routerLink="/register" class="text-accent-green">Register</a>
 			</p>
 		</fieldset>
 	</form>
