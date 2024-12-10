@@ -10,11 +10,10 @@ import { WorkoutDetailsComponent } from './workout-details/workout-details.compo
 
 export const routes: Routes = [
 	{ path: '', component: HomeComponent },
-	{ path: 'login', component: LoginComponent, canActivate: [AuthGuard] },
+	{ path: 'login', component: LoginComponent },
 	{
 		path: 'register',
 		component: RegisterComponent,
-		canActivate: [AuthGuard],
 	},
 	{ path: 'account', component: AccountComponent },
 	{

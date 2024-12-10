@@ -22,12 +22,11 @@
 	<h2 class="text-3xl md:text-5xl m-10 font-extrabold text-slate-50">
 		Workouts
 	</h2>
-	@for(workout of workouts;track workout.id){
-	<app-post [workout]="workout" />
-	}
 </div>
+@for(workout of workouts;track workout.id){
+<app-post [workout]="workout" />
+}
 
-<!-- Modal -->
 <div
 	id="editProfileModal"
 	class="{{
