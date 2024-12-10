@@ -9,6 +9,52 @@
 	font: inherit;
 	vertical-align: baseline;
 }
+
+a {
+	color: #4b9c55;
+}
 body {
 	background-color: #18181b;
+}
+:root {
+	--background-color: #101010; /* Deep black with slight grey tones */
+	--primary-green: #2e8b57; /* Strong, muted green */
+	--secondary-green: #4b9c55; /* Slightly lighter, more vibrant green */
+	--light-grey: #333333; /* Dark grey for borders or subtle elements */
+	--medium-grey: #666666; /* For less emphasized text or background areas */
+	--text-light: #f5f5f5; /* Light grey/white text for readability */
+	--accent-green: #28a745; /* Bright green for buttons or call-to-actions */
+	--divider-grey: #444444; /* Slightly lighter grey than the background */
+}
+
+.bg-primary-green {
+	background-color: var(--primary-green);
+}
+
+.bg-secondary-green {
+	background-color: var(--secondary-green);
+}
+
+.bg-light-grey {
+	background-color: var(--light-grey);
+}
+
+.bg-medium-grey {
+	background-color: var(--medium-grey);
+}
+
+.bg-accent-green {
+	background-color: var(--accent-green);
+}
+
+.text-light {
+	color: var(--text-light);
+}
+
+.text-medium-grey {
+	color: var(--medium-grey);
+}
+
+.border-divider-grey {
+	border-color: var(--divider-grey);
 }
