@@ -3,7 +3,7 @@ import { UserService } from '../user/user.service';
 import { User } from 'firebase/auth';
 import { WorkoutService } from '../home/workout.service';
 import { PostComponent } from '../home/post/post.component';
-import { WorkoutGet } from '../types/Workout';
+import { Workout } from '../types/Workout';
 import { FormsModule, NgForm } from '@angular/forms';
 import { PreferencesService } from '../user/preferences.service';
 
@@ -22,7 +22,7 @@ export class AccountComponent implements OnInit {
 	) {}
 	hidden = 'invisible';
 	user: User | null = null;
-	workouts: WorkoutGet[] | null = null;
+	workouts: Workout[] | null = null;
 	ngOnInit(): void {
 		this.getUser();
 	}

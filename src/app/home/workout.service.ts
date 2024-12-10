@@ -1,10 +1,5 @@
 import { Injectable } from '@angular/core';
-import {
-	Exercise,
-	ExerciseSet,
-	WorkoutSend,
-	WorkoutGet,
-} from '../types/Workout';
+import { Exercise, ExerciseSet, Workout } from '../types/Workout';
 import {
 	addDoc,
 	collection,
@@ -33,7 +28,7 @@ export class WorkoutService {
 		private userService: UserService,
 		private errorService: ErrorService
 	) {}
-	sendWorkout = async (workout: WorkoutSend) => {
+	sendWorkout = async (workout: Workout) => {
 		if (!this.userService.isLogged) return;
 		let userId = '';
 		this.userService.user$.subscribe(item => {
@@ -76,11 +71,11 @@ export class WorkoutService {
 	getDocuments = (q: Query) => {
 		try {
 			const querySnapshot = getDocs(q);
-			const workouts: WorkoutGet[] = [];
+			const workouts: Workout[] = [];
 			querySnapshot.then(item => {
 				item.forEach(doc => {
 					const data = doc.data();
-					const workout: WorkoutGet = {
+					const workout: Workout = {
 						id: doc.id,
 						ownerId: data['ownerId'] || 'Unknown Owner',
 						createdAt: data['createdAt'] || 'Unknown Date',
@@ -142,7 +137,7 @@ export class WorkoutService {
 			const querySnapshot = await getDoc(doc(db, 'exercises', id));
 
 			const data = querySnapshot.data();
-			let workout: WorkoutGet | null = null;
+			let workout: Workout | null = null;
 			if (data) {
 				workout = {
 					id: querySnapshot.id,

@@ -6,7 +6,7 @@ import {
 	SimpleChanges,
 } from '@angular/core';
 import { ExerciseCardComponent } from './exercise-card/exercise-card.component';
-import { WorkoutGet } from '../../types/Workout';
+import { Workout } from '../../types/Workout';
 import { PreferencesService } from '../../user/preferences.service';
 import { UserService } from '../../user/user.service';
 import { User } from 'firebase/auth';
@@ -21,7 +21,7 @@ import { RouterLink } from '@angular/router';
 	styleUrl: './post.component.css',
 })
 export class PostComponent implements OnInit {
-	@Input() workout: WorkoutGet | null = null;
+	@Input() workout: Workout | null = null;
 
 	constructor(
 		private prefService: PreferencesService,
@@ -45,13 +45,13 @@ export class PostComponent implements OnInit {
 				.then(response => (this.ownerUsername = response));
 	}
 	deletePost = () => {
-		if (this.workout)
+		if (this.workout && this.workout.id != undefined)
 			this.workoutService
 				.deteleteWorkout(this.workout?.id)
 				.then(() => location.reload());
 	};
 	likePost = () => {
-		if (this.workout)
+		if (this.workout && this.workout.id != undefined)
 			this.workoutService
 				.likePost(this.workout.id)
 				.then(() => console.log('Done'));

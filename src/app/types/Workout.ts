@@ -1,10 +1,5 @@
-type WorkoutSend = {
-	ownerId: string;
-	createdAt?: string;
-	exercises: Exercise[];
-};
-type WorkoutGet = {
-	id: string;
+type Workout = {
+	id?: string;
 	ownerId: string;
 	createdAt?: string;
 	exercises: Exercise[];
@@ -19,4 +14,4 @@ type ExerciseSet = {
 	weight: number;
 	reps: number;
 };
-export type { WorkoutGet, WorkoutSend, Exercise, ExerciseSet };
+export type { Workout, Exercise, ExerciseSet };
