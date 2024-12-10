@@ -29,8 +29,8 @@ export class CreateWorkoutComponent implements OnInit {
 	create = () => {
 		if (!this.editing) {
 			this.workoutService.sendWorkout(this.workoutObj);
-			this.router.navigate(['/']);
 		} else this.workoutService.updateWorkoutById(this.workoutObj);
+		this.router.navigate(['/']);
 	};
 	addExercise = () => {
 		this.workoutObj.exercises.push({ name: 'Exercise', sets: [] });

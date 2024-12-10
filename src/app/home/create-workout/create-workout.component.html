@@ -1,5 +1,5 @@
 <div class="flex justify-center items-center min-h-screen p-4">
-	<div class="text-center bg-gray-600 p-4 rounded-lg max-w-2xl">
+	<div class="text-center bg-light-grey p-6 rounded-lg max-w-2xl">
 		<form
 			class="register-form text-slate-50"
 			#form="ngForm"
@@ -22,15 +22,16 @@
 						backgroundColor: form.invalid ? 'grey' : '#234465'
 					}"
 					class="m-2 h-12 px-6 rounded-lg">
+					class="m-2 h-12 px-6 rounded-lg bg-accent-green text-slate-50 font-bold hover:bg-accent-green-dark transition duration-200 ease-in-out">
 					END WORKOUT
 				</button>
 			</fieldset>
 		</form>
 		<a
 			[style]="{
-				backgroundColor: form.invalid ? 'grey' : '#234465'
+				backgroundColor: form.invalid ? 'grey' : 'bg-slate-500'
 			}"
-			class="m-2"
+			class="m-2 text-slate-50 font-bold py-2 px-4 rounded-lg hover:bg-accent-green-dark transition duration-200 ease-in-out"
 			routerLink="/">
 			Close
 		</a>
