@@ -33,7 +33,12 @@ export class WorkoutService {
 		let userId = '';
 		this.userService.user$.subscribe(item => {
 			//TODO Add Error Message
-			if (!item) return;
+			if (!item) {
+				this.errorService.setError(
+					'Error Sending Workout:User Not Found'
+				);
+				return;
+			}
 			userId = item?.uid;
 		});
 		workout.ownerId = userId;
@@ -44,7 +49,9 @@ export class WorkoutService {
 			});
 			console.log('Document written with ID: ', docRef.id);
 		} catch (e) {
-			console.error('Error adding document: ', e);
+			this.errorService.setError(
+				'Error adding document: ' + (e as Error).message
+			);
 		}
 	};
 	getLastWorkouts = () => {
@@ -97,7 +104,9 @@ export class WorkoutService {
 			});
 			return workouts;
 		} catch (e) {
-			this.errorService.setError('Error Fetching Workout' + (e as Error));
+			this.errorService.setError(
+				'Error Fetching Workout' + (e as Error).message
+			);
 			return null;
 		}
 	};
@@ -105,7 +114,9 @@ export class WorkoutService {
 		try {
 			await deleteDoc(doc(db, 'exercises', workoutId));
 		} catch (e) {
-			console.log('Error Deleting:' + (e as Error));
+			this.errorService.setError(
+				'Error Deleting:' + (e as Error).message
+			);
 		}
 	};
 	likePost = async (workoutId: string) => {
@@ -122,11 +133,10 @@ export class WorkoutService {
 				return response;
 			} catch (e) {
 				this.errorService.setError(
-					'Error Updating User:' + (e as Error)
+					'Error Liking:' + (e as Error).message
 				);
 			}
-		} else
-			this.errorService.setError('Error Updating User: User Not Found');
+		} else this.errorService.setError('Error Liking: User Not Found');
 	};
 	getWorkoutById = async (id: string) => {
 		try {
@@ -159,7 +169,9 @@ export class WorkoutService {
 			} else this.errorService.setError('Error Fetching');
 			return workout;
 		} catch (e) {
-			this.errorService.setError('Error Fetching:' + (e as Error));
+			this.errorService.setError(
+				'Error Fetching:' + (e as Error).message
+			);
 			return null;
 		}
 	};
