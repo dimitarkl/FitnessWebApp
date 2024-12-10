@@ -25,6 +25,17 @@ export const routes: Routes = [
 		path: 'details',
 		children: [{ path: ':detailsId', component: WorkoutDetailsComponent }],
 	},
+	{
+		path: 'edit',
+		children: [
+			{ path: '', component: HomeComponent },
+			{
+				path: ':editId',
+				component: CreateWorkoutComponent,
+				canActivate: [AuthGuard],
+			},
+		],
+	},
 	{ path: '404', component: NotFoundComponent },
 	{ path: '**', redirectTo: '/404' },
 ];

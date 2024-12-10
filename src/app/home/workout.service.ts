@@ -175,4 +175,38 @@ export class WorkoutService {
 			return null;
 		}
 	};
+	updateWorkoutById = async (workout: Workout) => {
+		if (auth.currentUser) {
+			let body;
+			if (workout.likes == undefined)
+				body = {
+					...workout,
+					likes: null,
+				};
+			else
+				body = {
+					...workout,
+				};
+			if (workout.id) {
+				try {
+					const response = await setDoc(
+						doc(db, 'exercises', workout.id),
+						body,
+						{
+							merge: true,
+						}
+					);
+					return response;
+				} catch (e) {
+					this.errorService.setError(
+						'Error Updating Workout:' + (e as Error).message
+					);
+					console.log(
+						'Error Updating Workout:' + (e as Error).message
+					);
+				}
+			} else this.errorService.setError('Workout Id Not Found');
+		} else
+			this.errorService.setError('Error Updating User: User Not Found');
+	};
 }

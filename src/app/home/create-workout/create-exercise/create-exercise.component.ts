@@ -1,4 +1,12 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+	Component,
+	EventEmitter,
+	Input,
+	OnChanges,
+	OnInit,
+	Output,
+	SimpleChanges,
+} from '@angular/core';
 import { SetInputComponent } from './set-input/set-input.component';
 import { Exercise, ExerciseSet } from '../../../types/Workout';
 
@@ -9,7 +17,7 @@ import { Exercise, ExerciseSet } from '../../../types/Workout';
 	templateUrl: './create-exercise.component.html',
 	styleUrl: './create-exercise.component.css',
 })
-export class CreateExerciseComponent implements OnInit {
+export class CreateExerciseComponent implements OnChanges {
 	@Input() name: string = '';
 	@Input() addExercise: () => void = () => {};
 	@Input() last: boolean = false;
@@ -38,8 +46,7 @@ export class CreateExerciseComponent implements OnInit {
 		if (this.exercise && name != '') this.exercise.name = name;
 		else console.log('Error Changing Exercise Name');
 	};
-
-	ngOnInit(): void {
+	ngOnChanges(changes: SimpleChanges): void {
 		this.checkSets();
 	}
 	checkSets = () => {

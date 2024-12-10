@@ -19,7 +19,7 @@
 				type="text"
 				id="exercise"
 				placeholder="Bench Press"
-				ngModel
+				[(ngModel)]="exerciseName"
 				(ngModelChange)="submitSet(form)" />}@else{
 			<input class="w-30 invisible" />
 			}
@@ -27,30 +27,51 @@
 		<div>
 			@if(first){
 			<h1 class="text-lg font-semibold">Reps</h1>
-			}
+			} @if(setValues.reps!=0){
 			<input
 				class="w-10 text-slate-950"
 				type="number"
 				name="reps"
 				id="reps"
 				placeholder="{{ set?.reps }}"
-				ngModel
 				(ngModelChange)="submitSet(form)"
+				[(ngModel)]="setValues.reps"
 				required />
+			} @else {
+			<input
+				class="w-10 text-slate-950"
+				type="number"
+				name="reps"
+				id="reps"
+				placeholder="{{ set?.reps }}"
+				(ngModelChange)="submitSet(form)"
+				ngModel
+				required />
+			}
 		</div>
 		<div>
 			@if(first){
 			<h1 class="text-lg font-semibold">Weight</h1>
-			}
+			} @if(setValues.weight!=0){
 			<input
 				class="w-10 text-slate-950"
 				type="number"
 				name="weight"
 				id="weight"
+				[(ngModel)]="setValues.weight"
+				(ngModelChange)="submitSet(form)"
+				required />
+			}@else {
+			<input
+				class="w-10 text-slate-950"
+				type="number"
+				name="weight"
+				id="weight"
+				[value]="setValues.weight"
 				placeholder="{{ set?.weight }}"
 				ngModel
 				(ngModelChange)="submitSet(form)"
-				required />
+				required />}
 		</div>
 	</div>
 </form>

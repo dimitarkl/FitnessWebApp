@@ -1,9 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { CreateExerciseComponent } from './create-exercise/create-exercise.component';
-import { Exercise, WorkoutSend } from '../../types/Workout';
+import { Exercise, Workout } from '../../types/Workout';
 import { WorkoutService } from '../workout.service';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 @Component({
 	selector: 'app-create-workout',
 	standalone: true,
@@ -11,34 +11,44 @@ import { RouterLink } from '@angular/router';
 	templateUrl: './create-workout.component.html',
 	styleUrl: './create-workout.component.css',
 })
-export class CreateWorkoutComponent {
-	hidden = false;
-	constructor(private workoutService: WorkoutService) {}
-
+export class CreateWorkoutComponent implements OnInit {
+	constructor(
+		private workoutService: WorkoutService,
+		private route: ActivatedRoute,
+		private router: Router
+	) {}
+	editing = false;
+	ngOnInit(): void {
+		const id = this.route.snapshot.params['editId'];
+		this.getWorkout(id);
+	}
 	handleExerciseChange(updatedExercise: Exercise, index: number) {
 		this.workoutObj.exercises[index] = updatedExercise;
 	}
 
 	create = () => {
-		this.workoutService.sendWorkout(this.workoutObj);
-	};
-	switchForm = () => {
-		this.hidden = !this.hidden;
-		this.workoutService.getLastWorkouts();
+		if (!this.editing) {
+			this.workoutService.sendWorkout(this.workoutObj);
+			this.router.navigate(['/']);
+		} else this.workoutService.updateWorkoutById(this.workoutObj);
 	};
 	addExercise = () => {
 		this.workoutObj.exercises.push({ name: 'Exercise', sets: [] });
 	};
-	workoutObj: WorkoutSend = {
+	getWorkout = (id: string | null) => {
+		if (id) {
+			this.workoutService.getWorkoutById(id).then(workout => {
+				if (workout) this.workoutObj = workout;
+				this.editing = true;
+			});
+		}
+	};
+	workoutObj: Workout = {
 		ownerId: '',
 		exercises: [
 			{
 				name: 'benchPPress',
 				sets: [
-					{
-						weight: 0,
-						reps: 0,
-					},
 					{
 						weight: 0,
 						reps: 0,
