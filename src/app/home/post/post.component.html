@@ -1,45 +1,39 @@
 <div
-	class="card-container flex justify-center items-center box-border outline-black outline-10 mb-2.5 mt-2.5">
-	<div class="card w-[625px] bg-gray-600 rounded-lg shadow-md">
-		<div class="card-content m-2.5 text-white">
-			<div class="card-user flex flex-row mb-2.5">
-				<svg
-					xmlns="http://www.w3.org/2000/svg"
-					enable-background="new 0 0 24 24"
-					height="24px"
-					viewBox="0 0 24 24"
-					width="24px"
-					fill="#e8eaed">
-					<g><rect fill="none" height="24" width="24" /></g>
-					<g>
-						<path
-							d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 4c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm0 14c-2.03 0-4.43-.82-6.14-2.88C7.55 15.8 9.68 15 12 15s4.45.8 6.14 2.12C16.43 19.18 14.03 20 12 20z" />
-					</g>
-				</svg>
-
-				<h1 class="font-bold text-2xl ml-2.5">
+	class="flex justify-center items-center box-border outline-black outline-10 mb-2.5 mt-2.5">
+	<div class="w-[625px] bg-light-grey rounded-lg shadow-md">
+		<div class="m-2.5 text-light">
+			<div class="flex flex-row mb-2.5">
+				<img
+					src="https://via.placeholder.com/120"
+					alt="Profile Photo"
+					class="w-12 h-12 rounded-full object-cover border-2 border-[#333333]" />
+				<h1 class="font-bold text-2xl mt-1.5 ml-2">
 					{{ ownerUsername ? ownerUsername : 'Username Not Found' }}
 				</h1>
 			</div>
-			<div class="card-description ml-5">
-				<p>PLACEHOLDER</p>
+			<div class="ml-5">
+				<p>Workout Name Here</p>
 			</div>
 			@for(exercise of workout?.exercises?.slice(0, 3);track $index){
 			<app-exercise-card [exercise]="exercise" />
 			} @if(more>0){
 			<div class="text-center">
-				<a routerLink="/details/{{ workout?.id }}">
+				<a
+					routerLink="/details/{{ workout?.id }}"
+					class="text-secondary-green">
 					Click To See The Full Workout({{ more }} more left)
 				</a>
 			</div>
 			}@else {
 			<div class="text-center">
-				<a routerLink="/details/{{ workout?.id }}">
+				<a
+					routerLink="/details/{{ workout?.id }}"
+					class="text-secondary-green">
 					Click To See The Full Workout
 				</a>
 			</div>
 			}
-			<button (click)="showLikes()">
+			<button (click)="showLikes()" class="text-accent-green">
 				{{
 					workout && workout.likes
 						? workout.likes.length + ' Likes'
@@ -50,22 +44,17 @@
 				@if(workout?.ownerId!=user?.uid){
 				<button
 					(click)="likePost()"
-					class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+					class="bg-accent-green hover:bg-primary-green text-white font-bold py-2 px-4 rounded">
 					Like</button
-				>}
-				<button
-					class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
-					Comment
-				</button>
-				@if(workout?.ownerId==user?.uid){
+				>} @if(workout?.ownerId==user?.uid){
 				<a
 					routerLink="/edit/{{ workout?.id }}"
-					class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+					class="bg-secondary-green hover:bg-primary-green text-white font-bold py-2 px-4 rounded">
 					Edit
 				</a>
 				<button
 					(click)="deletePost()"
-					class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+					class="bg-secondary-green hover:bg-primary-green text-white font-bold py-2 px-4 rounded">
 					Delete</button
 				>}
 			</div>
