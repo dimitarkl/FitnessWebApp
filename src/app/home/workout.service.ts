@@ -19,6 +19,7 @@ import {
 import { auth, db } from '../../lib/firebase';
 import { UserService } from '../user/user.service';
 import { ErrorService } from '../error/error.service';
+import { catchError, firstValueFrom, map, of } from 'rxjs';
 
 @Injectable({
 	providedIn: 'root',
@@ -29,29 +30,47 @@ export class WorkoutService {
 		private errorService: ErrorService
 	) {}
 	sendWorkout = async (workout: Workout) => {
-		if (!this.userService.isLogged) return;
-		let userId = '';
-		this.userService.user$.subscribe(item => {
-			//TODO Add Error Message
-			if (!item) {
+		const userId = await this.checkUser(); // Get the user ID from checkUser
+		if (userId) {
+			workout.ownerId = userId; // Set the workout's ownerId
+
+			try {
+				const docRef = await addDoc(collection(db, 'exercises'), {
+					...workout,
+					createdAt: serverTimestamp(),
+				});
+				console.log('Document written with ID: ', docRef.id);
+			} catch (e) {
 				this.errorService.setError(
-					'Error Sending Workout:User Not Found'
+					'Error adding document: ' + (e as Error).message
 				);
-				return;
 			}
-			userId = item?.uid;
-		});
-		workout.ownerId = userId;
+		} else {
+			// Handle case when user is invalid
+			this.errorService.setError('User not found or invalid');
+		}
+	};
+	checkUser = async (): Promise<string | null> => {
 		try {
-			const docRef = await addDoc(collection(db, 'exercises'), {
-				...workout,
-				createdAt: serverTimestamp(),
-			});
-			console.log('Document written with ID: ', docRef.id);
-		} catch (e) {
-			this.errorService.setError(
-				'Error adding document: ' + (e as Error).message
+			const userId = await firstValueFrom(
+				this.userService.user$.pipe(
+					map(user => user?.uid || null), // Map to user ID or null if not found
+					catchError(() => {
+						this.errorService.setError('Error fetching user');
+						return of(null);
+					})
+				)
 			);
+
+			if (userId) {
+				return userId; // Return the userId
+			} else {
+				this.errorService.setError('User not found or error occurred');
+				return null; // Return null if no userId found
+			}
+		} catch (error) {
+			this.errorService.setError('Error processing user');
+			return null; // Return null in case of an error
 		}
 	};
 	getLastWorkouts = () => {
@@ -112,32 +131,46 @@ export class WorkoutService {
 		}
 	};
 	deteleteWorkout = async (workoutId: string) => {
-		try {
-			await deleteDoc(doc(db, 'exercises', workoutId));
-		} catch (e) {
-			this.errorService.setError(
-				'Error Deleting:' + (e as Error).message
-			);
+		const workout = await this.getWorkoutById(workoutId);
+		if (!workout) {
+			this.errorService.setError('Error:Workout Doesnt Exist');
+			return;
 		}
-	};
-	likePost = async (workoutId: string) => {
-		if (auth.currentUser) {
-			const body = {
-				likes: [auth.currentUser.uid],
-			};
+		const isUserValid = await this.checkUser();
+		if (isUserValid)
 			try {
-				const response = await setDoc(
-					doc(db, 'exercises', workoutId),
-					body,
-					{ merge: true }
-				);
-				return response;
+				await deleteDoc(doc(db, 'exercises', workoutId));
 			} catch (e) {
 				this.errorService.setError(
-					'Error Liking:' + (e as Error).message
+					'Error Deleting:' + (e as Error).message
 				);
 			}
-		} else this.errorService.setError('Error Liking: User Not Found');
+	};
+	likePost = async (workoutId: string) => {
+		const workout = await this.getWorkoutById(workoutId);
+		if (!workout) {
+			this.errorService.setError('Error:Workout Doesnt Exist');
+			return;
+		}
+		const isUserValid = await this.checkUser();
+		if (isUserValid)
+			if (auth.currentUser) {
+				const body = {
+					likes: [auth.currentUser.uid],
+				};
+				try {
+					const response = await setDoc(
+						doc(db, 'exercises', workoutId),
+						body,
+						{ merge: true }
+					);
+					return response;
+				} catch (e) {
+					this.errorService.setError(
+						'Error Liking:' + (e as Error).message
+					);
+				}
+			} else this.errorService.setError('Error Liking: User Not Found');
 	};
 	getWorkoutById = async (id: string) => {
 		try {
