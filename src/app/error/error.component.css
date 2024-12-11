@@ -1,15 +1,66 @@
 .error-message {
-	background-color: #ff4c4c;
-	color: white;
+	background-color: #f44336;
+	color: #fff;
 	padding: 15px 20px;
-	border-radius: 5px;
-	box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
-	font-size: 1.2rem;
+	border: 1px solid white;
+	border-radius: 8px;
+	box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2);
+	font-size: 1.1rem;
 	text-align: center;
 	position: fixed;
 	top: 15%;
 	left: 50%;
 	transform: translateX(-50%);
-	width: 100%;
-	max-width: 300px;
+	max-width: 90%;
+	min-height: 50px;
+	z-index: 1000;
+	opacity: 0;
+	animation: fadeIn 0.5s forwards;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	white-space: normal;
+	word-wrap: break-word;
+}
+
+.error-message.show {
+	opacity: 1;
+}
+
+.error-message .icon {
+	margin-right: 10px;
+	font-size: 1.4rem;
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+@media (max-width: 768px) {
+	.error-message {
+		font-size: 1rem;
+		padding: 12px 20px;
+		max-width: 90%;
+	}
+
+	.error-message .icon {
+		font-size: 1.2rem;
+	}
+}
+
+@media (max-width: 480px) {
+	.error-message {
+		font-size: 0.9rem;
+		padding: 10px 15px;
+		max-width: 90%;
+	}
+
+	.error-message .icon {
+		font-size: 1.1rem;
+	}
 }
