@@ -23,6 +23,7 @@ export class CreateExerciseComponent implements OnChanges {
 	@Input() last: boolean = false;
 	@Input() exercise: Exercise | null = null;
 	@Input() indx: number = 0;
+	@Input() deleteExercise!: (index: number) => void;
 
 	@Output() setChange = new EventEmitter<Exercise>();
 	sets = 0;
@@ -53,6 +54,9 @@ export class CreateExerciseComponent implements OnChanges {
 		if (this.exercise) {
 			const count = this.exercise.sets?.length;
 			if (count) this.sets = count;
+			else {
+				this.deleteExercise(this.indx);
+			}
 			if (this.exercise.sets) {
 				this.set = this.exercise.sets;
 			}
@@ -60,6 +64,11 @@ export class CreateExerciseComponent implements OnChanges {
 	};
 	add = () => {
 		this.exercise?.sets?.push({ weight: 0, reps: 0 });
+		this.checkSets();
+	};
+	deleteSet = (index: number) => {
+		console.log('set index' + index);
+		this.exercise?.sets?.splice(index, 1);
 		this.checkSets();
 	};
 }

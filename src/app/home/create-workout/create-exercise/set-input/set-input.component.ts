@@ -21,6 +21,7 @@ export class SetInputComponent implements OnChanges {
 	@Input() first: boolean = false;
 	@Input() set: ExerciseSet | null = null;
 	@Input() exerciseName: string = '';
+	@Input() deleteSet!: (index: number) => void;
 
 	@Output() setChange = new EventEmitter<ExerciseSet>();
 	@Output() setName = new EventEmitter<string>();
@@ -44,5 +45,8 @@ export class SetInputComponent implements OnChanges {
 			this.setValues.reps = this.set.reps;
 			this.setValues.weight = this.set.weight;
 		}
+	};
+	onDeleteSet = () => {
+		this.deleteSet(this.idx);
 	};
 }

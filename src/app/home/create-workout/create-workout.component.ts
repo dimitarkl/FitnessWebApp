@@ -25,7 +25,16 @@ export class CreateWorkoutComponent implements OnInit {
 	handleExerciseChange(updatedExercise: Exercise, index: number) {
 		this.workoutObj.exercises[index] = updatedExercise;
 	}
-
+	deleteExercise = (index: number) => {
+		if (
+			this.workoutObj.exercises[index].sets &&
+			this.workoutObj.exercises[index].sets.length <= 0
+		) {
+			this.workoutObj.exercises.splice(index, 1);
+		} else {
+			console.log('ERROR');
+		}
+	};
 	create = () => {
 		if (!this.editing) {
 			this.workoutService.sendWorkout(this.workoutObj);
@@ -33,7 +42,10 @@ export class CreateWorkoutComponent implements OnInit {
 		this.router.navigate(['/']);
 	};
 	addExercise = () => {
-		this.workoutObj.exercises.push({ name: 'Exercise', sets: [] });
+		this.workoutObj.exercises.push({
+			name: 'Exercise',
+			sets: [{ reps: 0, weight: 0 }],
+		});
 	};
 	getWorkout = (id: string | null) => {
 		if (id) {

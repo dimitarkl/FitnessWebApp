@@ -13,20 +13,18 @@
 					[last]="$index === workoutObj.exercises.length - 1"
 					[exercise]="workoutObj.exercises[$index]"
 					[indx]="$index"
-					(setChange)="handleExerciseChange($event, $index)" />
+					(setChange)="handleExerciseChange($event, $index)"
+					[deleteExercise]="deleteExercise" />
 				}
 
 				<button
 					[disabled]="form.invalid"
-					[style]="{
-						backgroundColor: form.invalid ? 'grey' : '#234465'
-					}"
-					class="m-2 h-12 px-6 rounded-lg">
 					class="m-2 h-12 px-6 rounded-lg bg-accent-green text-slate-50 font-bold hover:bg-accent-green-dark transition duration-200 ease-in-out">
 					END WORKOUT
 				</button>
 			</fieldset>
 		</form>
+
 		<a
 			[style]="{
 				backgroundColor: form.invalid ? 'grey' : 'bg-slate-500'

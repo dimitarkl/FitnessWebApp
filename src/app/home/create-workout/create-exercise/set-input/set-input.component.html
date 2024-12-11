@@ -3,15 +3,15 @@
 	#form="ngForm"
 	(ngSubmit)="submitSet(form)">
 	<div
-		class="flex flex-row flex-wrap md:grid md:grid-cols-5 p-4 rounded-lg bg-gray-800 text-center shadow-md text-slate-50 gap-4">
+		class="flex flex-row flex-wrap md:grid md:grid-cols-6 p-4 rounded-lg bg-medium-grey text-center shadow-md text-slate-50 gap-4">
 		<div class="flex-1 md:flex-none">
 			@if(first) {
-			<label class="text-lg font-semibold">Set</label> }
-			<h2 class="mt-2 text-xl">{{ idx + 1 }}</h2>
+			<label class="text-sm md:text-lg font-semibold">Set</label> }
+			<h2 class="mt-2 text-lg md:text-xl">{{ idx + 1 }}</h2>
 		</div>
 		<div class="flex-[2] md:col-span-2">
 			@if(first) {
-			<h1 class="text-lg font-semibold">Exercise</h1>
+			<h1 class="text-sm md:text-lg font-semibold">Exercise</h1>
 			} @if(first) {
 			<input
 				class="w-full text-slate-950 text-center py-2 px-3 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-accent-green"
@@ -28,7 +28,7 @@
 		</div>
 		<div class="flex-1 md:flex-none">
 			@if(first) {
-			<h1 class="text-lg font-semibold">Reps</h1>
+			<h1 class="text-sm md:text-lg font-semibold">Reps</h1>
 			} @if(setValues.reps != 0) {
 			<input
 				class="w-full md:w-20 text-slate-950 text-center py-2 px-3 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-accent-green"
@@ -53,7 +53,7 @@
 		</div>
 		<div class="flex-1 md:flex-none">
 			@if(first) {
-			<h1 class="text-lg font-semibold">Weight</h1>
+			<h1 class="text-sm md:text-lg font-semibold">Weight</h1>
 			} @if(setValues.weight != 0) {
 			<input
 				class="w-full md:w-20 text-slate-950 text-center py-2 px-3 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-accent-green"
@@ -76,5 +76,20 @@
 				required />
 			}
 		</div>
+		@if(first){
+		<button
+			type="button"
+			(click)="onDeleteSet()"
+			class="mt-5 text-xl md:text-3xl font-bold p-0">
+			&times;
+		</button>
+		} @else {
+		<button
+			type="button"
+			(click)="onDeleteSet()"
+			class="text-xl md:text-3xl font-bold">
+			&times;
+		</button>
+		}
 	</div>
 </form>

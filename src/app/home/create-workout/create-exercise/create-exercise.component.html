@@ -8,7 +8,8 @@
 		[idx]="$index"
 		[set]="set ? set[$index] : null"
 		(setChange)="handleSetChange($event, $index)"
-		(setName)="setName($event)" />
+		(setName)="setName($event)"
+		[deleteSet]="deleteSet" />
 	}
 
 	<button
