@@ -1,5 +1,5 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { BehaviorSubject, Observable, Subscription, tap } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import {
 	browserLocalPersistence,
 	createUserWithEmailAndPassword,
@@ -9,6 +9,7 @@ import {
 	User,
 } from 'firebase/auth';
 import { auth } from '../../lib/firebase';
+import { ErrorService } from '../error/error.service';
 
 @Injectable({
 	providedIn: 'root',
@@ -18,7 +19,7 @@ export class UserService implements OnDestroy {
 		new BehaviorSubject<User | null>(null);
 	user$: Observable<User | null> = this.userSubject.asObservable();
 
-	constructor() {
+	constructor(private errorService: ErrorService) {
 		this.initializeAuthState();
 	}
 	private initializeAuthState(): void {
@@ -32,7 +33,7 @@ export class UserService implements OnDestroy {
 
 			return signInWithEmailAndPassword(auth, email, password);
 		} catch (err) {
-			console.log('Login Error:' + (err as Error).message);
+			this.errorService.setError('Login Error:' + (err as Error).message);
 		}
 		return;
 	};
@@ -41,7 +42,9 @@ export class UserService implements OnDestroy {
 			await setPersistence(auth, browserLocalPersistence);
 			return createUserWithEmailAndPassword(auth, email, password);
 		} catch (err) {
-			console.log('Register Error:' + (err as Error).message);
+			this.errorService.setError(
+				'Register Error:' + (err as Error).message
+			);
 		}
 		return;
 	};
@@ -49,7 +52,9 @@ export class UserService implements OnDestroy {
 		try {
 			await auth.signOut();
 		} catch (err) {
-			console.log('Logout Error:' + (err as Error).message);
+			this.errorService.setError(
+				'Logout Error:' + (err as Error).message
+			);
 		}
 	};
 	get isLogged(): boolean {
