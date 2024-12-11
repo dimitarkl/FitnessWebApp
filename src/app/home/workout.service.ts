@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Exercise, ExerciseSet, Workout } from '../types/Workout';
 import {
 	addDoc,
+	arrayUnion,
 	collection,
 	deleteDoc,
 	doc,
@@ -146,6 +147,7 @@ export class WorkoutService {
 				);
 			}
 	};
+	//preebano
 	likePost = async (workoutId: string) => {
 		const workout = await this.getWorkoutById(workoutId);
 		if (!workout) {
@@ -156,7 +158,7 @@ export class WorkoutService {
 		if (isUserValid)
 			if (auth.currentUser) {
 				const body = {
-					likes: [auth.currentUser.uid],
+					likes: arrayUnion(auth.currentUser.uid),
 				};
 				try {
 					const response = await setDoc(
