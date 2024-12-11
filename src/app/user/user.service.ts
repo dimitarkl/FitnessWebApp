@@ -31,7 +31,7 @@ export class UserService implements OnDestroy {
 		try {
 			await setPersistence(auth, browserLocalPersistence);
 
-			return signInWithEmailAndPassword(auth, email, password);
+			return await signInWithEmailAndPassword(auth, email, password);
 		} catch (err) {
 			this.errorService.setError('Login Error:' + (err as Error).message);
 		}
@@ -40,7 +40,7 @@ export class UserService implements OnDestroy {
 	register = async (email: string, password: string) => {
 		try {
 			await setPersistence(auth, browserLocalPersistence);
-			return createUserWithEmailAndPassword(auth, email, password);
+			return await createUserWithEmailAndPassword(auth, email, password);
 		} catch (err) {
 			this.errorService.setError(
 				'Register Error:' + (err as Error).message
