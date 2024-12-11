@@ -98,8 +98,7 @@ export class WorkoutService {
 	getLastWorkouts = () => {
 		const q = query(
 			collection(db, 'exercises'),
-			orderBy('createdAt', 'desc'),
-			limit(5)
+			orderBy('createdAt', 'desc')
 		);
 		const response = this.getDocuments(q);
 		return response;
