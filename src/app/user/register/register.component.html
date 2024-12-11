@@ -58,17 +58,47 @@
 					minlength="6"
 					required
 					class="w-full p-2.5 border border-gray-300 rounded-md" />
-			</div>
-
-			@if(inputPassword?.touched){
-			<div class="text-red-500 mt-2 text-sm">
-				@if(inputPassword?.errors?.['required']){
-				<p>Password is required!</p>
-				} @if(inputPassword?.errors?.['minlength']){
-				<p>Password must be at least 6 characters!</p>
+				@if(inputPassword?.touched){
+				<div class="text-red-500 mt-2 text-sm">
+					@if(inputPassword?.errors?.['required']){
+					<p>Password is required!</p>
+					} @if(inputPassword?.errors?.['minlength']){
+					<p>Password must be at least 6 characters!</p>
+					}
+				</div>
 				}
 			</div>
-			}
+
+			<div class="field field-icon mt-4 mb-4 relative">
+				<label
+					for="rePassword"
+					class="absolute left-3 top-1/2 transform -translate-y-1/2">
+					<span><i class="fas fa-lock text-accent-green"></i></span>
+				</label>
+				<input
+					[class]="(
+					  (inputPassword?.touched && inputPassword?.errors?.['required']) || 
+					  (inputPassword?.touched && inputPassword?.errors?.['minlength'])
+					) ? 'input-error input-field' : 'input-field'"
+					type="password"
+					name="rePassword"
+					id="rePassword"
+					placeholder="******"
+					ngModel
+					#inputRePassword="ngModel"
+					minlength="6"
+					required
+					class="w-full p-2.5 border border-gray-300 rounded-md" />
+				@if(inputRePassword?.touched){
+				<div class="text-red-500 mt-2 text-sm">
+					@if(inputRePassword?.errors?.['required']){
+					<p>Repeat password is required!</p>
+					} @if(inputRePassword?.errors?.['minlength']){
+					<p>Repeat password must be at least 6 characters!</p>
+					}
+				</div>
+				}
+			</div>
 
 			<button
 				[disabled]="form.invalid"
