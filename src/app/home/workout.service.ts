@@ -84,6 +84,7 @@ export class WorkoutService {
 					const data = doc.data();
 					const workout: Workout = {
 						id: doc.id,
+						title: data['title'] || 'Title Not Found',
 						ownerId: data['ownerId'] || 'Unknown Owner',
 						createdAt: data['createdAt'] || 'Unknown Date',
 						exercises: (data['exercises'] || []).map(
@@ -151,6 +152,7 @@ export class WorkoutService {
 			if (data) {
 				workout = {
 					id: querySnapshot.id,
+					title: data['title'] || 'Title Not Found',
 					ownerId: data['ownerId'] || 'Unknown Owner',
 					createdAt: data['createdAt'] || 'Unknown Date',
 					exercises: (data['exercises'] || []).map(

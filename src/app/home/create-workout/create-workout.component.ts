@@ -55,7 +55,12 @@ export class CreateWorkoutComponent implements OnInit {
 			});
 		}
 	};
+	submitName = (form: NgForm) => {
+		const { title } = form.value;
+		this.workoutObj.title = title;
+	};
 	workoutObj: Workout = {
+		title: '',
 		ownerId: '',
 		exercises: [
 			{

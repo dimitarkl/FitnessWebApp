@@ -1,4 +1,5 @@
 type Workout = {
+	title: string;
 	id?: string;
 	ownerId: string;
 	createdAt?: string;

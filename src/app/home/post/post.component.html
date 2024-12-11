@@ -12,7 +12,7 @@
 				</h1>
 			</div>
 			<div class="ml-5">
-				<p>Workout Name Here</p>
+				<p>{{ workout?.title }}</p>
 			</div>
 			@for(exercise of workout?.exercises?.slice(0, 3);track $index){
 			<app-exercise-card [exercise]="exercise" />
