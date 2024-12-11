@@ -1,15 +1,19 @@
-<div class="text-center m-14">
-	<h1 class="text-7xl md:text-9xl font-extrabold text-slate-50">
+<div class="text-center m-6 md:m-14">
+	<h1
+		class="text-5xl sm:text-6xl md:text-7xl lg:text-9xl font-extrabold text-slate-50">
 		FITNESS APP
 	</h1>
 </div>
+
 @for(workout of workouts;track workout.id){
 <app-post [workout]="workout" />
 }
-<div class="fixed bottom-20 left-1/2 transform -translate-x-1/2 text-center">
+
+<div
+	class="fixed bottom-10 sm:bottom-14 left-1/2 transform -translate-x-1/2 text-center w-full">
 	<a
 		routerLink="/create"
-		class="text-5xl text-white bg-accent-green py-3 px-6 rounded-lg m-10 font-extrabold hover:bg-accent-green-dark transition duration-200 ease-in-out">
+		class="text-3xl sm:text-4xl md:text-5xl text-white bg-accent-green py-3 px-6 rounded-lg mx-6 sm:mx-8 md:mx-10 font-extrabold hover:bg-accent-green-dark transition duration-200 ease-in-out">
 		Start Workout
 	</a>
 </div>
