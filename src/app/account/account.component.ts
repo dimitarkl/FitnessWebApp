@@ -46,6 +46,8 @@ export class AccountComponent implements OnInit {
 	submitAccount = (form: NgForm) => {
 		console.log('form submitted');
 		const { username } = form.value;
+		form.reset();
+		this.hidden = 'invisible';
 		this.prefService.updateUsername(username);
 		console.log(form.value);
 	};

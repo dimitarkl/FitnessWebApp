@@ -1,23 +1,27 @@
-<div class="text-center flex flex-row justify-center items-center">
-	<img
-		src="//icons.veryicon.com/png/o/miscellaneous/youyinzhibo/guest.png"
-		alt="guest Icon" />
-	<div class="flex-col">
-		<h1 class="text-5xl md:text-7xl ml-10 font-extrabold text-slate-50">
-			user:{{ user?.displayName }}
-		</h1>
-		<h1 class="text-3xl md:text-5xl m-10 font-extrabold text-slate-50">
-			{{ user?.email }}
-		</h1>
+<div class="max-w-2xl sm:w-[625px] mx-auto p-2">
+	<div class="shadow-lg rounded-lg p-6 mb-8 bg-primary-green">
+		<div class="flex items-center space-x-6">
+			<img
+				src="https://via.placeholder.com/120"
+				alt="Profile Photo"
+				class="w-24 h-24 rounded-full object-cover border-2 border-divider-grey" />
+			<div>
+				<h1 class="text-3xl font-semibold text-[#eaeaea]">
+					{{ user?.displayName }}
+				</h1>
+				<p class="text-lg text-[#a5d6a7]">{{ user?.email }}</p>
+			</div>
+		</div>
+		<div class="w-36 rounded-lg mt-5">
+			<button
+				(click)="changeHidden()"
+				class="w-full py-3 bg-accent-green text-white font-semibold rounded-lg hover:bg-[#00c853] focus:outline-none">
+				Edit Profile
+			</button>
+		</div>
 	</div>
 </div>
-<div class="text-center flex flex-row justify-center">
-	<button
-		(click)="changeHidden()"
-		class="text-3xl md:text-5xl h-24 w-72 font-extrabold text-slate-50 mr-80 box-border outline outline-slate-50 outline-8">
-		Edit Profile
-	</button>
-</div>
+
 <div class="text-center flex flex-col justify-center items-center">
 	<h2 class="text-3xl md:text-5xl m-10 font-extrabold text-slate-50">
 		Workouts
@@ -31,24 +35,25 @@
 	id="editProfileModal"
 	class="{{
 		hidden
-	}} fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
-	ng-show="ctrl.isModalOpen">
-	<div class="bg-white rounded-lg p-8 w-full max-w-lg relative">
+	}} fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-2">
+	<div class="bg-medium-grey p-8 w-full max-w-lg relative rounded-lg">
 		<button
 			(click)="changeHidden()"
-			class="absolute top-4 right-4 text-slate-700 text-3xl font-bold">
+			class="absolute top-4 right-4 text-light text-3xl font-bold">
 			&times;
 		</button>
-		<h2 class="text-2xl font-bold mb-4 text-gray-900">Edit Profile</h2>
+		<h2 class="text-2xl font-bold mb-6 text-center text-light">
+			Edit Profile
+		</h2>
 		<form #form="ngForm" (ngSubmit)="submitAccount(form)">
-			<div class="mb-4">
+			<div class="mb-6">
 				<label
-					class="block text-gray-700 text-sm font-bold mb-2"
+					class="block text-light text-sm font-bold mb-2"
 					for="displayName"
 					>Display Name</label
 				>
 				<input
-					class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+					class="w-full px-4 py-3 border border-divider-grey rounded-lg bg-dark text-light focus:outline-none focus:ring-2 focus:ring-accent-green focus:border-accent-green"
 					type="username"
 					name="username"
 					id="username"
@@ -58,7 +63,9 @@
 			</div>
 			<div class="flex items-center justify-between">
 				<button
-					class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+					type="submit"
+					class="w-full py-3 mt-4 rounded bg-accent-green text-light font-bold hover:bg-accent-green disabled:bg-medium-grey"
+					[disabled]="form.invalid">
 					Save
 				</button>
 			</div>
