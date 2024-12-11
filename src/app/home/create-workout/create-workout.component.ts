@@ -39,7 +39,7 @@ export class CreateWorkoutComponent implements OnInit {
 		if (!this.editing) {
 			this.workoutService.sendWorkout(this.workoutObj);
 		} else this.workoutService.updateWorkoutById(this.workoutObj);
-		this.router.navigate(['/']);
+		this.router.navigate(['/catalog']); //TODO rollback
 	};
 	addExercise = () => {
 		this.workoutObj.exercises.push({

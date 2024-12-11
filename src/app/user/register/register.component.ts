@@ -29,7 +29,7 @@ export class RegisterComponent {
 			this.errorService.setError("Passwords don't match");
 		this.userService
 			.register(email, password)
-			?.then(() => this.router.navigate(['/']));
+			?.then(() => this.router.navigate(['/catalog'])); //TODO rollback
 		console.log(`Email: ${email} and password: ${password}`);
 	}
 }
