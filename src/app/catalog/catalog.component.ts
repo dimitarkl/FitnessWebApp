@@ -16,14 +16,15 @@ export class CatalogComponent {
 		private workoutService: WorkoutService,
 		private errorService: ErrorService
 	) {}
-	workouts: Workout[] | null = null;
+	workouts!: Workout[];
 
 	ngOnInit(): void {
 		this.getWorkout();
 	}
 	getWorkout = () => {
-		const response = this.workoutService.getLastWorkouts();
-		if (response != null) this.workouts = response;
-		else this.errorService.setError('Error Getting Response');
+		this.workoutService.getLastWorkouts().then(response => {
+			if (response != null) this.workouts = response;
+			else this.errorService.setError('Error Getting Response');
+		});
 	};
 }

@@ -22,22 +22,32 @@ export class AccountComponent implements OnInit {
 	) {}
 	hidden = 'invisible';
 	user: User | null = null;
+	displayName: string = '';
 	workouts: Workout[] | null = null;
+	weightUnit: string = '';
 	ngOnInit(): void {
 		this.getUser();
+		this.getName();
+		this.getWorkouts();
+		this.getWeightUnit();
 	}
 	getUser = () => {
 		this.userService.user$.subscribe(i => {
 			this.user = i;
-			this.getWorkouts();
 		});
+	};
+	getName = () => {
+		if (this.user)
+			this.displayName = this.user.displayName
+				? this.user.displayName
+				: '';
+		else this.displayName = '';
 	};
 	getWorkouts = () => {
 		if (this.user) {
-			this.workouts = this.workoutService.getUserWorkouts(
-				this.user.uid,
-				5
-			);
+			this.workoutService
+				.getUserWorkouts(this.user.uid, 5)
+				.then(response => (this.workouts = response));
 		} else {
 			console.log('Error User');
 			return;
@@ -45,14 +55,19 @@ export class AccountComponent implements OnInit {
 	};
 	submitAccount = (form: NgForm) => {
 		console.log('form submitted');
-		const { username } = form.value;
-		form.reset();
+		const { username, weightUnit } = form.value;
 		this.hidden = 'invisible';
 		this.prefService.updateUsername(username);
-		console.log(form.value);
+		this.prefService.updateWeightUnit(weightUnit);
+		this.getUser();
+		this.getWorkouts();
 	};
 	changeHidden = () => {
 		if (this.hidden == 'invisible') this.hidden = '';
 		else this.hidden = 'invisible';
+	};
+	getWeightUnit = () => {
+		if (this.user)
+			this.prefService.getWeightUnit().then(i => (this.weightUnit = i));
 	};
 }

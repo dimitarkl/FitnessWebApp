@@ -21,6 +21,8 @@ import { auth, db } from '../../lib/firebase';
 import { UserService } from '../user/user.service';
 import { ErrorService } from '../error/error.service';
 import { catchError, firstValueFrom, map, of } from 'rxjs';
+import { PreferencesService } from '../user/preferences.service';
+import { User } from 'firebase/auth';
 
 @Injectable({
 	providedIn: 'root',
@@ -28,12 +30,16 @@ import { catchError, firstValueFrom, map, of } from 'rxjs';
 export class WorkoutService {
 	constructor(
 		private userService: UserService,
-		private errorService: ErrorService
+		private errorService: ErrorService,
+		private prefService: PreferencesService
 	) {}
 	sendWorkout = async (workout: Workout) => {
-		const userId = await this.checkUser(); // Get the user ID from checkUser
+		const userId = await this.checkUser();
 		if (userId) {
-			workout.ownerId = userId; // Set the workout's ownerId
+			workout.ownerId = userId;
+			const unit = await this.prefService.getWeightUnit();
+
+			if (unit == 'lbs') workout = this.convertWeightToKg(workout);
 
 			try {
 				const docRef = await addDoc(collection(db, 'exercises'), {
@@ -47,15 +53,30 @@ export class WorkoutService {
 				);
 			}
 		} else {
-			// Handle case when user is invalid
 			this.errorService.setError('User not found or invalid');
 		}
+	};
+	convertWeightToKg = (workout: Workout): Workout => {
+		workout.exercises.forEach(exercise => {
+			exercise.sets?.forEach(set => {
+				set.weight = parseFloat((set.weight * 0.453592).toFixed(2));
+			});
+		});
+		return workout;
+	};
+	convertWeightToLbs = (workout: Workout): Workout => {
+		workout.exercises.forEach(exercise => {
+			exercise.sets?.forEach(set => {
+				set.weight = parseFloat((set.weight * 2.20462).toFixed(2));
+			});
+		});
+		return workout;
 	};
 	checkUser = async (): Promise<string | null> => {
 		try {
 			const userId = await firstValueFrom(
 				this.userService.user$.pipe(
-					map(user => user?.uid || null), // Map to user ID or null if not found
+					map(user => user?.uid || null),
 					catchError(() => {
 						this.errorService.setError('Error fetching user');
 						return of(null);
@@ -95,7 +116,7 @@ export class WorkoutService {
 		return response;
 	};
 
-	getDocuments = (q: Query) => {
+	getDocuments = async (q: Query) => {
 		try {
 			const querySnapshot = getDocs(q);
 			const workouts: Workout[] = [];
@@ -123,6 +144,14 @@ export class WorkoutService {
 					workouts.push(workout);
 				});
 			});
+			const userId = await this.checkUser();
+			if (userId) {
+				const unit = await this.prefService.getWeightUnit();
+				if (unit == 'lbs')
+					workouts.forEach(
+						workout => (workout = this.convertWeightToLbs(workout))
+					);
+			}
 			return workouts;
 		} catch (e) {
 			this.errorService.setError(
@@ -147,7 +176,6 @@ export class WorkoutService {
 				);
 			}
 	};
-	//preebano
 	likePost = async (workoutId: string) => {
 		const workout = await this.getWorkoutById(workoutId);
 		if (!workout) {
@@ -204,6 +232,12 @@ export class WorkoutService {
 					likes: data['likes'],
 				};
 			} else this.errorService.setError('Error Fetching');
+			const userId = await this.checkUser();
+			if (userId) {
+				const unit = await this.prefService.getWeightUnit();
+				if (unit == 'lbs' && workout)
+					workout = this.convertWeightToLbs(workout);
+			}
 			return workout;
 		} catch (e) {
 			this.errorService.setError(
@@ -213,7 +247,13 @@ export class WorkoutService {
 		}
 	};
 	updateWorkoutById = async (workout: Workout) => {
-		if (auth.currentUser) {
+		const userId = await this.checkUser();
+		if (userId) {
+			workout.ownerId = userId;
+			const unit = await this.prefService.getWeightUnit();
+
+			if (unit == 'lbs') workout = this.convertWeightToKg(workout);
+
 			let body;
 			if (workout.likes == undefined)
 				body = {

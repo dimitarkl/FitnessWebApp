@@ -45,20 +45,38 @@
 			Edit Profile
 		</h2>
 		<form #form="ngForm" (ngSubmit)="submitAccount(form)">
-			<div class="mb-6">
-				<label
-					class="block text-light text-sm font-bold mb-2"
-					for="displayName"
-					>Display Name</label
-				>
-				<input
-					class="w-full px-4 py-3 border border-divider-grey rounded-lg bg-dark text-light focus:outline-none focus:ring-2 focus:ring-accent-green focus:border-accent-green"
-					type="username"
-					name="username"
-					id="username"
-					placeholder="Joe"
-					ngModel
-					#inputUsername="ngModel" />
+			<div class="mb-6 flex space-x-4">
+				<div class="flex-1">
+					<label
+						class="block text-light text-sm font-bold mb-2"
+						for="displayName"
+						>Display Name</label
+					>
+					<input
+						class="w-full px-4 py-3 border border-divider-grey rounded-lg bg-dark text-light focus:outline-none focus:ring-2 focus:ring-accent-green focus:border-accent-green"
+						type="username"
+						name="username"
+						id="username"
+						placeholder="Joe"
+						[(ngModel)]="displayName"
+						#inputUsername="ngModel" />
+				</div>
+				<div class="w-1/3">
+					<label
+						class="block text-light text-sm font-bold mb-2"
+						for="weightUnit"
+						>Weight Unit</label
+					>
+					<select
+						class="w-full px-4 py-3 border border-divider-grey rounded-lg bg-dark text-light focus:outline-none focus:ring-2 focus:ring-accent-green focus:border-accent-green"
+						name="weightUnit"
+						id="weightUnit"
+						[(ngModel)]="weightUnit"
+						#inputWeightUnit="ngModel">
+						<option value="kg">kg</option>
+						<option value="lbs">lbs</option>
+					</select>
+				</div>
 			</div>
 			<div class="flex items-center justify-between">
 				<button

@@ -41,7 +41,13 @@
 						Weight
 					</h1>
 					}
-					<p>{{ set.weight }}</p>
+					<p>
+						{{
+							prefUnit === 'kg'
+								? set.weight + ' kg'
+								: (set.weight * 2.20462).toFixed(2) + ' lbs'
+						}}
+					</p>
 				</div>
 			</div>
 			} }

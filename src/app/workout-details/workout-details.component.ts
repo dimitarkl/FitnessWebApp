@@ -18,16 +18,18 @@ export class WorkoutDetailsComponent implements OnInit {
 	constructor(
 		private workoutService: WorkoutService,
 		private route: ActivatedRoute,
-		private userService: UserService,
 		private prefService: PreferencesService
 	) {}
+
 	class = 'w-full';
 	workout: Workout | null = null;
 	ownerUsername: string | null = null;
+	prefUnit: string = '';
 	ngOnInit(): void {
 		const id = this.route.snapshot.params['detailsId'];
 		this.getWorkout(id);
 		this.getOwnerName();
+		this.getWeightUnit();
 	}
 	getOwnerName = () => {
 		if (this.workout?.ownerId)
@@ -40,5 +42,10 @@ export class WorkoutDetailsComponent implements OnInit {
 			.getWorkoutById(id)
 			.then(response => (this.workout = response))
 			.then(() => this.getOwnerName());
+	};
+	getWeightUnit = () => {
+		this.prefService
+			.getWeightUnit()
+			.then(response => (this.prefUnit = response));
 	};
 }

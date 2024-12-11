@@ -43,4 +43,36 @@ export class PreferencesService {
 		querySnapshot.forEach(i => (response = i.data()['username']));
 		return response;
 	};
+
+	updateWeightUnit = async (unit: string) => {
+		if (auth.currentUser) {
+			try {
+				const body = {
+					preferredWeightUnit: unit,
+				};
+				const response = await setDoc(
+					doc(db, 'userPrefs', auth.currentUser.uid),
+					body,
+					{ merge: true }
+				);
+				return response;
+			} catch (e) {
+				console.log('Error Updating Preference:' + (e as Error));
+			}
+		} else console.log('Error Updating Preference: User Not Found');
+	};
+	getWeightUnit = async () => {
+		const userId = auth.currentUser?.uid;
+		if (!userId) return 'kg';
+		const q = query(
+			collection(db, 'userPrefs'),
+			where('userId', '==', userId)
+		);
+		const querySnapshot = await getDocs(q);
+		let response = '';
+		querySnapshot.forEach(
+			i => (response = i.data()['preferredWeightUnit'])
+		);
+		return response;
+	};
 }
