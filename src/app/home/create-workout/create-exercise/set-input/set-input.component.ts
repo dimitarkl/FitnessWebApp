@@ -31,14 +31,9 @@ export class SetInputComponent implements OnChanges {
 	setValues: { reps: number; weight: number } = { reps: 0, weight: 0 };
 	submitSet = (form: NgForm) => {
 		const { weight, reps, exercise } = form.value;
-		//TODO FIX Logic
 		console.log(weight + ' ' + reps + ' ' + exercise);
 		if (exercise) this.setName.emit(exercise);
-		if (weight && reps) {
-			this.setChange.emit({ weight, reps });
-		} else {
-			this.setChange.emit({ weight: 0, reps: 0 });
-		}
+		this.setChange.emit({ weight, reps });
 	};
 	updateSet = () => {
 		if (this.set) {
