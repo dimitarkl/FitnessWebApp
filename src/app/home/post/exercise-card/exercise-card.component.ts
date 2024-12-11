@@ -10,4 +10,5 @@ import { Exercise } from '../../../types/Workout';
 })
 export class ExerciseCardComponent {
 	@Input() exercise: Exercise | null = null;
+	@Input() class: string = '';
 }

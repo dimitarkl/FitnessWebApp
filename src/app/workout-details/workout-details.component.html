@@ -15,7 +15,9 @@
 				<p>{{ workout?.title }}</p>
 			</div>
 			@for(exercise of workout?.exercises; track $index) {
-			<app-exercise-card [exercise]="exercise"></app-exercise-card>
+			<app-exercise-card
+				[exercise]="exercise"
+				[class]="class"></app-exercise-card>
 			@for(set of exercise.sets; track $index) {
 			<div
 				class="grid grid-cols-3 gap-4 p-4 rounded-lg shadow-md text-center bg-medium-grey text-light mb-2.5">

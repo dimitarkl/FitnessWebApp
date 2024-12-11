@@ -21,6 +21,7 @@ export class WorkoutDetailsComponent implements OnInit {
 		private userService: UserService,
 		private prefService: PreferencesService
 	) {}
+	class = 'w-full';
 	workout: Workout | null = null;
 	ownerUsername: string | null = null;
 	ngOnInit(): void {

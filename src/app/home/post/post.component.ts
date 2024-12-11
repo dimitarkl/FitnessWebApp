@@ -31,6 +31,7 @@ export class PostComponent implements OnInit {
 	ownerUsername = '';
 	user: User | null = null;
 	likesInv = 'invisible';
+	class = 'w-96';
 	getUser = () => {
 		this.userService.user$.subscribe(i => (this.user = i));
 	};
@@ -54,7 +55,7 @@ export class PostComponent implements OnInit {
 		if (this.workout && this.workout.id != undefined)
 			this.workoutService
 				.likePost(this.workout.id)
-				.then(() => console.log('Done'));
+				.then(() => location.reload());
 	};
 	showLikes = () => {
 		console.log('Show Likes');
