@@ -12,7 +12,7 @@ export class ErrorComponent implements OnInit {
 	constructor(private errorService: ErrorService) {}
 	errorMessage = '';
 	ngOnInit(): void {
-		// this.errorMessage = this.errorService.errorMessage;
-		// setInterval(this.errorService.cleanError, 1000);
+		this.errorMessage = this.errorService.errorMessage;
+		setInterval(this.errorService.cleanError, 1000);
 	}
 }
