@@ -1,27 +1,45 @@
-# FitnessWebApp
+# Fitness App
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.2.3.
+A web application designed to help you log, plan, and track your workouts. With this app, you can create custom exercise routines, record sets and reps, and manage your fitness progress all in one place.
 
-## Development server
+## Features
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+-   **User Profiles:**  
+    Sign up, log in, and manage your personal profile. View your own workouts, track your progress, and edit personal information.
 
-## Code scaffolding
+-   **Workout Creation & Management:**  
+    Create new workouts and add exercises (e.g., bench press, pull-ups, push-ups).  
+    Assign sets, reps, and any relevant details.  
+    Easily update or delete existing workouts.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+-   **Progress Tracking:**  
+    Keep track of how many sets and reps you complete and update as you get stronger.  
+    Optionally "like" or interact with community workouts (if expanded to a social experience).
 
-## Build
+-   **Responsive UI:**  
+    Built with **Tailwind CSS** for a clean, modern, and responsive interface.  
+    Works seamlessly across desktop and mobile devices.
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+## Technologies Used
 
-## Running unit tests
+-   **Frontend:** [Angular](https://angular.io/) for building a dynamic, component-driven UI.
+-   **Backend & Database:** [Firebase](https://firebase.google.com/) for hosting, authentication, and real-time database functionality.
+-   **Styling:** [Tailwind CSS](https://tailwindcss.com/) for a utility-first, responsive design approach.
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+## Usage
 
-## Running end-to-end tests
+### Register or Log In:
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+Use your email and password (or other configured providers) to create an account or log in.
 
-## Further help
+### Create a Workout:
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+From the main dashboard or a dedicated "New Workout" section, add exercises, sets, and reps.
+
+### Edit or Delete Workouts:
+
+Navigate to your profile or workout list and manage your workouts as needed.
+
+### View Workouts:
+
+Browse through existing workouts you’ve created. (If expanded to a social feature, you could view community workouts as well.)
