@@ -83,16 +83,12 @@ export class WorkoutService {
 					})
 				)
 			);
-
 			if (userId) {
-				return userId; // Return the userId
-			} else {
-				this.errorService.setError('User not found or error occurred');
-				return null; // Return null if no userId found
-			}
+				return userId;
+			} else return null;
 		} catch (error) {
 			this.errorService.setError('Error processing user');
-			return null; // Return null in case of an error
+			return null;
 		}
 	};
 	getLastWorkouts = () => {

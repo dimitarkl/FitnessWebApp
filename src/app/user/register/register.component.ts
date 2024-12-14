@@ -30,6 +30,5 @@ export class RegisterComponent {
 		this.userService
 			.register(email, password)
 			?.then(() => this.router.navigate(['/catalog'])); //TODO rollback
-		console.log(`Email: ${email} and password: ${password}`);
 	}
 }
