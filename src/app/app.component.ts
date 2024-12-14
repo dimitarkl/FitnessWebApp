@@ -19,9 +19,11 @@ export class AppComponent implements OnInit {
 	}
 	displayError = () => {
 		if (this.errorService.errorMessage != '') this.errorHidden = false;
+		else this.errorHidden = true;
+		console.log(this.errorService.errorMessage != '');
 	};
 	startErrorCheck(): void {
-		this.errorCheckInterval = setInterval(this.displayError, 1000); // check every second
+		this.errorCheckInterval = setInterval(() => this.displayError(), 1000);
 	}
 	title = 'FitnessWebApp';
 }

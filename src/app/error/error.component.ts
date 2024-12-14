@@ -13,6 +13,10 @@ export class ErrorComponent implements OnInit {
 	errorMessage = '';
 	ngOnInit(): void {
 		this.errorMessage = this.errorService.errorMessage;
-		setInterval(this.errorService.cleanError, 1000);
+		setInterval(() => this.cleanError(), 10000);
 	}
+	cleanError = () => {
+		this.errorMessage = '';
+		this.errorService.cleanError();
+	};
 }
