@@ -25,7 +25,12 @@ export class SetInputComponent implements OnChanges {
 
 	@Output() setChange = new EventEmitter<ExerciseSet>();
 	@Output() setName = new EventEmitter<string>();
+
+	repsInput: number | '' = '';
+	weightInput: number | '' = '';
 	ngOnChanges(changes: SimpleChanges): void {
+		this.repsInput = this.set?.reps || '';
+		this.weightInput = this.set?.weight || '';
 		this.updateSet();
 	}
 	setValues: { reps: number; weight: number } = { reps: 0, weight: 0 };
