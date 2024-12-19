@@ -7,7 +7,6 @@ import { AuthGuard } from './guards/auth.guard';
 import { CreateWorkoutComponent } from './home/create-workout/create-workout.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { WorkoutDetailsComponent } from './workout-details/workout-details.component';
-import { CatalogComponent } from './catalog/catalog.component';
 
 export const routes: Routes = [
 	{ path: '', component: HomeComponent },
@@ -37,7 +36,7 @@ export const routes: Routes = [
 			},
 		],
 	},
-	{ path: 'catalog', component: CatalogComponent },
+	{ path: 'catalog', component: HomeComponent },
 	{ path: '404', component: NotFoundComponent },
 	{ path: '**', redirectTo: '/404' },
 ];
