@@ -1,5 +1,7 @@
 # Fitness App
 
+[Visit FitnessWebApp](https://fitnesswebapp-40085.web.app/catalog)
+
 A web application designed to help you log, plan, and track your workouts. With this app, you can create custom exercise routines, record sets and reps, and manage your fitness progress all in one place.
 
 ## Features

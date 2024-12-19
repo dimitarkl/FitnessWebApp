@@ -33,7 +33,7 @@
 				</a>
 			</div>
 			}
-			<button (click)="showLikes()" class="text-accent-green">
+			<button (click)="showLikes()" class="text-[var(--accent-green)]">
 				{{
 					workout && workout.likes
 						? workout.likes.length == 1
@@ -47,20 +47,15 @@
 				!workout?.likes?.includes(user.uid)){
 				<button
 					(click)="likePost()"
-					class="bg-accent-green hover:bg-primary-green text-white font-bold py-2 px-4 rounded">
+					class="bg-[var(--accent-green)] hover:bg-[var(--primary-green)] text-[var(--text-light)] font-bold py-2 px-4 rounded">
 					Like
 				</button>
 				} @if(workout?.ownerId==user?.uid){
 				<a
 					routerLink="/edit/{{ workout?.id }}"
-					class="bg-secondary-green hover:bg-primary-green text-white font-bold py-2 px-4 rounded">
+					class="bg-[var(--secondary-green)] hover:bg-[var(--primary-green)] text-[var(--text-light)] font-bold py-2 px-4 rounded">
 					Edit
 				</a>
-				<button
-					(click)="deletePost()"
-					class="bg-secondary-green hover:bg-primary-green text-white font-bold py-2 px-4 rounded">
-					Delete
-				</button>
 				}
 			</div>
 		</div>
