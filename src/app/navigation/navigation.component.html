@@ -1,14 +1,42 @@
-<nav class="navbar">
-	<ul class="nav-links">
-		<li><a routerLink="/" class="nav-item">Home</a></li>
-		@if(loggedIn){
-		<li><a routerLink="/account" class="nav-item">Account</a></li>
-		<li><a (click)="Logout()" class="nav-item">Logout</a></li>
-
+<nav class="bg-gray-900 p-6 shadow-lg">
+	<ul class="flex justify-center space-x-16">
+		<li>
+			<a
+				routerLink="/"
+				class="text-xl font-semibold text-gray-100 hover:text-green-500 transition-colors duration-200"
+				>Home</a
+			>
+		</li>
+		@if(loggedIn) {
+		<li>
+			<a
+				routerLink="/account"
+				class="text-xl font-semibold text-gray-100 hover:text-green-500 transition-colors duration-200"
+				>Account</a
+			>
+		</li>
+		<li>
+			<a
+				(click)="Logout()"
+				class="text-xl font-semibold text-gray-100 hover:text-green-500 transition-colors duration-200"
+				>Logout</a
+			>
+		</li>
 		} @else {
-		<li><a routerLink="/login" class="nav-item">Login</a></li>
-
-		<li><a routerLink="/register" class="nav-item">Register</a></li>
+		<li>
+			<a
+				routerLink="/login"
+				class="text-xl font-semibold text-gray-100 hover:text-green-500 transition-colors duration-200"
+				>Login</a
+			>
+		</li>
+		<li>
+			<a
+				routerLink="/register"
+				class="text-xl font-semibold text-gray-100 hover:text-green-500 transition-colors duration-200"
+				>Register</a
+			>
+		</li>
 		}
 	</ul>
 </nav>
