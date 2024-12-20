@@ -1,4 +1,4 @@
-import { Component, OnChanges, OnInit } from '@angular/core';
+import { Component, OnChanges, OnDestroy, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { NavigationComponent } from './navigation/navigation.component';
 import { ErrorComponent } from './error/error.component';
@@ -9,7 +9,7 @@ import { ErrorService } from './error/error.service';
 	imports: [RouterOutlet, NavigationComponent, ErrorComponent],
 	templateUrl: './app.component.html',
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
 	constructor(private errorService: ErrorService) {}
 	errorHidden = true;
 	private errorCheckInterval: any;
@@ -19,10 +19,12 @@ export class AppComponent implements OnInit {
 	displayError = () => {
 		if (this.errorService.errorMessage != '') this.errorHidden = false;
 		else this.errorHidden = true;
-		console.log(this.errorService.errorMessage != '');
 	};
 	startErrorCheck(): void {
 		this.errorCheckInterval = setInterval(() => this.displayError(), 1000);
+	}
+	ngOnDestroy(): void {
+		clearInterval(this.errorCheckInterval);
 	}
 	title = 'FitnessWebApp';
 }
