@@ -10,7 +10,6 @@ import { ErrorService } from '../../error/error.service';
 	standalone: true,
 	imports: [RouterLink, FormsModule, CommonModule],
 	templateUrl: './register.component.html',
-	styleUrl: './register.component.css',
 })
 export class RegisterComponent {
 	constructor(

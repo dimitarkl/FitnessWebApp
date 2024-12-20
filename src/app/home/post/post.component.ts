@@ -18,7 +18,6 @@ import { RouterLink } from '@angular/router';
 	standalone: true,
 	imports: [ExerciseCardComponent, RouterLink],
 	templateUrl: './post.component.html',
-	styleUrl: './post.component.css',
 })
 export class PostComponent implements OnInit {
 	@Input() workout: Workout | null = null;

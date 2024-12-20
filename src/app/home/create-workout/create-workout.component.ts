@@ -9,7 +9,6 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 	standalone: true,
 	imports: [FormsModule, CreateExerciseComponent, RouterLink],
 	templateUrl: './create-workout.component.html',
-	styleUrl: './create-workout.component.css',
 })
 export class CreateWorkoutComponent implements OnInit {
 	constructor(

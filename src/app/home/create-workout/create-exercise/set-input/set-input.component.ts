@@ -14,7 +14,6 @@ import { ExerciseSet } from '../../../../types/Workout';
 	standalone: true,
 	imports: [FormsModule],
 	templateUrl: './set-input.component.html',
-	styleUrl: './set-input.component.css',
 })
 export class SetInputComponent implements OnChanges {
 	@Input() idx: number = 0;

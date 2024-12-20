@@ -15,7 +15,6 @@ import { Exercise, ExerciseSet } from '../../../types/Workout';
 	standalone: true,
 	imports: [SetInputComponent],
 	templateUrl: './create-exercise.component.html',
-	styleUrl: './create-exercise.component.css',
 })
 export class CreateExerciseComponent implements OnChanges {
 	@Input() name: string = '';

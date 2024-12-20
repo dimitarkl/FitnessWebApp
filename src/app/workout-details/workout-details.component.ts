@@ -12,7 +12,6 @@ import { PreferencesService } from '../user/preferences.service';
 	standalone: true,
 	imports: [ExerciseCardComponent],
 	templateUrl: './workout-details.component.html',
-	styleUrl: './workout-details.component.css',
 })
 export class WorkoutDetailsComponent implements OnInit {
 	constructor(

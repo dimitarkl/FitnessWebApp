@@ -12,7 +12,6 @@ import { PreferencesService } from '../user/preferences.service';
 	standalone: true,
 	imports: [PostComponent, FormsModule],
 	templateUrl: './account.component.html',
-	styleUrl: './account.component.css',
 })
 export class AccountComponent implements OnInit {
 	constructor(

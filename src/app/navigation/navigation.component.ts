@@ -7,7 +7,6 @@ import { UserService } from '../user/user.service';
 	standalone: true,
 	imports: [RouterLink],
 	templateUrl: './navigation.component.html',
-	styleUrl: './navigation.component.css',
 })
 export class NavigationComponent {
 	constructor(private userService: UserService) {}

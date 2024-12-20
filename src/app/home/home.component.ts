@@ -12,7 +12,6 @@ import { PostComponent } from './post/post.component';
 	standalone: true,
 	imports: [RouterLink, PostComponent],
 	templateUrl: './home.component.html',
-	styleUrl: './home.component.css',
 })
 export class HomeComponent implements OnInit {
 	constructor(
