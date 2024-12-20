@@ -14,19 +14,22 @@ a {
 	color: #4b9c55;
 }
 body {
-	background-color: #18181b;
+	background-color: var(--background-color);
 }
 :root {
-	--background-color: #101010; /* Deep black with slight grey tones */
+	--background-color-dark: #111827; /* Dark blue background */
+	--background-color: #1f2937; /* Deep black with slight grey tones */
 	--primary-green: #2e8b57; /* Strong, muted green */
 	--secondary-green: #4b9c55; /* Slightly lighter, more vibrant green */
 	--light-grey: #333333; /* Dark grey for borders or subtle elements */
 	--medium-grey: #666666; /* For less emphasized text or background areas */
 	--text-light: #f5f5f5; /* Light grey/white text for readability */
-	--accent-green: #28a745; /* Bright green for buttons or call-to-actions */
+	--accent-green: #22c55e; /* Bright green for buttons or call-to-actions */
 	--divider-grey: #444444; /* Slightly lighter grey than the background */
 }
-
+.bg-dark-blue {
+	background-color: var(--background-color-dark);
+}
 .bg-dark {
 	background-color: var(--background-color);
 }
