@@ -8,7 +8,6 @@ import { ErrorService } from './error/error.service';
 	standalone: true,
 	imports: [RouterOutlet, NavigationComponent, ErrorComponent],
 	templateUrl: './app.component.html',
-	styleUrl: './app.component.css',
 })
 export class AppComponent implements OnInit {
 	constructor(private errorService: ErrorService) {}

@@ -1,0 +1,83 @@
+/* .login-form-wrapper {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-height: 100vh;
+	background-color: #f0f0f0;
+}
+
+.login-form-wrapper .login-form {
+	background-color: #fff;
+	padding: 2rem;
+	border-radius: 8px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	width: 100%;
+	max-width: 400px;
+}
+
+.login-form-wrapper fieldset {
+	border: none;
+}
+
+.login-form-wrapper h2 {
+	text-align: center;
+	margin-bottom: 1rem;
+}
+
+.login-form-wrapper .field {
+	margin-bottom: 1rem;
+}
+
+.login-form-wrapper .field-icon {
+	display: flex;
+	align-items: center;
+}
+
+.login-form-wrapper .field-icon label {
+	margin-right: 0.5rem;
+	color: #888;
+}
+
+.login-form-wrapper .field-icon input {
+	width: 100%;
+	padding: 0.5rem;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+}
+
+.login-form-wrapper .field-icon input.input-error {
+	border-color: red;
+}
+
+.login-form-wrapper .error {
+	color: red;
+	font-size: 0.875rem;
+	margin-top: 0.5rem;
+}
+
+.login-form-wrapper button {
+	width: 100%;
+	padding: 0.75rem;
+	border: none;
+	border-radius: 4px;
+	color: #fff;
+	cursor: pointer;
+}
+
+.login-form-wrapper button:disabled {
+	cursor: not-allowed;
+}
+
+.login-form-wrapper .text-center {
+	text-align: center;
+	margin-top: 1rem;
+}
+
+.login-form-wrapper .text-center a {
+	color: #234465;
+	text-decoration: none;
+}
+
+.login-form-wrapper .text-center a:hover {
+	text-decoration: underline;
+} */
