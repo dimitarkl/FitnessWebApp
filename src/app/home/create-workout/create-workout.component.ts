@@ -63,7 +63,7 @@ export class CreateWorkoutComponent implements OnInit {
 		ownerId: '',
 		exercises: [
 			{
-				name: 'benchPPress',
+				name: 'Exercise',
 				sets: [
 					{
 						weight: 0,
@@ -72,16 +72,7 @@ export class CreateWorkoutComponent implements OnInit {
 				],
 			},
 			{
-				name: 'pullUps',
-				sets: [
-					{
-						weight: 0,
-						reps: 0,
-					},
-				],
-			},
-			{
-				name: 'push ups',
+				name: 'Second Exercise',
 				sets: [
 					{
 						weight: 0,

@@ -10,7 +10,6 @@ import { CommonModule } from '@angular/common';
 	standalone: true,
 	imports: [RouterLink, FormsModule, CommonModule],
 	templateUrl: './login.component.html',
-	styleUrl: './login.component.css',
 })
 export class LoginComponent {
 	constructor(private userService: UserService, private router: Router) {}

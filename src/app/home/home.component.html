@@ -1,18 +1,18 @@
 <div class="text-center m-6 md:m-14">
 	<h1
-		class="text-5xl sm:text-6xl md:text-7xl lg:text-9xl font-extrabold text-slate-50">
+		class="text-5xl sm:text-6xl md:text-7xl lg:text-9xl font-extrabold text-gray-50">
 		FITNESS APP
 	</h1>
 </div>
 
-@for(workout of workouts;track workout.id){
-<app-post [workout]="workout" />
+@for(workout of workouts; track workout.id) {
+<app-post [workout]="workout"></app-post>
 }
 
 <div class="fixed bottom-8 left-1/2 transform -translate-x-1/2 animate-fade-in">
 	<a
 		routerLink="/create"
-		class="inline-block bg-[var(--primary-green)] text-[var(--text-light)] font-semibold py-3 px-6 rounded-full text-lg transition-colors duration-200 ease-in-out hover:bg-[var(--accent-green)] focus:outline-none focus:ring-2 focus:ring-[var(--primary-green)] focus:ring-opacity-50">
+		class="inline-block bg-gradient-to-r from-green-400 to-green-600 text-white font-bold py-4 px-10 rounded-full text-xl transition-transform transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-green-500 focus:ring-opacity-75 shadow-lg border-2 border-white">
 		Start Workout
 	</a>
 </div>
