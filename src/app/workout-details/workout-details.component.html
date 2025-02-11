@@ -1,14 +1,16 @@
 <div
-	class="flex justify-center items-center box-border border-gray-700 rounded-lg shadow-lg py-4 px-6 my-4">
+	class="flex justify-center items-center box-border border-gray-700 rounded-lg shadow-lg py-4 px-6 my-4"
+>
 	<div class="w-full max-w-xl bg-dark-blue rounded-lg shadow-sm">
 		<div class="p-6 text-gray-100">
 			<div class="flex flex-col md:flex-row items-center gap-4 mb-6">
 				<img
-					src="https://via.placeholder.com/120"
+					src="avatar.png"
 					alt="Profile Photo"
-					class="w-14 h-14 rounded-full object-cover border border-gray-600" />
+					class="w-14 h-14 rounded-full object-cover border border-gray-600"
+				/>
 				<h1 class="font-bold text-2xl text-gray-100 md:mb-0">
-					{{ ownerUsername ? ownerUsername : 'User Not Found' }}
+					{{ ownerUsername ? ownerUsername : "User Not Found" }}
 				</h1>
 			</div>
 			<div class="mb-6">
@@ -19,10 +21,12 @@
 			@for(exercise of workout?.exercises; track $index) {
 			<app-exercise-card
 				[exercise]="exercise"
-				[class]="class"></app-exercise-card>
+				[class]="class"
+			></app-exercise-card>
 			@for(set of exercise.sets; track $index) {
 			<div
-				class="grid grid-cols-3 gap-4 p-3 rounded-lg shadow-inner text-center bg-gray-800 text-gray-100 mt-4">
+				class="grid grid-cols-3 gap-4 p-3 rounded-lg shadow-inner text-center bg-gray-800 text-gray-100 mt-4"
+			>
 				<div>
 					@if($index == 0) {
 					<h1 class="font-semibold text-accent-green uppercase">
@@ -47,9 +51,9 @@
 					}
 					<p class="text-lg">
 						{{
-							prefUnit === 'kg'
-								? set.weight + ' kg'
-								: set.weight + ' lbs'
+							prefUnit === "kg"
+								? set.weight + " kg"
+								: set.weight + " lbs"
 						}}
 					</p>
 				</div>
