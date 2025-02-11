@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 * {
+	caret-color: transparent;
 	margin: 0;
 	padding: 0;
 	border: 0;

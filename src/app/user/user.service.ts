@@ -1,5 +1,5 @@
-import { Injectable, OnDestroy } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Injectable, OnDestroy } from "@angular/core";
+import { BehaviorSubject, map, Observable } from "rxjs";
 import {
 	browserLocalPersistence,
 	createUserWithEmailAndPassword,
@@ -7,12 +7,12 @@ import {
 	setPersistence,
 	signInWithEmailAndPassword,
 	User,
-} from 'firebase/auth';
-import { auth } from '../../lib/firebase';
-import { ErrorService } from '../error/error.service';
+} from "firebase/auth";
+import { auth } from "../../lib/firebase";
+import { ErrorService } from "../error/error.service";
 
 @Injectable({
-	providedIn: 'root',
+	providedIn: "root",
 })
 export class UserService implements OnDestroy {
 	private userSubject: BehaviorSubject<User | null> =
@@ -22,10 +22,11 @@ export class UserService implements OnDestroy {
 	constructor(private errorService: ErrorService) {
 		this.initializeAuthState();
 	}
-	private initializeAuthState(): void {
-		onAuthStateChanged(auth, user => {
+	initializeAuthState(): void {
+		onAuthStateChanged(auth, (user) => {
 			this.userSubject.next(user);
 		});
+		console.log(this.userSubject.value);
 	}
 	login = async (email: string, password: string) => {
 		try {
@@ -33,7 +34,7 @@ export class UserService implements OnDestroy {
 
 			return await signInWithEmailAndPassword(auth, email, password);
 		} catch (err) {
-			this.errorService.setError('Login Error:' + (err as Error).message);
+			this.errorService.setError("Login Error:" + (err as Error).message);
 		}
 		return;
 	};
@@ -43,7 +44,7 @@ export class UserService implements OnDestroy {
 			return await createUserWithEmailAndPassword(auth, email, password);
 		} catch (err) {
 			this.errorService.setError(
-				'Register Error:' + (err as Error).message
+				"Register Error:" + (err as Error).message
 			);
 		}
 		return;
@@ -53,12 +54,19 @@ export class UserService implements OnDestroy {
 			await auth.signOut();
 		} catch (err) {
 			this.errorService.setError(
-				'Logout Error:' + (err as Error).message
+				"Logout Error:" + (err as Error).message
 			);
 		}
 	};
-	get isLogged(): boolean {
-		return !!this.userSubject.value;
+	isLogged$ = this.userSubject
+		.asObservable()
+		.pipe(map((user) => (user !== null ? !!user : null)));
+
+	get isLogged(): boolean | null {
+		console.log();
+		return this.userSubject.value !== null
+			? !!this.userSubject.value
+			: null;
 	}
 	ngOnDestroy(): void {}
 }
