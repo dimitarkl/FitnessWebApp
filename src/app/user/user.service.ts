@@ -18,15 +18,15 @@ export class UserService implements OnDestroy {
 	private userSubject: BehaviorSubject<User | null> =
 		new BehaviorSubject<User | null>(null);
 	user$: Observable<User | null> = this.userSubject.asObservable();
-
+	userBool: User | null | false = false;
 	constructor(private errorService: ErrorService) {
 		this.initializeAuthState();
 	}
 	initializeAuthState(): void {
 		onAuthStateChanged(auth, (user) => {
 			this.userSubject.next(user);
+			this.userBool = user;
 		});
-		console.log(this.userSubject.value);
 	}
 	login = async (email: string, password: string) => {
 		try {
@@ -58,15 +58,10 @@ export class UserService implements OnDestroy {
 			);
 		}
 	};
-	isLogged$ = this.userSubject
-		.asObservable()
-		.pipe(map((user) => (user !== null ? !!user : null)));
-
 	get isLogged(): boolean | null {
-		console.log();
-		return this.userSubject.value !== null
-			? !!this.userSubject.value
-			: null;
+		if (this.userBool) return true;
+		else if (this.userBool == null) return false;
+		return null;
 	}
 	ngOnDestroy(): void {}
 }

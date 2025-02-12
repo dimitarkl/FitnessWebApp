@@ -7,22 +7,27 @@ import {
 } from "@angular/router";
 
 import { UserService } from "../user/user.service";
-import { tap } from "rxjs";
-import { User } from "firebase/auth";
 export const AuthGuard: CanActivateFn = async (
 	route: ActivatedRouteSnapshot,
 	state: RouterStateSnapshot
 ) => {
 	const userService = inject(UserService);
 	const router = inject(Router);
-	let user: User | null = null;
-	userService.user$.subscribe((userObs) => {
-		user = userObs;
-	});
-	console.log(user);
-	if (user) {
-		return true;
-	}
-	router.navigate(["/login"]);
-	return false;
+
+	const checkAuth = (): Promise<boolean> => {
+		return new Promise((resolve) => {
+			const interval = setInterval(() => {
+				if (userService.isLogged === true) {
+					clearInterval(interval);
+					resolve(true);
+				} else if (userService.isLogged === false) {
+					clearInterval(interval);
+					router.navigate(["/login"]);
+					resolve(false);
+				}
+			}, 250);
+		});
+	};
+
+	return await checkAuth();
 };
