@@ -4,13 +4,14 @@
   "main": "index.js",
   "scripts": {
     "start": " node app.js",
-    "dev": "node --watch app"
+    "dev": "node --watch app.js"
   },
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
     "cors": "^2.8.5",
-    "express": "^4.21.2"
+    "express": "^4.21.2",
+    "pg": "^8.13.3"
   }
 }
