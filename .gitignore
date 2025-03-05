@@ -41,4 +41,5 @@ Thumbs.db
 
 #firebaseConfig
 firebaseConfig.ts
+.firebase/
 .prettierrc
