@@ -1,19 +1,10 @@
-import pkg from "pg";
-import * as dotenv from "dotenv";
+import 'dotenv/config';
+import { pgTable, serial, text, varchar } from "drizzle-orm/pg-core";
+import { drizzle } from "drizzle-orm/node-postgres";
+import { Pool } from "pg";
 
-const { Pool } = pkg;
-
-dotenv.config();
 const pool = new Pool({
-    user: process.env.USER,
-    host: process.env.HOST,
-    database: process.env.DATABASE,
-    password: process.env.PASSWORD,
-    port: Number(process.env.DBPORT),
+    connectionString: process.env.DATABASE_URL!,
 });
-
-pool.connect()
-    .then(() => console.log("Connected to PostgreSQL"))
-    .catch((err: Error) => console.error("Connection error", err));
-
-export default pool;
+const db = drizzle({ client: pool });
+export default db;
