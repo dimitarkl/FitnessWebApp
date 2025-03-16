@@ -2,8 +2,8 @@ import { bigint, integer, pgTable, real, timestamp, varchar } from "drizzle-orm/
 //TODO Likes not implemented
 export const usersTable = pgTable("users", {
     id: bigint({ mode: 'bigint' }).primaryKey().generatedAlwaysAsIdentity(),
-    email: varchar().unique(),
-    password: varchar(),
+    email: varchar().unique().notNull(),
+    password: varchar().notNull(),
     preferredWeightUnit: varchar().references(() => weightUnitsTable.unit),
     username: varchar(),
 })

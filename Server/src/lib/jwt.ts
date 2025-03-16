@@ -1,4 +1,3 @@
-import util from 'util';
 import jwt from 'jsonwebtoken'
 
 const sign = (payload: object, secret: string, options?: jwt.SignOptions): Promise<string> => {
