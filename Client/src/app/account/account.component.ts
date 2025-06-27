@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../user/user.service';
-import { User } from 'firebase/auth';
 import { WorkoutService } from '../home/workout.service';
 import { PostComponent } from '../home/post/post.component';
-import { Workout } from '../types/Workout';
+import { Workout } from '../../../../shared/types/Workout';
 import { FormsModule, NgForm } from '@angular/forms';
 import { PreferencesService } from '../user/preferences.service';
+import { User } from '../../../../shared/types/user';
 
 @Component({
 	selector: 'app-account',
@@ -36,17 +36,17 @@ export class AccountComponent implements OnInit {
 		});
 	};
 	getName = () => {
-		if (this.user)
-			this.displayName = this.user.displayName
-				? this.user.displayName
-				: '';
-		else this.displayName = '';
+		// if (this.user)
+		// 	this.displayName = this.user.displayName
+		// 		? this.user.displayName
+		// 		: '';
+		// else this.displayName = '';
 	};
 	getWorkouts = () => {
 		if (this.user) {
-			this.workoutService
-				.getUserWorkouts(this.user.uid, 5)
-				.then(response => (this.workouts = response));
+			// this.workoutService
+			// 	.getUserWorkouts(this.user.uid, 5)
+			// 	.then(response => (this.workouts = response));
 		} else {
 			console.log('Error User');
 			return;

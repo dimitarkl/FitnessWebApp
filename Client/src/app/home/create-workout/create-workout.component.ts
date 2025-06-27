@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { CreateExerciseComponent } from './create-exercise/create-exercise.component';
-import { Exercise, Workout } from '../../types/Workout';
+import { Exercise, Workout } from '../../../../../shared/types/Workout';
 import { WorkoutService } from '../workout.service';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 @Component({

@@ -135,4 +135,31 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
+# Compiled output
+/bazel-out
+
+# IDEs and editors
+.idea/
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# Miscellaneous
+/.angular/cache
+.sass-cache/
+/connect.lock
+/libpeerconnection.log
+testem.log
+/typings
+
+#firebaseConfig
+firebaseConfig.ts
+.firebase/
+.prettierrc
+
+
 drizzle/meta
+.vscode

@@ -1,14 +1,4 @@
 import { Injectable } from '@angular/core';
-import { auth, db } from '../../lib/firebase';
-import { updateProfile } from 'firebase/auth';
-import {
-	collection,
-	doc,
-	getDocs,
-	query,
-	setDoc,
-	where,
-} from 'firebase/firestore';
 
 @Injectable({
 	providedIn: 'root',

@@ -7,7 +7,7 @@ import {
 	SimpleChanges,
 } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
-import { ExerciseSet } from '../../../../types/Workout';
+import { ExerciseSet } from '../../../../../../../shared/types/Workout';
 
 @Component({
 	selector: 'app-set-input',

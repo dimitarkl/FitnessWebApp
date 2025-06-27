@@ -6,10 +6,9 @@ import {
 	SimpleChanges,
 } from '@angular/core';
 import { ExerciseCardComponent } from './exercise-card/exercise-card.component';
-import { Workout } from '../../types/Workout';
+import { Workout } from '../../../../../shared/types/Workout';
 import { PreferencesService } from '../../user/preferences.service';
 import { UserService } from '../../user/user.service';
-import { User } from 'firebase/auth';
 import { WorkoutService } from '../workout.service';
 import { RouterLink } from '@angular/router';
 
@@ -28,7 +27,7 @@ export class PostComponent implements OnInit {
 		private workoutService: WorkoutService
 	) {}
 	ownerUsername = '';
-	user: User | null = null;
+	user: { id: string } | null = null;
 	likesInv = 'invisible';
 	class = 'w-96';
 	getUser = () => {

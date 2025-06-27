@@ -8,7 +8,7 @@ import {
 	SimpleChanges,
 } from '@angular/core';
 import { SetInputComponent } from './set-input/set-input.component';
-import { Exercise, ExerciseSet } from '../../../types/Workout';
+import { Exercise, ExerciseSet } from '../../../../../../shared/types/Workout';
 
 @Component({
 	selector: 'app-create-exercise',

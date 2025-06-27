@@ -1,36 +1,13 @@
 import { Injectable, OnDestroy } from "@angular/core";
-import { BehaviorSubject, map, Observable } from "rxjs";
-import {
-	browserLocalPersistence,
-	createUserWithEmailAndPassword,
-	onAuthStateChanged,
-	setPersistence,
-	signInWithEmailAndPassword,
-	User,
-} from "firebase/auth";
-import { auth } from "../../lib/firebase";
+import { BehaviorSubject, Observable, tap, } from "rxjs";
 import { ErrorService } from "../error/error.service";
 
 @Injectable({
 	providedIn: "root",
 })
 export class UserService implements OnDestroy {
-	private userSubject: BehaviorSubject<User | null> =
-		new BehaviorSubject<User | null>(null);
-	user$: Observable<User | null> = this.userSubject.asObservable();
-	userBool: User | null | false = false;
-	constructor(private errorService: ErrorService) {
-		this.initializeAuthState();
-	}
-	initializeAuthState(): void {
-		onAuthStateChanged(auth, (user) => {
-			this.userSubject.next(user);
-			this.userBool = user;
-		});
-	}
-	login = async (email: string, password: string) => {
-		try {
-			await setPersistence(auth, browserLocalPersistence);
+    private userSubject: BehaviorSubject<User | null> =
+        new BehaviorSubject<User | null>(null);
 
 			return await signInWithEmailAndPassword(auth, email, password);
 		} catch (err) {

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 //import { PostComponent } from './post/post.component';
 import { WorkoutService } from './workout.service';
-import { Workout } from '../types/Workout';
+import { Workout } from '../../../../shared/types/Workout';;
 import { PreferencesService } from '../user/preferences.service';
 import { RouterLink } from '@angular/router';
 import { ErrorService } from '../error/error.service';
@@ -23,9 +23,9 @@ export class HomeComponent implements OnInit {
 		this.getWorkout();
 	}
 	getWorkout = () => {
-		this.workoutService.getLastWorkouts().then(response => {
-			if (response != null) this.workouts = response;
-			else this.errorService.setError('Error Getting Response');
-		});
+		// this.workoutService.getLastWorkouts().then(response => {
+		// 	if (response != null) this.workouts = response;
+		// 	else this.errorService.setError('Error Getting Response');
+		// });
 	};
 }
