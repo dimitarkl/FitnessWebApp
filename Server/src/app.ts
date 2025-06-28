@@ -1,22 +1,17 @@
 import express, { Request, Response } from "express";
 import cors from "cors";
+import { loginRoute, logout, registerRoute } from "./controllers/authController";
+import configExpress from "./config/configExpress";
 import dotenv from "dotenv";
-import { createWorkout } from "./controllers/workoutController"
-import { loginRoute, registerRoute } from "./controllers/authController";
+import express from "express";
+import { getMe } from "./controllers/usersController";
+
 dotenv.config();
 
 const app = express();
+configExpress(app);
+
 const PORT = process.env.PORT || 5000;
-
-app.use(express.json());
-app.use(cors({
-    origin: 'http://localhost:4200',
-    credentials: true,
-}));
-
-app.get("/", (req: Request, res: Response) => {
-    res.send("Hello, TypeScript Express!");
-});
 
 app.listen(PORT, () => {
     console.log(`🚀 Server running on http://localhost:${PORT}`);
@@ -24,3 +19,5 @@ app.listen(PORT, () => {
 app.post("/api/create-workout", createWorkout);
 app.post("/auth/register", registerRoute)
 app.post("/auth/login", loginRoute)
+app.get("/auth/logout", logout)
+app.get('/users/me',getMe);
