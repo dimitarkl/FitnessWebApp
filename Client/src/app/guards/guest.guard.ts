@@ -1,34 +1,29 @@
 import { inject } from "@angular/core";
 import {
-	ActivatedRouteSnapshot,
-	CanActivateFn,
-	Router,
-	RouterStateSnapshot,
+    ActivatedRouteSnapshot,
+    CanActivateFn,
+    Router,
+    RouterStateSnapshot,
 } from "@angular/router";
 
 import { UserService } from "../user/user.service";
-export const GuestGuard: CanActivateFn = async (
-	route: ActivatedRouteSnapshot,
-	state: RouterStateSnapshot
+import { filter, map, Observable, take, tap } from "rxjs";
+export const GuestGuard: CanActivateFn = (
+    route: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot
 ) => {
-	const userService = inject(UserService);
-	const router = inject(Router);
+    const userService = inject(UserService);
+    const router = inject(Router);
 
-	const checkGuest = (): Promise<boolean> => {
-		return new Promise((resolve) => {
-			const interval = setInterval(() => {
-				if (userService.isLogged === true) {
-					clearInterval(interval);
-					router.navigate(["/"]);
-					resolve(false);
-				} else if (userService.isLogged === false) {
-					clearInterval(interval);
 
-					resolve(true);
-				}
-			}, 250);
-		});
-	};
+    return userService.isAuthenticated$.pipe(
+        filter((value): value is boolean => value !== null),
+        take(1), 
+        tap((isAuthenticated) => {
+            console.log(isAuthenticated);
+            if (isAuthenticated) router.navigate(['/']);
+        }),
+        map((isAuthenticated) => !isAuthenticated)
+    );
 
-	return await checkGuest();
 };

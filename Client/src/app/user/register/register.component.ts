@@ -20,14 +20,21 @@ export class RegisterComponent {
 	register(form: NgForm) {
 		if (form.invalid) {
 			console.error('Invalid Register Form!');
-			return;
 		}
+		this.userService.isAuthenticated$.subscribe((isAuthenticated) => { console.log('isAuthenticated:', isAuthenticated) })
 
 		const { email, password, rePassword } = form.value;
 		if (rePassword != password)
 			this.errorService.setError("Passwords don't match");
-		this.userService
-			.register(email, password)
-			?.then(() => this.router.navigate(['/catalog'])); //TODO rollback
+
+        this.userService.register(email, password).subscribe({
+            next: () => {
+                this.router.navigate(['/'])
+            },
+            error: (error) => {
+                console.error(error.error.message);
+                this.errorService.setError(error.error.message || 'Registration failed');
+            }
+        })
 	}
 }

@@ -1,44 +1,97 @@
 import { Injectable, OnDestroy } from "@angular/core";
 import { BehaviorSubject, Observable, tap, } from "rxjs";
 import { ErrorService } from "../error/error.service";
+import { HttpClient } from "@angular/common/http";
+import { User } from "../../../../shared/types/user";
 
 @Injectable({
-	providedIn: "root",
+    providedIn: "root",
 })
+
 export class UserService implements OnDestroy {
     private userSubject: BehaviorSubject<User | null> =
         new BehaviorSubject<User | null>(null);
 
-			return await signInWithEmailAndPassword(auth, email, password);
-		} catch (err) {
-			this.errorService.setError("Login Error:" + (err as Error).message);
-		}
-		return;
-	};
-	register = async (email: string, password: string) => {
-		try {
-			await setPersistence(auth, browserLocalPersistence);
-			return await createUserWithEmailAndPassword(auth, email, password);
-		} catch (err) {
-			this.errorService.setError(
-				"Register Error:" + (err as Error).message
-			);
-		}
-		return;
-	};
-	logout = async () => {
-		try {
-			await auth.signOut();
-		} catch (err) {
-			this.errorService.setError(
-				"Logout Error:" + (err as Error).message
-			);
-		}
-	};
-	get isLogged(): boolean | null {
-		if (this.userBool) return true;
-		else if (this.userBool == null) return false;
-		return null;
-	}
-	ngOnDestroy(): void {}
+    user$: Observable<User | null> = this.userSubject.asObservable();
+    userBool: User | null | false = false;
+
+    private isAuthenticated = new BehaviorSubject<boolean | null>(null);
+    isAuthenticated$ = this.isAuthenticated.asObservable();
+
+    private apiUrl = 'http://localhost:5000';
+    private authUrl = `${this.apiUrl}/auth`;
+
+    constructor(
+        private errorService: ErrorService,
+        private http: HttpClient,
+    ) {
+        this.initializeAuthState();
+    }
+    checkUser = async () => {
+        this.http.get(
+            `${this.apiUrl}/users/me`,
+            { withCredentials: true }
+        ).subscribe({
+            next: (data: any) => {
+                if (data.authenticated == false) {
+                    console.log("User not authenticated");
+                    this.isAuthenticated.next(false);
+                    this.userSubject.next(null);
+                    return;
+                }
+                this.userSubject.next(data.user);
+                this.isAuthenticated.next(true);
+            },
+            error: (err) => {
+                console.log("Error checking user authentication", err);
+                this.isAuthenticated.next(false);
+                this.userSubject.next(null);
+            }
+        });
+    }
+    initializeAuthState(): void {
+        this.checkUser()
+    }
+    logout(): void {
+        this.http.get(
+            `${this.authUrl}/logout`,
+            { withCredentials: true }
+        ).pipe(
+            tap(() => {
+                this.userSubject.next(null);
+                this.isAuthenticated.next(false);
+            }),
+            tap({
+                error: (err) => {
+                    this.errorService.setError(err);
+                }
+            })
+        ).subscribe();
+
+    }
+
+    login(email: string, password: string) {
+        return this.http.post(
+            `${this.authUrl}/login`,
+            { email, password },
+            { withCredentials: true }
+        ).pipe(
+            tap(() => this.isAuthenticated.next(true))
+        );
+    }
+
+    register(email: string, password: string): Observable<any> {
+        return this.http.post(
+            `${this.authUrl}/register`,
+            { email, password },
+            { withCredentials: true }
+        ).pipe(
+            tap(() => this.isAuthenticated.next(true))
+        )
+    }
+
+    get isLogged(): boolean | null {
+        return this.isAuthenticated.value
+    }
+    ngOnDestroy(): void { }
 }

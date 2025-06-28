@@ -10,34 +10,38 @@ import { WorkoutDetailsComponent } from "./workout-details/workout-details.compo
 import { GuestGuard } from "./guards/guest.guard";
 
 export const routes: Routes = [
-	{ path: "", component: HomeComponent },
-	{ path: "login", component: LoginComponent, canActivate: [GuestGuard] },
-	{
-		path: "register",
-		component: RegisterComponent,
-		canActivate: [GuestGuard],
-	},
-	{ path: "account", component: AccountComponent, canActivate: [AuthGuard] },
-	{
-		path: "create",
-		component: CreateWorkoutComponent,
-		canActivate: [AuthGuard],
-	},
-	{
-		path: "details",
-		children: [{ path: ":detailsId", component: WorkoutDetailsComponent }],
-	},
-	{
-		path: "edit",
-		children: [
-			{ path: "", component: HomeComponent },
-			{
-				path: ":editId",
-				component: CreateWorkoutComponent,
-				canActivate: [AuthGuard],
-			},
-		],
-	},
-	{ path: "404", component: NotFoundComponent },
-	{ path: "**", redirectTo: "/404" },
+    { path: "", component: HomeComponent },
+    { path: "login", component: LoginComponent, canActivate: [GuestGuard] },
+    {
+        path: "register",
+        component: RegisterComponent,
+        canActivate: [GuestGuard]
+    },
+    {
+        path: "account",
+        component: AccountComponent,
+        canActivate: [AuthGuard]
+    },
+    {
+        path: "create",
+        component: CreateWorkoutComponent,
+        canActivate: [AuthGuard]
+    },
+    {
+        path: "details",
+        children: [{ path: ":detailsId", component: WorkoutDetailsComponent }],
+    },
+    {
+        path: "edit",
+        children: [
+            { path: "", component: HomeComponent },
+            {
+                path: ":editId",
+                component: CreateWorkoutComponent,
+                canActivate: [AuthGuard],
+            },
+        ],
+    },
+    { path: "404", component: NotFoundComponent },
+    { path: "**", redirectTo: "/404" },
 ];
