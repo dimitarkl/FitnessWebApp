@@ -8,6 +8,13 @@
       "when": 1751112481160,
       "tag": "0000_furry_onslaught",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1751209207972,
+      "tag": "0001_daily_the_initiative",
+      "breakpoints": true
     }
   ]
 }

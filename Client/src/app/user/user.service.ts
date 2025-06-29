@@ -29,7 +29,7 @@ export class UserService implements OnDestroy {
     }
     checkUser = async () => {
         this.http.get(
-            `${this.apiUrl}/users/me`,
+            `${this.apiUrl}/api/users/me`,
             { withCredentials: true }
         ).subscribe({
             next: (data: any) => {
