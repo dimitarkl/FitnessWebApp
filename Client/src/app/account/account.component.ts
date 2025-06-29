@@ -44,9 +44,21 @@ export class AccountComponent implements OnInit {
 	};
 	getWorkouts = () => {
 		if (this.user) {
-			// this.workoutService
-			// 	.getUserWorkouts(this.user.uid, 5)
-			// 	.then(response => (this.workouts = response));
+			 this.workoutService
+			 	.getUserWorkouts().subscribe({
+                    next: (response: any) => {
+                        if (response) {
+                            console.log('Workouts fetched successfully');
+                            console.log(response);
+                            this.workouts = response;
+                        } else {
+                            console.error('No workouts found');
+                        }
+                    },
+                    error: (error: Error) => {
+                        console.error('Error fetching workouts: ' + error.message);
+                    }
+                })
 		} else {
 			console.log('Error User');
 			return;

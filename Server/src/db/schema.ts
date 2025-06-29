@@ -22,7 +22,7 @@ export const workoutTable = pgTable("workout", {
 
 export const exerciseTable = pgTable('exercise', {
     id: bigint({ mode: 'bigint' }).primaryKey().generatedAlwaysAsIdentity(),
-    name: varchar()
+    name: varchar().notNull()
 })
 
 export const exerciseSetTable = pgTable('exercise_set', {
