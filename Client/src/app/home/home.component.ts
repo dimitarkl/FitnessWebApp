@@ -8,24 +8,35 @@ import { ErrorService } from '../error/error.service';
 import { PostComponent } from './post/post.component';
 
 @Component({
-	selector: 'app-home',
-	standalone: true,
-	imports: [RouterLink, PostComponent],
-	templateUrl: './home.component.html',
+    selector: 'app-home',
+    standalone: true,
+    imports: [RouterLink, PostComponent],
+    templateUrl: './home.component.html',
 })
 export class HomeComponent implements OnInit {
-	constructor(
-		private workoutService: WorkoutService,
-		private errorService: ErrorService
-	) {}
-	workouts: Workout[] | null = null;
-	ngOnInit(): void {
-		this.getWorkout();
-	}
-	getWorkout = () => {
-		// this.workoutService.getLastWorkouts().then(response => {
-		// 	if (response != null) this.workouts = response;
-		// 	else this.errorService.setError('Error Getting Response');
-		// });
-	};
+    constructor(
+        private workoutService: WorkoutService,
+        private errorService: ErrorService
+    ) { }
+    workouts: Workout[] | null = null;
+    ngOnInit(): void {
+        this.getWorkout();
+    }
+    ngOnChange():void {
+        this.getWorkout();
+    }
+    getWorkout = () => {
+        this.workoutService.getLastWorkouts().subscribe({
+            next: (response: any) => {
+                if (response) {
+                    this.workouts = response;
+                } else {
+                    this.errorService.setError('No workouts found');
+                }
+            },
+            error: (error: Error) => {
+                this.errorService.setError('Error fetching workouts: ' + error.message);
+            }
+        });
+    };
 }

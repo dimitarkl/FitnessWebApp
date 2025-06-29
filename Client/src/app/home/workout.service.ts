@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Exercise, ExerciseSet, Workout } from '../../../../shared/types/Workout';;
+import { Exercise, ExerciseSet, ExerciseType, Workout } from '../../../../shared/types/Workout';;
 
 import { UserService } from '../user/user.service';
 import { ErrorService } from '../error/error.service';
 import { catchError, firstValueFrom, map, of } from 'rxjs';
 import { PreferencesService } from '../user/preferences.service';
+import { User } from '../../../../shared/types/user';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
     providedIn: 'root',
@@ -13,36 +15,27 @@ export class WorkoutService {
     constructor(
         private userService: UserService,
         private errorService: ErrorService,
-        private prefService: PreferencesService
+        private prefService: PreferencesService,
+        private http: HttpClient,
     ) { }
-
+    private apiUrl = 'http://localhost:5000';
     sendWorkout = async (workout: Workout) => {
-        // const userId = await this.checkUser();
-        // if (userId) {
-        // 	workout.ownerId = userId;
-        // 	const unit = await this.prefService.getWeightUnit();
 
-        // 	if (unit == 'lbs') workout = this.convertWeightToKg(workout);
+        let user: User | null = await firstValueFrom(this.userService.user$)
+        if (!user) {
+            this.errorService.setError('User not found or invalid');
+            console.log(user)
+            return;
+        }
+        try {
+            this.http.post(`${this.apiUrl}` + '/api/create-workout', {
+                workout: workout,
+                userId: user.id
+            }, { withCredentials: true }).subscribe()
 
-        // 	try {
-        // 		const docRef = await addDoc(collection(db, 'exercises'), {
-        // 			...workout,
-        // 			createdAt: serverTimestamp(),
-        // 		});
-        // 		console.log('Document written with ID: ', docRef.id);
-        // 	} catch (e) {
-        // 		this.errorService.setError(
-        // 			'Error adding document: ' + (e as Error).message
-        // 		);
-        // 	}
-        // } else {
-        // 	this.errorService.setError('User not found or invalid');
-        // }
-
-        const userId = this.userService.user$.pipe(
-            map(user => user?.id)
-        );
-        console.log(userId);
+        } catch (error) {
+            this.errorService.setError('Error sending workout: ' + (error as Error).message);
+        }
     };
     convertWeightToKg = (workout: Workout): Workout => {
         workout.exercises.forEach(exercise => {
@@ -81,23 +74,14 @@ export class WorkoutService {
         return "";
     };
     getLastWorkouts = () => {
-        // const q = query(
-        // 	collection(db, 'exercises'),
-        // 	orderBy('createdAt', 'desc')
-        // );
-        // const response = this.getDocuments(q);
-        return Promise<null>;
+        return this.http.get(`${this.apiUrl}/api/workouts`,
+            { withCredentials: true })
+
+
     };
 
-    getUserWorkouts = (id: string, amount: number) => {
-        // const q = query(
-        // 	collection(db, 'exercises'),
-        // 	where('ownerId', '==', id),
-        // 	orderBy('createdAt', 'desc'),
-        // 	limit(amount)
-        // );
-        // const response = this.getDocuments(q);
-        // return response;
+    getUserWorkouts = () => {
+        return this.http.get(`${this.apiUrl}/api/user/workouts`, { withCredentials: true })
     };
 
     getDocuments = async (q: any) => {
@@ -186,49 +170,10 @@ export class WorkoutService {
         // 		}
         // 	} else this.errorService.setError('Error Liking: User Not Found');
     };
-    getWorkoutById = async (id: string) => {
-        // try {
-        // 	const q = query(
-        // 		collection(db, 'exercises'),
-        // 		where(documentId(), '==', id)
-        // 	);
-        // 	const querySnapshot = await getDoc(doc(db, 'exercises', id));
+    getWorkoutById = (id: string) => {
+        return this.http.get(`${this.apiUrl}/api/workouts/${id}`,
+            { withCredentials: true })
 
-        // 	const data = querySnapshot.data();
-        // 	let workout: Workout | null = null;
-        // 	if (data) {
-        // 		workout = {
-        // 			id: querySnapshot.id,
-        // 			title: data['title'] || 'Title Not Found',
-        // 			ownerId: data['ownerId'] || 'Unknown Owner',
-        // 			createdAt: data['createdAt'] || 'Unknown Date',
-        // 			exercises: (data['exercises'] || []).map(
-        // 				(exercise: Exercise) => ({
-        // 					name: exercise?.name || 'Unknown Exercise',
-        // 					sets: (exercise?.sets || []).map(
-        // 						(set: ExerciseSet) => ({
-        // 							weight: set?.weight || 0,
-        // 							reps: set?.reps || 0,
-        // 						})
-        // 					),
-        // 				})
-        // 			),
-        // 			likes: data['likes'],
-        // 		};
-        // 	} else this.errorService.setError('Error Fetching');
-        // 	const userId = await this.checkUser();
-        // 	if (userId) {
-        // 		const unit = await this.prefService.getWeightUnit();
-        // 		if (unit == 'lbs' && workout)
-        // 			workout = this.convertWeightToLbs(workout);
-        // 	}
-        // 	return workout;
-        // } catch (e) {
-        // 	this.errorService.setError(
-        // 		'Error Fetching:' + (e as Error).message
-        // 	);
-        return null;
-        // }
     };
     updateWorkoutById = async (workout: Workout) => {
         // 	const userId = await this.checkUser();
@@ -271,4 +216,21 @@ export class WorkoutService {
         // 		this.errorService.setError('Error Updating User: User Not Found');
         return workout;
     };
+
+    getExercises = async (): Promise<ExerciseType[]> => {
+        try {
+            const data: any = await firstValueFrom(
+                this.http.get(`${this.apiUrl}/exercises`, { withCredentials: true })
+            );
+            if (data) {
+                return data;
+            } else {
+                this.errorService.setError('No exercises found');
+                return [];
+            }
+        } catch (err: any) {
+            this.errorService.setError('Error fetching exercises: ' + err.message);
+            return [];
+        }
+    }
 }
