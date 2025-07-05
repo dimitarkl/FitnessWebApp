@@ -4,14 +4,10 @@ export const usersTable = pgTable("users", {
     id: bigint({ mode: 'bigint' }).primaryKey().generatedAlwaysAsIdentity(),
     email: varchar().unique().notNull(),
     password: varchar().notNull(),
-    preferredWeightUnit: varchar().references(() => weightUnitsTable.unit),
+    preferredWeightUnit: varchar().notNull().default('kg'),
     username: varchar(),
 })
 
-export const weightUnitsTable = pgTable("weight_units", {
-    id: bigint({ mode: 'bigint' }).primaryKey().generatedAlwaysAsIdentity(),
-    unit: varchar().unique()
-})
 
 export const workoutTable = pgTable("workout", {
     id: bigint({ mode: 'bigint' }).primaryKey().generatedAlwaysAsIdentity(),
