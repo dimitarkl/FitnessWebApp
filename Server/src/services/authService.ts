@@ -13,7 +13,9 @@ export const register = async (userData: {
     try {
         const userId = await db.insert(usersTable).values({
             email: userData.email,
-            password: password
+            password: password,
+            preferredWeightUnit: 'kg',
+            username: null,
         }).returning({
             id: usersTable.id
         })

@@ -9,7 +9,7 @@ export const authMiddleware = async (req: Request, res: Response, next: NextFunc
         req.user = decodedToken;
     } catch (err) {
         res.clearCookie('fitness-auth');
-        console.error('Failed to authenticate token:', err)
+        console.error('Failed to authenticate token:', (err as Error).message)
         return next();
     }
 
