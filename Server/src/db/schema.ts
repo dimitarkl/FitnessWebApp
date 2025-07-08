@@ -1,13 +1,21 @@
-import { bigint, integer, pgTable, real, timestamp, varchar } from "drizzle-orm/pg-core";
+import { bigint, decimal, integer, pgTable, real, timestamp, varchar } from "drizzle-orm/pg-core";
 //TODO Likes not implemented
+
+export const likeTable = pgTable("likes", {
+    id: bigint({ mode: 'bigint' }).primaryKey().generatedAlwaysAsIdentity(),
+    user_id: bigint({ mode: 'bigint' }).references(() => usersTable.id),
+    workout_id: bigint({ mode: 'bigint' }).references(() => workoutTable.id),
+    created_at: timestamp({ withTimezone: true }).defaultNow()
+})
+
 export const usersTable = pgTable("users", {
     id: bigint({ mode: 'bigint' }).primaryKey().generatedAlwaysAsIdentity(),
     email: varchar().unique().notNull(),
     password: varchar().notNull(),
     preferredWeightUnit: varchar().notNull().default('kg'),
     username: varchar(),
+    created_at: timestamp({ withTimezone: true }).defaultNow()
 })
-
 
 export const workoutTable = pgTable("workout", {
     id: bigint({ mode: 'bigint' }).primaryKey().generatedAlwaysAsIdentity(),
@@ -24,7 +32,7 @@ export const exerciseTable = pgTable('exercise', {
 export const exerciseSetTable = pgTable('exercise_set', {
     id: bigint({ mode: 'bigint' }).primaryKey().generatedAlwaysAsIdentity(),
     reps: real().notNull(),
-    weight: integer().notNull(),
+    weight: decimal().notNull(),
     w_e_id: bigint({ mode: 'bigint' }).references(() => workoutExerciseTable.id, { onDelete: 'cascade' })
 })
 export const workoutExerciseTable = pgTable('workout_exercise', {

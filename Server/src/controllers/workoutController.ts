@@ -1,9 +1,10 @@
 import { Request, Response } from "express"
-import { createWorkout, deleteWorkoutById, editWorkout, findByOwner, findWorkoutById, getExercises, getWorkouts } from "../services/workoutService"
-import { ExerciseType } from "../../../shared/types/workout"
+import { convertWorkoutToPounds, createWorkout, deleteWorkoutById, editWorkout, findByOwner, findWorkoutById, getExercises, getWorkouts } from "../services/workoutService"
+import { ExerciseType, Workout } from "../../../shared/types/workout"
 import { create } from "domain"
 import { sanitazeInputs } from "../utils/util"
 import { error } from "console"
+import { getUser } from "../services/userService"
 
 export const createWorkoutRoute = async (req: Request, res: Response) => {
     console.log('POST: Create workout')
@@ -17,8 +18,9 @@ export const createWorkoutRoute = async (req: Request, res: Response) => {
         res.status(400).json({ error: 'Missing workout data' });
         return;
     }
+    const user = await getUser(req.user.id)
 
-    const workout = sanitazeInputs(req.body.workout)
+    const workout = sanitazeInputs(req.body.workout, user.preferredWeightUnit)
     const workoutId = await createWorkout(workout, req.user.id);
     if (!workoutId) {
         res.status(400).json({ error: 'Error creating workout' });
@@ -41,7 +43,12 @@ export const reqExercises = async (req: Request, res: Response) => {
 export const getLastWorkouts = async (req: Request, res: Response) => {
     console.log("GET: Last workouts");
 
-    const workouts = await getWorkouts(5);
+    let workouts = await getWorkouts(5);
+    if (req.user) {
+        const user = await getUser(req.user.id)
+        if (user)
+            workouts.forEach(workout => convertWorkoutToPounds(workout as Workout, user.preferredWeightUnit))
+    }
 
     res.status(200).json(
         workouts)
@@ -49,9 +56,15 @@ export const getLastWorkouts = async (req: Request, res: Response) => {
 
 export const getWorkoutById = async (req: Request, res: Response) => {
     console.log("GET: Workout by ID:" + req.params.id);
+    const user = req.user
     const workoutId = req.params.id;
 
-    const workout = await findWorkoutById(workoutId);
+    let workout = await findWorkoutById(workoutId);
+    if (req.user) {
+        const user = await getUser(req.user.id)
+        if (user)
+            workout = convertWorkoutToPounds(workout as Workout, user.preferredWeightUnit)
+    }
     if (workout) {
         res.status(200).json({
             workout
@@ -63,14 +76,22 @@ export const getWorkoutById = async (req: Request, res: Response) => {
 
 export const getUserWorkouts = async (req: Request, res: Response) => {
     console.log("GET: User workouts");
+
     if (!req.user) {
         console.log('User not authenticated');
         res.sendStatus(401);
         return;
     }
+
     const userId = req.user.id;
-    const workouts = await findByOwner(userId);
+    let workouts = await findByOwner(userId);
+
     if (workouts) {
+        if (req.user) {
+            const user = await getUser(req.user.id)
+            if (user)
+                workouts.forEach(workout => convertWorkoutToPounds(workout as Workout, user.preferredWeightUnit))
+        }
         res.status(200).json(workouts);
     } else {
         res.sendStatus(404);
@@ -112,14 +133,12 @@ export const updateWorkout = async (req: Request, res: Response) => {
 
     const workoutId = req.params.id
     const user = req.user
-    const { workout } = req.body
-    console.log(workout)
+    let { workout } = req.body
     if (!user) {
         res.sendStatus(401)
         return;
     }
     const workoutExistance = await findWorkoutById(workoutId)
-    console.log(workoutExistance)
     if (!workoutExistance) {
         res.status(404).json({ error: "Workout doesnt exist" })
         return
@@ -127,7 +146,7 @@ export const updateWorkout = async (req: Request, res: Response) => {
         res.sendStatus(401)
         return;
     }
-
+    workout = sanitazeInputs(req.body.workout, user.preferredWeightUnit)
     const result = await editWorkout(workoutId, workout)
     if (result)
         res.status(200).json({ message: "Workout updated successfully" })

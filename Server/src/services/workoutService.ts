@@ -2,10 +2,9 @@ import db from "../db"
 import { exerciseSetTable, exerciseTable, workoutExerciseTable, workoutTable } from "../db/schema"
 import { Exercise, Workout } from "../../../shared/types/workout"
 import { desc, eq, inArray } from "drizzle-orm"
-
-const errString = '\x1b[31m[ERROR]:\x1b[0m';
-
-//TODO: create Workout Sanitizer
+import { getUser } from "./userService";
+import { errString, kgToPounds, poundsToKg } from "../utils/util";
+import { User } from "../../../shared/types/user";
 
 const createWorkout = async (workoutData: Workout, ownerId: string) => {
     try {
@@ -26,7 +25,7 @@ const createWorkout = async (workoutData: Workout, ownerId: string) => {
             if (exercise.sets && exercise.sets.length > 0) {
                 const setValues = exercise.sets.map((set) => ({
                     reps: set.reps,
-                    weight: set.weight,
+                    weight: String(set.weight),
                     w_e_id: workoutExerciseRelation.id,
                 }));
                 await db.insert(exerciseSetTable).values(setValues);
@@ -35,6 +34,8 @@ const createWorkout = async (workoutData: Workout, ownerId: string) => {
 
         return newWorkout.id.toString();
 
+    } catch (err) {
+        console.log(errString, (err as Error).message)
         return null
     }
 }
@@ -50,6 +51,10 @@ const getExercises = async () => {
 
         return exercises;
 
+    } catch (err) {
+        console.log(errString, (err as Error).message)
+        return null
+    }
 }
 
 const findByOwner = async (ownerId: string) => {
@@ -104,7 +109,7 @@ const findWorkoutById = async (id: string) => {
             .where(eq(workoutExerciseTable.workoutId, workout.id));
 
         const workoutExerciseIds = exercises.map(e => e.workoutExerciseId);
-        let setsResult: { id: bigint; reps: number; weight: number; w_e_id: bigint | null }[] = [];
+        let setsResult: { id: bigint; reps: number; weight: string; w_e_id: bigint | null }[] = [];
 
         if (workoutExerciseIds.length > 0) {
             setsResult = await db.select()
@@ -112,7 +117,7 @@ const findWorkoutById = async (id: string) => {
                 .where(inArray(exerciseSetTable.w_e_id, workoutExerciseIds));
         }
         const exercisesMap = new Map<bigint, Exercise>();
-        
+
         if (workoutExerciseIds.length > 0) {
             setsResult = await db.select()
                 .from(exerciseSetTable)
@@ -126,7 +131,7 @@ const findWorkoutById = async (id: string) => {
                     return {
                         id: Number(set.id),
                         reps: set.reps,
-                        weight: set.weight,
+                        weight: Number(set.weight),
                         w_e_id: Number(set.w_e_id)
                     }
                 })
@@ -140,12 +145,12 @@ const findWorkoutById = async (id: string) => {
             createdAt: workout.created_at instanceof Date ? workout.created_at.toISOString() : undefined,
             exercises: Array.from(exercisesMap.values())
         };
-
         return finalWorkout;
     } catch (err) {
         console.log(errString, (err as Error).message)
     }
 }
+
 const deleteWorkoutById = async (id: string) => {
     try {
         const workoutExercises = await db.select({ id: workoutExerciseTable.id })
@@ -183,7 +188,7 @@ const deleteWorkoutById = async (id: string) => {
 }
 
 const editWorkout = async (id: string, newWorkout: Workout) => {
-    console.log('id', id, 'Workout', newWorkout)
+    console.log(newWorkout.exercises)
     try {
         await db.update(workoutTable).set({ title: newWorkout.title }).where(eq(workoutTable.id, BigInt(id)))
 
@@ -195,7 +200,7 @@ const editWorkout = async (id: string, newWorkout: Workout) => {
         if (workoutExerciseIds.length > 0) {
             await db.delete(exerciseSetTable)
                 .where(inArray(exerciseSetTable.w_e_id, workoutExerciseIds));
-                
+
             await db.delete(workoutExerciseTable)
                 .where(inArray(workoutExerciseTable.id, workoutExerciseIds));
         }
@@ -216,7 +221,7 @@ const editWorkout = async (id: string, newWorkout: Workout) => {
             if (exercise.sets && exercise.sets.length > 0) {
                 const setValues = exercise.sets.map((set) => ({
                     reps: set.reps,
-                    weight: set.weight,
+                    weight: String(set.weight),
                     w_e_id: workoutExerciseRelation.id,
                 }));
                 await db.insert(exerciseSetTable).values(setValues);
@@ -229,6 +234,28 @@ const editWorkout = async (id: string, newWorkout: Workout) => {
 
 }
 
+const convertWorkoutToPounds = (workout: Workout, preferredWeightUnit: string) => {
+    if (preferredWeightUnit === 'lbs')
+        workout.exercises.forEach(exercise => {
+            exercise.sets?.forEach(set => {
+                set.weight = kgToPounds(set.weight);
+            });
+        });
+    return workout
+}
+
+
+const convertWorkoutToKg = (workout: Workout, preferredWeightUnit: string)=> {
+    if (preferredWeightUnit === 'lbs')
+        workout.exercises.forEach(exercise => {
+            exercise.sets?.forEach(set => {
+                set.weight = poundsToKg(set.weight);
+            });
+        });
+
+    return workout;
+}
+
 export {
     createWorkout,
     getExercises,
@@ -236,5 +263,7 @@ export {
     getWorkouts,
     findByOwner,
     deleteWorkoutById,
-    editWorkout
+    editWorkout,
+    convertWorkoutToPounds,
+    convertWorkoutToKg
 }

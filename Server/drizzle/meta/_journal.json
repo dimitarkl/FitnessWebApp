@@ -15,6 +15,20 @@
       "when": 1751209207972,
       "tag": "0001_daily_the_initiative",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1751985213204,
+      "tag": "0002_volatile_magik",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1751988575548,
+      "tag": "0003_fearless_maverick",
+      "breakpoints": true
     }
   ]
 }

@@ -4,6 +4,7 @@ import { usersTable } from "../db/schema"
 import db from "../db";
 import 'dotenv/config';
 import { eq } from 'drizzle-orm';
+import { errString } from '../utils/util';
 
 export const register = async (userData: {
     email: string,
@@ -14,7 +15,6 @@ export const register = async (userData: {
         const userId = await db.insert(usersTable).values({
             email: userData.email,
             password: password,
-            preferredWeightUnit: 'kg',
             username: null,
         }).returning({
             id: usersTable.id
@@ -22,12 +22,12 @@ export const register = async (userData: {
         const token = await tokenCreation({
             id: userId.toString(),
             email: userData.email,
-            password: password
         });
         console.log("Register Succesful")
         return token
     } catch (err) {
-        throw err;
+        console.log(errString, (err as Error).message)
+        return null
     }
 };
 export const login = async (userData: {
@@ -42,24 +42,23 @@ export const login = async (userData: {
         const token = await tokenCreation({
             id: user.id.toString(),
             email: user.email,
-            password: user.password
         });
 
         console.log('Login Succesful')
         return token;
     } catch (err) {
-        throw err;
+        console.log(errString, (err as Error).message)
+        return ''
     }
 }
 function tokenCreation(user: {
     id: string,
     email: string,
-    password: string,
 }) {
+
     const payload = {
-        id: user.id,
-        email: user.email,
-        password: user.password,
-    };
+        ...user
+    }
+
     return jwt.sign(payload, process.env.SECRET as string, { expiresIn: "2h" });
 }
