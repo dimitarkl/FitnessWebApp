@@ -4,7 +4,6 @@ import { Exercise, ExerciseSet, ExerciseType, Workout } from '../../../../shared
 import { UserService } from '../user/user.service';
 import { ErrorService } from '../error/error.service';
 import { catchError, firstValueFrom, map, of } from 'rxjs';
-import { PreferencesService } from '../user/preferences.service';
 import { User } from '../../../../shared/types/user';
 import { HttpClient } from '@angular/common/http';
 
@@ -15,11 +14,19 @@ export class WorkoutService {
     constructor(
         private userService: UserService,
         private errorService: ErrorService,
-        private prefService: PreferencesService,
         private http: HttpClient,
     ) { }
     private apiUrl = 'http://localhost:5000';
+    //TODO Fix Errors
     sendWorkout = async (workout: Workout) => {
+        const filteredWorkout = {
+            ...workout,
+            exercises: workout.exercises.filter(exercise => exercise.name !== "")
+        };
+        if (filteredWorkout.exercises.length <= 0) {
+            this.errorService.setError("Empty Workout")
+            return;
+        }
 
         let user: User | null = await firstValueFrom(this.userService.user$)
         if (!user) {
@@ -29,146 +36,36 @@ export class WorkoutService {
         }
         try {
             this.http.post(`${this.apiUrl}` + '/api/create-workout', {
-                workout: workout,
-                userId: user.id
+                workout: workout
             }, { withCredentials: true }).subscribe()
+            
 
         } catch (error) {
-            this.errorService.setError('Error sending workout: ' + (error as Error).message);
+            console.log('Error sending workout: ' + (error as Error).message)
+            this.errorService.setError('Error sending workout' );
         }
-    };
-    convertWeightToKg = (workout: Workout): Workout => {
-        workout.exercises.forEach(exercise => {
-            exercise.sets?.forEach(set => {
-                set.weight = parseFloat((set.weight * 0.453592).toFixed(2));
-            });
-        });
-        return workout;
-    };
-    convertWeightToLbs = (workout: Workout): Workout => {
-        workout.exercises.forEach(exercise => {
-            exercise.sets?.forEach(set => {
-                set.weight = parseFloat((set.weight * 2.20462).toFixed(2));
-            });
-        });
-        return workout;
-    };
-    checkUser = async (): Promise<string | null> => {
-        // try {
-        // 	const userId = await firstValueFrom(
-        // 		this.userService.user$.pipe(
-        // 			map(user => user?.uid || null),
-        // 			catchError(() => {
-        // 				this.errorService.setError('Error fetching user');
-        // 				return of(null);
-        // 			})
-        // 		)
-        // 	);
-        // 	if (userId) {
-        // 		return userId;
-        // 	} else return null;
-        // } catch (error) {
-        // 	this.errorService.setError('Error processing user');
-        // 	return null;
-        // }
-        return "";
+        return true
     };
     getLastWorkouts = () => {
         return this.http.get(`${this.apiUrl}/api/workouts`,
             { withCredentials: true })
-
-
     };
 
     getUserWorkouts = () => {
         return this.http.get(`${this.apiUrl}/api/user/workouts`, { withCredentials: true })
     };
 
-    getDocuments = async (q: any) => {
-        // try {
-        // 	const querySnapshot = getDocs(q);
-        // 	const workouts: Workout[] = [];
-        // 	querySnapshot.then(item => {
-        // 		item.forEach(doc => {
-        // 			const data = doc.data();
-        // 			const workout: Workout = {
-        // 				id: doc.id,
-        // 				title: data['title'] || 'Title Not Found',
-        // 				ownerId: data['ownerId'] || 'Unknown Owner',
-        // 				createdAt: data['createdAt'] || 'Unknown Date',
-        // 				exercises: (data['exercises'] || []).map(
-        // 					(exercise: Exercise) => ({
-        // 						name: exercise?.name || 'Unknown Exercise',
-        // 						sets: (exercise?.sets || []).map(
-        // 							(set: ExerciseSet) => ({
-        // 								weight: set?.weight || 0,
-        // 								reps: set?.reps || 0,
-        // 							})
-        // 						),
-        // 					})
-        // 				),
-        // 				likes: data['likes'],
-        // 			};
-        // 			workouts.push(workout);
-        // 		});
-        // 	});
-        // 	const userId = await this.checkUser();
-        // 	if (userId) {
-        // 		const unit = await this.prefService.getWeightUnit();
-        // 		if (unit == 'lbs')
-        // 			workouts.forEach(
-        // 				workout => (workout = this.convertWeightToLbs(workout))
-        // 			);
-        // 	}
-        // 	return workouts;
-        // } catch (e) {
-        // 	this.errorService.setError(
-        // 		'Error Fetching Workout' + (e as Error).message
-        // 	);
-        // 	return null;
-        // }
-    };
     deteleteWorkout = async (workoutId: string) => {
-        // const workout = await this.getWorkoutById(workoutId);
-        // if (!workout) {
-        // 	this.errorService.setError('Error:Workout Doesnt Exist');
-        // 	return;
-        // }
-        // const isUserValid = await this.checkUser();
-        // if (isUserValid)
-        // 	try {
-        // 		await deleteDoc(doc(db, 'exercises', workoutId));
-        // 	} catch (e) {
-        // 		this.errorService.setError(
-        // 			'Error Deleting:' + (e as Error).message
-        // 		);
-        // 	}
+        this.http.delete(`${this.apiUrl}/api/workouts/${workoutId}`
+            , { withCredentials: true }).subscribe({
+                error: (err) => {
+                    console.log('Erorr while deleting workout',(err as Error).message)
+                    this.errorService.setError('Erorr while deleting workout')
+                }
+            })
     };
     likePost = async (workoutId: string) => {
-        // const workout = await this.getWorkoutById(workoutId);
-        // if (!workout) {
-        // 	this.errorService.setError('Error:Workout Doesnt Exist');
-        // 	return;
-        // }
-        // const isUserValid = await this.checkUser();
-        // if (isUserValid)
-        // 	if (auth.currentUser) {
-        // 		const body = {
-        // 			likes: arrayUnion(auth.currentUser.uid),
-        // 		};
-        // 		try {
-        // 			const response = await setDoc(
-        // 				doc(db, 'exercises', workoutId),
-        // 				body,
-        // 				{ merge: true }
-        // 			);
-        // 			return response;
-        // 		} catch (e) {
-        // 			this.errorService.setError(
-        // 				'Error Liking:' + (e as Error).message
-        // 			);
-        // 		}
-        // 	} else this.errorService.setError('Error Liking: User Not Found');
+      
     };
     getWorkoutById = (id: string) => {
         return this.http.get(`${this.apiUrl}/api/workouts/${id}`,
@@ -176,45 +73,38 @@ export class WorkoutService {
 
     };
     updateWorkoutById = async (workout: Workout) => {
-        // 	const userId = await this.checkUser();
-        // 	if (userId) {
-        // 		workout.ownerId = userId;
-        // 		const unit = await this.prefService.getWeightUnit();
+        const filteredWorkout = {
+            ...workout,
+            exercises: workout.exercises.filter(exercise => exercise.name !== "")
+        };
+        if (filteredWorkout.exercises.length <= 0) {
+            this.errorService.setError("Empty Workout")
+            return;
+        }
 
-        // 		if (unit == 'lbs') workout = this.convertWeightToKg(workout);
+        let user: User | null = await firstValueFrom(this.userService.user$)
+        if (!user) {
+            this.errorService.setError('User not found or invalid');
+            console.log(user)
+            return;
+        }
+        try {
+            this.http.put(`${this.apiUrl}/api/workouts/${workout.id}`, {
+                workout: workout,
+            }, { withCredentials: true }).subscribe({
+                next: () => {
+                    //TODO update the workouts list
+                },
+                error: (err) => {
+                    console.log(err)
+                    this.errorService.setError("Error Updating Workout")
+                }
 
-        // 		let body;
-        // 		if (workout.likes == undefined)
-        // 			body = {
-        // 				...workout,
-        // 				likes: null,
-        // 			};
-        // 		else
-        // 			body = {
-        // 				...workout,
-        // 			};
-        // 		if (workout.id) {
-        // 			try {
-        // 				const response = await setDoc(
-        // 					doc(db, 'exercises', workout.id),
-        // 					body,
-        // 					{
-        // 						merge: true,
-        // 					}
-        // 				);
-        // 				return response;
-        // 			} catch (e) {
-        // 				this.errorService.setError(
-        // 					'Error Updating Workout:' + (e as Error).message
-        // 				);
-        // 				console.log(
-        // 					'Error Updating Workout:' + (e as Error).message
-        // 				);
-        // 			}
-        // 		} else this.errorService.setError('Workout Id Not Found');
-        // 	} else
-        // 		this.errorService.setError('Error Updating User: User Not Found');
-        return workout;
+            })
+        } catch (err) {
+            return false
+        }
+        return false
     };
 
     getExercises = async (): Promise<ExerciseType[]> => {
@@ -229,7 +119,8 @@ export class WorkoutService {
                 return [];
             }
         } catch (err: any) {
-            this.errorService.setError('Error fetching exercises: ' + err.message);
+            console.log('Error fetching exercises: ' + err.message)
+            this.errorService.setError('Error fetching exercises');
             return [];
         }
     }

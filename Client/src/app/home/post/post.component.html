@@ -61,8 +61,8 @@
         </a>
         } @if(workout?.ownerId == user?.id) {
         <a
-          routerLink="/edit/{{ workout?.id }}"
-          class="bg-accent-green hover:bg-green-600 text-gray-900 font-bold py-2 px-4 rounded"
+            (click)="deleteWorkout()"
+            class="bg-accent-green hover:bg-green-600 text-gray-900 font-bold py-2 px-4 rounded"
         >
           Delete </a
         >}

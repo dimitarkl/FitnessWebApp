@@ -33,7 +33,7 @@ export class RegisterComponent {
             },
             error: (error) => {
                 console.error(error.error.message);
-                this.errorService.setError(error.error.message || 'Registration failed');
+                this.errorService.setError('Registration failed');
             }
         })
 	}

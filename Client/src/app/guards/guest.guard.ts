@@ -20,7 +20,6 @@ export const GuestGuard: CanActivateFn = (
         filter((value): value is boolean => value !== null),
         take(1), 
         tap((isAuthenticated) => {
-            console.log(isAuthenticated);
             if (isAuthenticated) router.navigate(['/']);
         }),
         map((isAuthenticated) => !isAuthenticated)

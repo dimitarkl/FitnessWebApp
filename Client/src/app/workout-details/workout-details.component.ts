@@ -3,8 +3,8 @@ import { WorkoutService } from '../home/workout.service';
 import { ActivatedRoute } from '@angular/router';
 import { Workout } from '../../../../shared/types/Workout';
 import { ExerciseCardComponent } from '../home/post/exercise-card/exercise-card.component';
-import { PreferencesService } from '../user/preferences.service';
 import { ErrorService } from '../error/error.service';
+import { UserService } from '../user/user.service';
 
 @Component({
     selector: 'app-workout-details',
@@ -16,44 +16,51 @@ export class WorkoutDetailsComponent implements OnInit {
     constructor(
         private workoutService: WorkoutService,
         private route: ActivatedRoute,
-        private prefService: PreferencesService,
-        private errorService: ErrorService
+        private errorService: ErrorService,
+        private userServices: UserService
     ) { }
 
     class = 'w-full';
     workout: Workout | null = null;
     ownerUsername: string | null = null;
-    prefUnit: string = '';
+    prefUnit: string = 'kg';
     ngOnInit(): void {
         const id = this.route.snapshot.params['detailsId'];
         this.getWorkout(id);
-        this.getOwnerName();
-        this.getWeightUnit();
+        this.getPrefUnit()
+        console.log(this.prefUnit)
     }
-    getOwnerName = () => {
-        if (this.workout?.ownerId)
-            this.prefService
-                .getUsernameById(this.workout.ownerId)
-                .then(response => (this.ownerUsername = response));
-    };
     getWorkout = (id: string) => {
         this.workoutService
             .getWorkoutById(id).subscribe({
                 next: (response: any) => {
                     if (response) {
                         this.workout = response.workout;
-                        } else {
-                            this.errorService.setError('No workouts found');
-                        }
+
+                        this.updateWorkoutOwner(this.workout?.ownerId)
+                    } else {
+                        this.errorService.setError('No workouts found');
+                    }
                 },
                 error: (error: Error) => {
-                    this.errorService.setError('Error fetching workouts: ' + error.message);
+                    console.log('Error fetching workouts: ' + error.message)
+                    this.errorService.setError('Error fetching workouts');
                 }
             })
     };
-    getWeightUnit = () => {
-        this.prefService
-            .getWeightUnit()
-            .then(response => (this.prefUnit = response));
-    };
+    updateWorkoutOwner = (id: string | undefined) => {
+        if (!id) return
+        this.userServices.getUser(id).subscribe(
+            username => this.ownerUsername = username
+        )
+    }
+    getPrefUnit = () => {
+        this.userServices.user$.subscribe({
+            next: (user) => {
+                if (!user) return
+                this.prefUnit = user.preferredWeightUnit
+            }
+        })
+    }
+
 }

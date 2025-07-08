@@ -16,7 +16,7 @@ export class LoginComponent {
     constructor(
         private userService: UserService,
         private router: Router,
-        private errorService: ErrorService  
+        private errorService: ErrorService
     ) { }
     login(form: NgForm) {
         if (form.invalid) {
@@ -31,7 +31,7 @@ export class LoginComponent {
             },
             error: (error) => {
                 console.error(error.error.message);
-                this.errorService.setError(error.error.message || 'Registration failed');
+                this.errorService.setError('Login failed');
             }
         })
     }

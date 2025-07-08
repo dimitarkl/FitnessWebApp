@@ -51,9 +51,14 @@ export class SetInputComponent implements OnChanges, OnInit {
     setValues: { reps: number; weight: number } = { reps: 0, weight: 0 };
     submitSet = (form: NgForm) => {
         const { weight, reps, exercise } = form.value;
-        console.log(weight + ' ' + reps + ' ' + exercise);
-        if (exercise) this.setName.emit(exercise);
-        this.setChange.emit({ weight, reps });
+        if (exercise) {
+            this.setName.emit(exercise);
+            console.log(typeof reps === 'number')
+            if (typeof weight === 'number' && typeof reps === 'number')
+                this.setChange.emit({ weight, reps });
+            else if (typeof reps === 'number')
+                this.setChange.emit({ weight: 0, reps });
+        }
     };
     getExercises = async () => {
         this.exerciseSelection = await this.workoutService.getExercises();

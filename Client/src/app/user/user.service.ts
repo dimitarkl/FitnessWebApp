@@ -1,8 +1,9 @@
 import { Injectable, OnDestroy } from "@angular/core";
-import { BehaviorSubject, Observable, tap, } from "rxjs";
+import { BehaviorSubject, filter, map, Observable, tap, } from "rxjs";
 import { ErrorService } from "../error/error.service";
 import { HttpClient } from "@angular/common/http";
 import { User } from "../../../../shared/types/user";
+import { NavigationEnd, Router } from "@angular/router";
 
 @Injectable({
     providedIn: "root",
@@ -24,8 +25,18 @@ export class UserService implements OnDestroy {
     constructor(
         private errorService: ErrorService,
         private http: HttpClient,
+        private router: Router
     ) {
         this.initializeAuthState();
+        this.subscribeToRouteChanges();
+    }
+
+    private subscribeToRouteChanges(): void {
+        this.router.events.pipe(
+            filter(event => event instanceof NavigationEnd)
+        ).subscribe(() => {
+            this.initializeAuthState();
+        });
     }
     checkUser = async () => {
         this.http.get(
@@ -34,7 +45,6 @@ export class UserService implements OnDestroy {
         ).subscribe({
             next: (data: any) => {
                 if (data.authenticated == false) {
-                    console.log("User not authenticated");
                     this.isAuthenticated.next(false);
                     this.userSubject.next(null);
                     return;
@@ -43,6 +53,7 @@ export class UserService implements OnDestroy {
                 this.isAuthenticated.next(true);
             },
             error: (err) => {
+                this.errorService.setError('Error checking user authentication')
                 console.log("Error checking user authentication", err);
                 this.isAuthenticated.next(false);
                 this.userSubject.next(null);
@@ -63,7 +74,8 @@ export class UserService implements OnDestroy {
             }),
             tap({
                 error: (err) => {
-                    this.errorService.setError(err);
+                    console.log('Error Logging Out',err)
+                    this.errorService.setError('Error Logging Out');
                 }
             })
         ).subscribe();
@@ -93,5 +105,30 @@ export class UserService implements OnDestroy {
     get isLogged(): boolean | null {
         return this.isAuthenticated.value
     }
+
+    updateUser = (username: string, weightUnit: string) => {
+        return this.http.put(`${this.apiUrl}/api/users/update`, {
+            username,
+            weightUnit
+        }, { withCredentials: true }).pipe(
+            tap({
+                next: () => {
+                    this.initializeAuthState();
+                },
+                error: (error) => {
+                    console.error('Error updating user:', error);
+                    this.errorService.setError("Error updating user");
+                }
+            })
+        );
+    };
+
+    getUser = (id: string) => {
+        return this.http.get<User>(`${this.apiUrl}/api/users/${id}`, { withCredentials: true })
+            .pipe(
+                map(user => user.username)
+            );
+    }
+
     ngOnDestroy(): void { }
 }

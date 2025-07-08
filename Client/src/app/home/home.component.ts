@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 //import { PostComponent } from './post/post.component';
 import { WorkoutService } from './workout.service';
 import { Workout } from '../../../../shared/types/Workout';;
-import { PreferencesService } from '../user/preferences.service';
 import { RouterLink } from '@angular/router';
 import { ErrorService } from '../error/error.service';
 import { PostComponent } from './post/post.component';
@@ -35,7 +34,8 @@ export class HomeComponent implements OnInit {
                 }
             },
             error: (error: Error) => {
-                this.errorService.setError('Error fetching workouts: ' + error.message);
+                console.log('Error fetching workouts: ' + error.message)
+                this.errorService.setError('Error fetching workouts: ');
             }
         });
     };

@@ -19,6 +19,7 @@ export class CreateWorkoutComponent implements OnInit {
         private errorService: ErrorService
     ) { }
     editing = false;
+    //TODO:calls 4 times the exercises
     ngOnInit(): void {
         const id = this.route.snapshot.params['editId'];
         if (id)
@@ -26,6 +27,7 @@ export class CreateWorkoutComponent implements OnInit {
     }
     handleExerciseChange(updatedExercise: Exercise, index: number) {
         this.workoutObj.exercises[index] = updatedExercise;
+        console.log(this.workoutObj)
     }
     deleteExercise = (index: number) => {
         if (
@@ -37,11 +39,15 @@ export class CreateWorkoutComponent implements OnInit {
             console.log('ERROR');
         }
     };
-    create = () => {
-        if (!this.editing) {
-            this.workoutService.sendWorkout(this.workoutObj);
-        } else this.workoutService.updateWorkoutById(this.workoutObj);
-        //this.router.navigate(['/']);
+    create = async () => {
+        let response;
+        if (!this.editing)
+            response = await this.workoutService.sendWorkout(this.workoutObj);
+        else
+            response = await this.workoutService.updateWorkoutById(this.workoutObj);
+
+        if (response === true)
+            this.router.navigate(['/'])
     };
     addExercise = () => {
         this.workoutObj.exercises.push({
@@ -53,14 +59,11 @@ export class CreateWorkoutComponent implements OnInit {
         if (id) {
             this.workoutService.getWorkoutById(id).subscribe({
                 next: (response: any) => {
-                    if (response) {
-                        this.workoutObj = response.workout;
-                    } else {
-                        this.errorService.setError('No workouts found');
-                    }
+                    this.workoutObj = response.workout;
+                    this.editing = true;
                 },
                 error: (error: Error) => {
-                    this.errorService.setError('Error fetching workouts: ' + error.message);
+                    this.errorService.setError('Error fetching workout');
                 }
             })
         }
@@ -74,7 +77,7 @@ export class CreateWorkoutComponent implements OnInit {
         ownerId: '',
         exercises: [
             {
-                name: 'Exercise',
+                name: '',
                 sets: [
                     {
                         weight: 0,
@@ -83,7 +86,7 @@ export class CreateWorkoutComponent implements OnInit {
                 ],
             },
             {
-                name: 'Second Exercise',
+                name: '',
                 sets: [
                     {
                         weight: 0,
