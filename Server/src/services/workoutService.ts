@@ -188,7 +188,6 @@ const deleteWorkoutById = async (id: string) => {
 }
 
 const editWorkout = async (id: string, newWorkout: Workout) => {
-    console.log(newWorkout.exercises)
     try {
         await db.update(workoutTable).set({ title: newWorkout.title }).where(eq(workoutTable.id, BigInt(id)))
 

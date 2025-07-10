@@ -7,7 +7,9 @@
 		[set]="set ? set[$index] : null"
 		(setChange)="handleSetChange($event, $index)"
 		(setName)="setName($event)"
-		[deleteSet]="deleteSet"></app-set-input>
+		[deleteSet]="deleteSet"
+        [exerciseSelection]="exerciseSelection"
+        ></app-set-input>
 	}
 
 	<button

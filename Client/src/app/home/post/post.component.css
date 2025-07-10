@@ -1,0 +1,61 @@
+.post-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    outline: 10px black;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    padding: 8px;
+    /*flex justify-center items-center outline-black outline-10 mb-2.5 mt-2.5 p-2  */
+}
+
+.post-card {
+    width: 100%;
+    background-color: var(--background-color-dark);
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1.5px 4px rgba(0, 0, 0, 0.06);
+    padding: 10px;
+    color: #f3f4f6;
+    /*w-full sm:w-[625px] bg-dark-blue rounded-lg shadow-md*/
+}
+
+.post-header {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 1rem;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.date-wrapper {
+    display: flex;
+    flex-direction: row;
+    margin-top: 0.375rem;
+    align-items: center;
+}
+
+.title-duration {
+    display: flex;
+    flex-direction: row;
+    margin-left: 1.25rem;
+    margin-right: 1.25rem;
+    justify-content: space-between;
+    margin: 1rem 1.25rem;
+    /* flex flex-row ml-5 mr-5 justify-between */
+}
+
+.exercises-wrapper {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: rgba(var(--app-text-color), 0.9);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+@media (min-width: 640px) {
+    .post-card {
+        width: 625px;
+    }
+}

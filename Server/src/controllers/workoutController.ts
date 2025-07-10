@@ -32,7 +32,7 @@ export const createWorkoutRoute = async (req: Request, res: Response) => {
 }
 
 export const reqExercises = async (req: Request, res: Response) => {
-    console.log('GET:Exercise types')
+    console.log('GET: Exercise types')
     const exercises = await getExercises();
     if (exercises)
         res.status(200).json(exercises);
@@ -49,7 +49,6 @@ export const getLastWorkouts = async (req: Request, res: Response) => {
         if (user)
             workouts.forEach(workout => convertWorkoutToPounds(workout as Workout, user.preferredWeightUnit))
     }
-
     res.status(200).json(
         workouts)
 }

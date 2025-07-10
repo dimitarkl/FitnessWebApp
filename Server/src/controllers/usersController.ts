@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { getUser, updateUser } from '../services/userService';
 
 export const getMe = async (req: Request, res: Response) => {
-    console.log("GET: users/me");
+    console.log("GET: Users/me");
     if (req.user) {
         const user = await getUser(req.user.id)
         res.json({ authenticated: true, user })

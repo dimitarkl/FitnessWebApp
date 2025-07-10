@@ -1,44 +1,87 @@
 <div class="flex justify-center items-center min-h-screen p-4">
-	<div class="text-center bg-dark-blue p-6 rounded-lg max-w-2xl">
-		<form
-			class="register-form text-gray-100"
-			#form="ngForm"
-			(ngSubmit)="create()">
-			<fieldset>
-				<h2 class="text-3xl font-extrabold mb-4 text-gray-100">
-					Workout
-				</h2>
-				<div class="flex flex-col mb-6 justify-center items-center">
-                    <!-- TODO: fix this idk how -->
-                    <input
-                        class="w-1/2 py-3 px-4 text-center bg-transparent border-b-4 border-red-500  z-40"
-                        (ngModelChange)="submitName(form)" type="text" name="title" id="title" [(ngModel)]="this.workoutObj.title"
-                        placeholder="Morning Workout" />
+    <div class="text-center bg-dark-blue p-6 rounded-lg max-w-2xl">
+        <form class="register-form text-gray-100" #form="ngForm" (ngSubmit)="create()">
+            <fieldset>
+                <h2 class="text-3xl font-extrabold mb-4 text-gray-100">
+                    Create Workout
+                </h2>
+                <div class="flex flex-row mb-6 justify-between items-center">
+                    <div class="px-4">
+                        <p class="text-left text-sm">Input Workout Name</p>
+                        <input
+                            class="w-full text-xl bg-transparent border-b-2 border-white border-solid z-40 focus:outline-none"
+                            (ngModelChange)="submitName(form)" type="text" name="title" id="title"
+                            [(ngModel)]="this.workoutObj.title" placeholder="Morning Workout" />
                     </div>
+                    <div class="px-4">
+                        <p class="text-sm mb-2">Duration</p>
+                        <button type="button"
+                            class="bg-accent-green text-black font-bold py-2 px-4 rounded-lg hover:bg-green-600 transition duration-200 ease-in-out"
+                            (click)="toggleDurationInput()">
+                            {{formattedDuration}}
+                        </button>
 
-				@for(exercise of workoutObj.exercises; track $index) {
-				<app-create-exercise
-					[name]="workoutObj.exercises[$index].name"
-					[addExercise]="addExercise"
-					[last]="$index === workoutObj.exercises.length - 1"
-					[exercise]="workoutObj.exercises[$index]"
-					[indx]="$index"
-					(setChange)="handleExerciseChange($event, $index)"
-					[deleteExercise]="deleteExercise"></app-create-exercise>
-				}
+                        <!-- Time input that appears when editing -->
+                        @if (isEditingDuration) {
+                        <!-- <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                            <div class="bg-dark-blue p-6 rounded-lg shadow-lg max-w-sm w-full mx-4">
+                                <h3 class="text-lg font-semibold text-white mb-4 text-center">Set Duration</h3>
 
-				<button
-					[disabled]="form.invalid"
-					class="m-2 h-12 px-6 rounded-lg bg-accent-green text-black font-extrabold hover:bg-green-600 transition duration-200 ease-in-out">
-					END WORKOUT
-				</button>
-			</fieldset>
-		</form>
+                                <div class="flex gap-4 justify-center mb-4">
+                                    <div class="flex flex-col items-center">
+                                        <span class="text-xs text-gray-300">Hours</span>
+                                        <input type="number" class="w-16 px-2 py-1 text-black rounded text-center"
+                                            [(ngModel)]="tempHours" min="0" max="23" placeholder={{}} />
+                                    </div>
 
-		<a
-			class="m-2 text-gray-100 font-bold py-2 px-4 rounded-lg hover:bg-green-600 transition duration-200 ease-in-out"
-			routerLink="/">
-			Close
-		</a>
-	</div>
+                                    <div class="flex flex-col items-center">
+                                        <span class="text-xs text-gray-300">Minutes</span>
+                                        <input type="number" class="w-16 px-2 py-1 text-black rounded text-center"
+                                            [(ngModel)]="tempMinutes" min="0" max="59" placeholder="21" />
+                                    </div>
+
+                                    <div class="flex flex-col items-center">
+                                        <span class="text-xs text-gray-300">Seconds</span>
+                                        <input type="number" class="w-16 px-2 py-1 text-black rounded text-center"
+                                            [(ngModel)]="tempSeconds" min="0" max="59" placeholder="59" />
+                                    </div>
+                                </div>
+
+                                <div class="flex gap-3 justify-center">
+                                    <button type="button"
+                                        class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition duration-200"
+                                        (click)="saveDuration()">
+                                        Save
+                                    </button>
+                                    <button type="button"
+                                        class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition duration-200"
+                                        (click)="cancelDurationEdit()">
+                                        Cancel
+                                    </button>
+                                </div>
+                            </div>
+                        </div> -->
+                        }
+                    </div>
+                </div>
+
+                @for(exercise of workoutObj.exercises; track $index) {
+                <app-create-exercise [name]="workoutObj.exercises[$index].name" [addExercise]="addExercise"
+                    [last]="$index === workoutObj.exercises.length - 1" [exercise]="workoutObj.exercises[$index]"
+                    [indx]="$index" (setChange)="handleExerciseChange($event, $index)" [deleteExercise]="deleteExercise"
+                    [exerciseSelection]="exerciseSelection"></app-create-exercise>
+                }
+
+                <button [disabled]="form.invalid"
+                    class="m-2 h-12 px-6 rounded-lg bg-accent-green text-black font-extrabold hover:bg-green-600 transition duration-200 ease-in-out">
+                    END WORKOUT
+                </button>
+            </fieldset>
+        </form>
+
+        <a class="m-2 text-gray-100 font-bold py-2 px-4 rounded-lg hover:bg-green-600 transition duration-200 ease-in-out"
+            routerLink="/">
+            Close
+        </a>
+    </div>
 </div>

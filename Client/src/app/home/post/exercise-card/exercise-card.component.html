@@ -1,4 +1,4 @@
-<div
+<!-- <div
 	class="flex justify-center items-center outline-black outline-10 mb-2.5 mt-2.5">
 	<div class="bg-accent-green rounded-lg shadow-md {{ class }}">
 		<div
@@ -8,4 +8,15 @@
 			</h1>
 		</div>
 	</div>
+</div> -->
+<div class="flex justify-center items-center outline-black outline-10 my-1.5">
+    <div class="bg-accent-green rounded-lg shadow-md {{ class }}">
+        <div class="p-3 flex flex-row justify-between text-lg text-gray-900">
+            <div>{{exercise?.name}}</div>
+            <div>({{exercise?.sets?.length != 1 
+                ?exercise?.sets?.length + " sets"
+                :exercise?.sets?.length + " set"
+            }})</div>
+        </div>
+    </div>
 </div>

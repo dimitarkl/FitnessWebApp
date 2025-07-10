@@ -1,4 +1,4 @@
-import { bigint, decimal, integer, pgTable, real, timestamp, varchar } from "drizzle-orm/pg-core";
+import { bigint, decimal, integer, pgTable, real, time, timestamp, varchar } from "drizzle-orm/pg-core";
 //TODO Likes not implemented
 
 export const likeTable = pgTable("likes", {
@@ -21,7 +21,8 @@ export const workoutTable = pgTable("workout", {
     id: bigint({ mode: 'bigint' }).primaryKey().generatedAlwaysAsIdentity(),
     ownerId: bigint({ mode: 'bigint' }).references(() => usersTable.id),
     title: varchar().notNull(),
-    created_at: timestamp({ withTimezone: true }).defaultNow()
+    created_at: timestamp({ withTimezone: true }).defaultNow(),
+    //workout_length: time(),
 })
 
 export const exerciseTable = pgTable('exercise', {

@@ -8,7 +8,7 @@ import {
 	SimpleChanges,
 } from '@angular/core';
 import { SetInputComponent } from './set-input/set-input.component';
-import { Exercise, ExerciseSet } from '../../../../../../shared/types/Workout';
+import { Exercise, ExerciseSet, ExerciseType } from '../../../../../../shared/types/Workout';
 
 @Component({
 	selector: 'app-create-exercise',
@@ -23,6 +23,7 @@ export class CreateExerciseComponent implements OnChanges {
 	@Input() exercise: Exercise | null = null;
 	@Input() indx: number = 0;
 	@Input() deleteExercise!: (index: number) => void;
+    @Input() exerciseSelection:ExerciseType[]=[];
 
 	@Output() setChange = new EventEmitter<Exercise>();
 	sets = 0;

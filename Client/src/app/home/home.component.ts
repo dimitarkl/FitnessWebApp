@@ -29,6 +29,7 @@ export class HomeComponent implements OnInit {
             next: (response: any) => {
                 if (response) {
                     this.workouts = response;
+                    console.log(response)
                 } else {
                     this.errorService.setError('No workouts found');
                 }

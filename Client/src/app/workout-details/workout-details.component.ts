@@ -28,7 +28,6 @@ export class WorkoutDetailsComponent implements OnInit {
         const id = this.route.snapshot.params['detailsId'];
         this.getWorkout(id);
         this.getPrefUnit()
-        console.log(this.prefUnit)
     }
     getWorkout = (id: string) => {
         this.workoutService
@@ -36,7 +35,6 @@ export class WorkoutDetailsComponent implements OnInit {
                 next: (response: any) => {
                     if (response) {
                         this.workout = response.workout;
-
                         this.updateWorkoutOwner(this.workout?.ownerId)
                     } else {
                         this.errorService.setError('No workouts found');

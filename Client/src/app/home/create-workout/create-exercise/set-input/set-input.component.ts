@@ -25,27 +25,23 @@ export class SetInputComponent implements OnChanges, OnInit {
     @Input() set: ExerciseSet | null = null;
     @Input() exerciseName: string = '';
     @Input() deleteSet!: (index: number) => void;
+    @Input() exerciseSelection: ExerciseType[] = []
 
     @Output() setChange = new EventEmitter<ExerciseSet>();
     @Output() setName = new EventEmitter<string>();
 
-    exerciseSelection: ExerciseType[] = []
 
-    constructor(
-        private workoutService: WorkoutService,
-    ) { }
 
     repsInput: number | '' = '';
     weightInput: number | '' = '';
     ngOnInit(): void {
-        this.getExercises();
     }
 
     ngOnChanges(changes: SimpleChanges): void {
         this.repsInput = this.set?.reps || '';
         this.weightInput = this.set?.weight || '';
         this.updateSet();
-        this.getExercises()
+
     }
 
     setValues: { reps: number; weight: number } = { reps: 0, weight: 0 };
@@ -60,9 +56,7 @@ export class SetInputComponent implements OnChanges, OnInit {
                 this.setChange.emit({ weight: 0, reps });
         }
     };
-    getExercises = async () => {
-        this.exerciseSelection = await this.workoutService.getExercises();
-    }
+
     updateSet = () => {
         if (this.set) {
             this.setValues.reps = this.set.reps;

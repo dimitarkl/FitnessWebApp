@@ -17,6 +17,7 @@ import { User } from '../../../../../shared/types/user';
     standalone: true,
     imports: [ExerciseCardComponent, RouterLink],
     templateUrl: './post.component.html',
+    styleUrl:'./post.component.css'
 })
 export class PostComponent implements OnInit {
     @Input() workout: Workout | null = null;
@@ -29,18 +30,20 @@ export class PostComponent implements OnInit {
 
     user: User | null = null;
     likesInv = 'invisible';
-    class = 'w-96';
+    class = 'w-80';
+    workoutDate = 'Sunday, July 6  2025'
+    workoutLength = '55m'
     getUser = () => {
         const id = this.workout?.ownerId
         if (!id) return
         this.userServices.getUser(id).subscribe(
             username => {
-                username ? this.ownerUsername = username : "Username Not Found"
+                username ? this.ownerUsername = username : ""
             }
         )
         this.userServices.user$.subscribe({
-            next:(user) => {
-                if(!user)return
+            next: (user) => {
+                if (!user) return
                 this.user = user;
             }
         })
@@ -50,6 +53,18 @@ export class PostComponent implements OnInit {
         this.more = this.workout?.exercises.length
             ? this.workout.exercises.length - 3
             : 0;
+        this.getWorkoutDate(this.workout)
+    }
+    getWorkoutDate = (workout: Workout | null) => {
+        if (!workout || !workout.createdAt) return;
+        const date = new Date(workout.createdAt);
+        const options: Intl.DateTimeFormatOptions = {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        };
+        this.workoutDate = date.toLocaleDateString('en-US', options);
     }
     deleteWorkout = () => {
         if (this.workout && this.workout.id != undefined)
