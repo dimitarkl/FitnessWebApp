@@ -2,7 +2,7 @@ type Workout = {
     title: string;
     id?: string;
     ownerId: string;
-    duration?:string;
+    duration:number;
     createdAt?: string;
     exercises: Exercise[];
     likes?: string[];

@@ -22,7 +22,7 @@ export const workoutTable = pgTable("workout", {
     ownerId: bigint({ mode: 'bigint' }).references(() => usersTable.id),
     title: varchar().notNull(),
     created_at: timestamp({ withTimezone: true }).defaultNow(),
-    //workout_length: time(),
+    duration: integer().notNull().default(0),
 })
 
 export const exerciseTable = pgTable('exercise', {

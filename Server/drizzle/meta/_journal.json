@@ -29,6 +29,27 @@
       "when": 1751988575548,
       "tag": "0003_fearless_maverick",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1752352712408,
+      "tag": "0004_fine_lake",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1752352893404,
+      "tag": "0005_swift_silver_sable",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1752352957533,
+      "tag": "0006_curved_nebula",
+      "breakpoints": true
     }
   ]
 }

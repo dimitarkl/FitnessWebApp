@@ -11,6 +11,7 @@ const createWorkout = async (workoutData: Workout, ownerId: string) => {
         const [newWorkout] = await db.insert(workoutTable).values({
             title: workoutData.title,
             ownerId: BigInt(ownerId),
+            duration:workoutData.duration
         }).returning({ id: workoutTable.id })
 
         for (const exercise of workoutData.exercises) {
@@ -143,7 +144,8 @@ const findWorkoutById = async (id: string) => {
             title: workout.title,
             ownerId: workout.ownerId ? workout.ownerId.toString() : 'Unknown Owner',
             createdAt: workout.created_at instanceof Date ? workout.created_at.toISOString() : undefined,
-            exercises: Array.from(exercisesMap.values())
+            exercises: Array.from(exercisesMap.values()),
+            duration:workout.duration
         };
         return finalWorkout;
     } catch (err) {
@@ -180,6 +182,7 @@ const deleteWorkoutById = async (id: string) => {
 
         await db.delete(workoutTable)
             .where(eq(workoutTable.id, BigInt(id)));
+        return true;
     }
     catch (err) {
         console.log(errString, (err as Error).message)
