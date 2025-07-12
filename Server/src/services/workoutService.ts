@@ -1,5 +1,5 @@
 import db from "../db"
-import { exerciseSetTable, exerciseTable, workoutExerciseTable, workoutTable } from "../db/schema"
+import { exerciseSetTable, exerciseTable, likeTable, workoutExerciseTable, workoutTable } from "../db/schema"
 import { Exercise, Workout } from "../../../shared/types/workout"
 import { desc, eq, inArray } from "drizzle-orm"
 import { getUser } from "./userService";
@@ -11,7 +11,7 @@ const createWorkout = async (workoutData: Workout, ownerId: string) => {
         const [newWorkout] = await db.insert(workoutTable).values({
             title: workoutData.title,
             ownerId: BigInt(ownerId),
-            duration:workoutData.duration
+            duration: workoutData.duration
         }).returning({ id: workoutTable.id })
 
         for (const exercise of workoutData.exercises) {
@@ -138,14 +138,16 @@ const findWorkoutById = async (id: string) => {
                 })
             });
         }
-
+        const likes = await db.select().from(likeTable).where(eq(likeTable.workout_id,workout.id))
+        
         const finalWorkout: Workout = {
             id: workout.id.toString(),
             title: workout.title,
             ownerId: workout.ownerId ? workout.ownerId.toString() : 'Unknown Owner',
             createdAt: workout.created_at instanceof Date ? workout.created_at.toISOString() : undefined,
             exercises: Array.from(exercisesMap.values()),
-            duration:workout.duration
+            duration: workout.duration,
+            likes:likes.map((like)=>String(like.user_id))
         };
         return finalWorkout;
     } catch (err) {
@@ -192,7 +194,12 @@ const deleteWorkoutById = async (id: string) => {
 
 const editWorkout = async (id: string, newWorkout: Workout) => {
     try {
-        await db.update(workoutTable).set({ title: newWorkout.title }).where(eq(workoutTable.id, BigInt(id)))
+        await db.update(workoutTable)
+            .set({
+                title: newWorkout.title,
+                duration: newWorkout.duration
+            })
+            .where(eq(workoutTable.id, BigInt(id)))
 
         const workoutExercises = await db.select({ id: workoutExerciseTable.id })
             .from(workoutExerciseTable)
@@ -247,7 +254,7 @@ const convertWorkoutToPounds = (workout: Workout, preferredWeightUnit: string) =
 }
 
 
-const convertWorkoutToKg = (workout: Workout, preferredWeightUnit: string)=> {
+const convertWorkoutToKg = (workout: Workout, preferredWeightUnit: string) => {
     if (preferredWeightUnit === 'lbs')
         workout.exercises.forEach(exercise => {
             exercise.sets?.forEach(set => {

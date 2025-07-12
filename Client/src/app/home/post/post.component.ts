@@ -72,10 +72,13 @@ export class PostComponent implements OnInit {
         //TODO: Refresh when deleting
     };
     likePost = () => {
+    likePost = async () => {
         if (this.workout && this.workout.id != undefined)
             this.workoutService
                 .likePost(this.workout.id)
                 .then(() => location.reload());
+            await this.workoutService.likePost(this.workout.id);
+        // TODO: Emit event to parent to refresh the list or remove this post
     };
     showLikes = () => {
         console.log('Show Likes');

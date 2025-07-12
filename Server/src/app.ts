@@ -4,6 +4,7 @@ import configExpress from "./config/configExpress";
 import dotenv from "dotenv";
 import express from "express";
 import { getMe, getUserById, updateMe } from "./controllers/usersController";
+import { likeWorkoutRoute } from "./controllers/likeController";
 
 dotenv.config();
 
@@ -23,6 +24,8 @@ app.get("/api/workouts", getLastWorkouts);
 app.get("/api/workouts/:id", getWorkoutById);
 app.delete("/api/workouts/:id", deleteWorkout);
 app.put("/api/workouts/:id", updateWorkout)
+
+app.post("/api/workouts/:id/like",likeWorkoutRoute)
 
 app.post("/auth/register", registerRoute)
 app.post("/auth/login", loginRoute)

@@ -71,11 +71,12 @@
             
             {{ workout?.likes?.length}}
         </button>
-        <div class="mt-4 flex space-x-4">
+        <div class="mt-4 flex space-x-2">
             @if(workout?.ownerId != user?.id && user &&
             !workout?.likes?.includes(user.id)) {
             <button (click)="likePost()"
                 class="bg-accent-green hover:bg-green-600 text-gray-900 font-bold py-2 px-4 rounded">
+            <button 
                 Like
             </button>
             }
