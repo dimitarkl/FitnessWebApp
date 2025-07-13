@@ -10,6 +10,7 @@ import {
 import { FormsModule, NgForm } from '@angular/forms';
 import { ExerciseSet, ExerciseType } from '../../../../../../../shared/types/Workout';
 import { WorkoutService } from '../../../workout.service';
+import { ErrorService } from '../../../../error/error.service';
 
 @Component({
     selector: 'app-set-input',
@@ -20,17 +21,16 @@ import { WorkoutService } from '../../../workout.service';
 })
 export class SetInputComponent implements OnChanges, OnInit {
 
+    constructor(
+        private errorService: ErrorService
+    ) { }
+
     @Input() idx: number = 0;
     @Input() first: boolean = false;
     @Input() set: ExerciseSet | null = null;
-    @Input() exerciseName: string = '';
     @Input() deleteSet!: (index: number) => void;
-    @Input() exerciseSelection: ExerciseType[] = []
 
     @Output() setChange = new EventEmitter<ExerciseSet>();
-    @Output() setName = new EventEmitter<string>();
-
-
 
     repsInput: number | '' = '';
     weightInput: number | '' = '';
@@ -46,15 +46,12 @@ export class SetInputComponent implements OnChanges, OnInit {
 
     setValues: { reps: number; weight: number } = { reps: 0, weight: 0 };
     submitSet = (form: NgForm) => {
-        const { weight, reps, exercise } = form.value;
-        if (exercise) {
-            this.setName.emit(exercise);
-            console.log(typeof reps === 'number')
-            if (typeof weight === 'number' && typeof reps === 'number')
-                this.setChange.emit({ weight, reps });
-            else if (typeof reps === 'number')
-                this.setChange.emit({ weight: 0, reps });
-        }
+        const { weight, reps } = form.value;
+        if (typeof weight === 'number' && typeof reps === 'number')
+            this.setChange.emit({ weight, reps });
+        else if (typeof reps === 'number')
+            this.setChange.emit({ weight: 0, reps });
+
     };
 
     updateSet = () => {

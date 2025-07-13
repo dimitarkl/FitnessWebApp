@@ -9,26 +9,32 @@ import {
 } from '@angular/core';
 import { SetInputComponent } from './set-input/set-input.component';
 import { Exercise, ExerciseSet, ExerciseType } from '../../../../../../shared/types/Workout';
+import { FormsModule } from '@angular/forms';
 
 @Component({
 	selector: 'app-create-exercise',
 	standalone: true,
-	imports: [SetInputComponent],
+	imports: [SetInputComponent,FormsModule],
 	templateUrl: './create-exercise.component.html',
+
 })
 export class CreateExerciseComponent implements OnChanges {
 	@Input() name: string = '';
-	@Input() addExercise: () => void = () => {};
 	@Input() last: boolean = false;
 	@Input() exercise: Exercise | null = null;
 	@Input() indx: number = 0;
 	@Input() deleteExercise!: (index: number) => void;
-    @Input() exerciseSelection:ExerciseType[]=[];
+	@Input() exerciseSelection: ExerciseType[] = [];
 
 	@Output() setChange = new EventEmitter<Exercise>();
 	sets = 0;
 	set: ExerciseSet[] | null = null;
 	handleSetChange(updatedSet: ExerciseSet, index: number) {
+		if (!this.exercise) {
+			console.error('Exercise Does not Exist')
+			return
+		}
+
 		if (!this.exercise) {
 			console.error('Exercise is undefined or null');
 			return;
@@ -43,10 +49,6 @@ export class CreateExerciseComponent implements OnChanges {
 		this.exercise.sets[index] = updatedSet;
 		this.setChange.emit(this.exercise);
 	}
-	setName = (name: string) => {
-		if (this.exercise && name != '') this.exercise.name = name;
-		else console.log('Error Changing Exercise Name');
-	};
 	ngOnChanges(changes: SimpleChanges): void {
 		this.checkSets();
 	}
@@ -67,8 +69,8 @@ export class CreateExerciseComponent implements OnChanges {
 		this.checkSets();
 	};
 	deleteSet = (index: number) => {
-		console.log('set index' + index);
 		this.exercise?.sets?.splice(index, 1);
 		this.checkSets();
 	};
 }
+

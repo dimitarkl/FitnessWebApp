@@ -17,7 +17,6 @@ export class WorkoutService {
         private http: HttpClient,
     ) { }
     private apiUrl = 'http://localhost:5000';
-    //TODO Fix Errors
     sendWorkout = async (workout: Workout) => {
         const filteredWorkout = {
             ...workout,
@@ -35,16 +34,17 @@ export class WorkoutService {
             return;
         }
         try {
-            this.http.post(`${this.apiUrl}` + '/api/create-workout', {
+            await firstValueFrom(this.http.post(`${this.apiUrl}` + '/api/create-workout', {
                 workout: workout
-            }, { withCredentials: true }).subscribe()
-            
+            }, { withCredentials: true }))
+            return true
 
         } catch (error) {
             console.log('Error sending workout: ' + (error as Error).message)
-            this.errorService.setError('Error sending workout' );
+            this.errorService.setError('Error sending workout');
+            return false
         }
-        return true
+
     };
     getLastWorkouts = () => {
         return this.http.get(`${this.apiUrl}/api/workouts`,
@@ -59,13 +59,27 @@ export class WorkoutService {
         this.http.delete(`${this.apiUrl}/api/workouts/${workoutId}`
             , { withCredentials: true }).subscribe({
                 error: (err) => {
-                    console.log('Erorr while deleting workout',(err as Error).message)
+                    console.log('Erorr while deleting workout', (err as Error).message)
                     this.errorService.setError('Erorr while deleting workout')
                 }
             })
     };
     likePost = async (workoutId: string) => {
-      
+
+        let user: User | null = await firstValueFrom(this.userService.user$)
+        if (!user) {
+            this.errorService.setError('User not found or invalid');
+            console.log(user)
+            return;
+        }
+        try {
+            await firstValueFrom(
+                this.http.post(`${this.apiUrl}/api/workouts/${workoutId}/like`, {}, { withCredentials: true })
+            );
+            return true;
+        } catch (err) {
+            return false
+        }
     };
     getWorkoutById = (id: string) => {
         return this.http.get(`${this.apiUrl}/api/workouts/${id}`,
@@ -89,22 +103,17 @@ export class WorkoutService {
             return;
         }
         try {
-            this.http.put(`${this.apiUrl}/api/workouts/${workout.id}`, {
-                workout: workout,
-            }, { withCredentials: true }).subscribe({
-                next: () => {
-                    //TODO update the workouts list
-                },
-                error: (err) => {
-                    console.log(err)
-                    this.errorService.setError("Error Updating Workout")
-                }
-
-            })
-        } catch (err) {
+            await firstValueFrom(
+                this.http.put(`${this.apiUrl}/api/workouts/${workout.id}`, {
+                    workout: workout,
+                }, { withCredentials: true })
+            );
+            return true;
+        } catch (err: any) {
+            console.log(err)
+            this.errorService.setError("Error Updating Workout")
             return false
         }
-        return false
     };
 
     getExercises = async (): Promise<ExerciseType[]> => {

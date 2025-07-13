@@ -21,7 +21,7 @@ export class AppComponent implements OnInit, OnDestroy {
 		else this.errorHidden = true;
 	};
 	startErrorCheck(): void {
-		this.errorCheckInterval = setInterval(() => this.displayError(), 1000);
+		this.errorCheckInterval = setInterval(() => this.displayError(), 500);
 	}
 	ngOnDestroy(): void {
 		clearInterval(this.errorCheckInterval);

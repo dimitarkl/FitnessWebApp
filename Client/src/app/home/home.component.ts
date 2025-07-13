@@ -29,7 +29,6 @@ export class HomeComponent implements OnInit {
             next: (response: any) => {
                 if (response) {
                     this.workouts = response;
-                    console.log(response)
                 } else {
                     this.errorService.setError('No workouts found');
                 }
@@ -40,4 +39,15 @@ export class HomeComponent implements OnInit {
             }
         });
     };
+    
+
+    onWorkoutDeleted(id: string): void {
+        if (!this.workouts) return;
+        this.workouts = this.workouts.filter(w => w.id !== id);
+    }
+    
+    // Handle like event from child PostComponent by refreshing the list
+    onPostLiked(_: any): void {
+        this.getWorkout();
+    }
 }

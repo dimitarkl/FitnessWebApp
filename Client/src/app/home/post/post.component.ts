@@ -4,6 +4,8 @@ import {
     OnChanges,
     OnInit,
     SimpleChanges,
+    Output,
+    EventEmitter
 } from '@angular/core';
 import { ExerciseCardComponent } from './exercise-card/exercise-card.component';
 import { Workout } from '../../../../../shared/types/Workout';
@@ -11,28 +13,39 @@ import { UserService } from '../../user/user.service';
 import { WorkoutService } from '../workout.service';
 import { RouterLink } from '@angular/router';
 import { User } from '../../../../../shared/types/user';
+import { DurationPipe } from '../../pipes/duration.pipe';
+import { RelativeDatePipe } from '../../pipes/relative-date.pipe';
+import { DeleteConfirmationModalComponent } from '../../shared/components/delete-confirmation-modal/delete-confirmation-modal.component';
+import { DeleteButtonComponent } from '../../shared/components/delete-button/delete-button.component';
 
 @Component({
     selector: 'app-post',
     standalone: true,
-    imports: [ExerciseCardComponent, RouterLink],
+    imports: [ExerciseCardComponent, RouterLink, DurationPipe, RelativeDatePipe, DeleteConfirmationModalComponent, DeleteButtonComponent],
     templateUrl: './post.component.html',
-    styleUrl:'./post.component.css'
+    styleUrl: './post.component.css'
 })
 export class PostComponent implements OnInit {
     @Input() workout: Workout | null = null;
+
+    @Output() workoutDeleted = new EventEmitter<string>();
+    @Output() postLiked = new EventEmitter<string>();
 
     constructor(
         private userServices: UserService,
         private workoutService: WorkoutService
     ) { }
-    ownerUsername = ''
 
+    ownerUsername = '';
     user: User | null = null;
     likesInv = 'invisible';
     class = 'w-80';
-    workoutDate = 'Sunday, July 6  2025'
-    workoutLength = '55m'
+    workoutLength = '55m';
+    more: number = 0;
+
+    // Delete confirmation modal properties
+    showDeleteConfirm = false;
+    isDeleting = false;
     getUser = () => {
         const id = this.workout?.ownerId
         if (!id) return
@@ -53,35 +66,34 @@ export class PostComponent implements OnInit {
         this.more = this.workout?.exercises.length
             ? this.workout.exercises.length - 3
             : 0;
-        this.getWorkoutDate(this.workout)
+        this.workout?.createdAt
+
     }
-    getWorkoutDate = (workout: Workout | null) => {
-        if (!workout || !workout.createdAt) return;
-        const date = new Date(workout.createdAt);
-        const options: Intl.DateTimeFormatOptions = {
-            weekday: 'long',
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-        };
-        this.workoutDate = date.toLocaleDateString('en-US', options);
+
+    confirmDelete(): void {
+        this.showDeleteConfirm = true;
     }
-    deleteWorkout = () => {
-        if (this.workout && this.workout.id != undefined)
-            this.workoutService.deteleteWorkout(this.workout?.id)
-        //TODO: Refresh when deleting
+
+    cancelDelete(): void {
+        this.showDeleteConfirm = false;
+    }
+
+    deleteWorkout = async (): Promise<void> => {
+        if (!this.workout?.id) return;
+
+        this.isDeleting = true;
+
+        await this.workoutService.deteleteWorkout(this.workout.id);
+        // Emit event to parent to refresh the list or remove this post
+        this.workoutDeleted.emit(this.workout.id);
+        this.isDeleting = false;
+        this.showDeleteConfirm = false;
     };
-    likePost = () => {
-    likePost = async () => {
-        if (this.workout && this.workout.id != undefined)
-            this.workoutService
-                .likePost(this.workout.id)
-                .then(() => location.reload());
-            await this.workoutService.likePost(this.workout.id);
-        // TODO: Emit event to parent to refresh the list or remove this post
+    likePost = async (): Promise<void> => {
+        if (!this.workout?.id) return;
+        await this.workoutService.likePost(this.workout.id);
+
+        // Emit event to parent to update likes
+        this.postLiked.emit(this.workout.id);
     };
-    showLikes = () => {
-        console.log('Show Likes');
-    };
-    more: number = 0;
 }

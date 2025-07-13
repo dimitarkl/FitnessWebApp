@@ -56,7 +56,6 @@ export class AccountComponent implements OnInit {
         }
     };
     submitAccount = (form: NgForm) => {
-        console.log('form submitted');
         const { username, weightUnit } = form.value;
         this.hidden = 'invisible';
         this.userService.updateUser(username, weightUnit).subscribe()

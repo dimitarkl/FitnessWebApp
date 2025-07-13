@@ -6,10 +6,11 @@ import { WorkoutService } from '../workout.service';
 import { DatePipe } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ErrorService } from '../../error/error.service';
+import { DurationPipe } from '../../pipes/duration.pipe';
 @Component({
     selector: 'app-create-workout',
     standalone: true,
-    imports: [FormsModule, CreateExerciseComponent, RouterLink, DatePipe],
+    imports: [FormsModule, CreateExerciseComponent, RouterLink, DatePipe,DurationPipe],
     templateUrl: './create-workout.component.html',
 })
 export class CreateWorkoutComponent implements OnInit, OnDestroy {
@@ -21,27 +22,40 @@ export class CreateWorkoutComponent implements OnInit, OnDestroy {
     ) { }
     editing = false;
     exerciseSelection: ExerciseType[] = []
-    workoutDuration: number = 10000;
-    private timerInterval = setInterval(() => this.workoutDuration++, 1000);
+
+    private timerInterval = setInterval(() => {
+        if (!this.isEditingDuration) this.workoutObj.duration++
+    }, 1000);
+
     isEditingDuration = false;
     tempHours = 0;
     tempMinutes = 0;
     tempSeconds = 0;
+    showExerciseSelection = false;
 
-    //TODO:calls 4 times the exercises
+    selectExercise = (selectedExercise: ExerciseType) => {
+        this.workoutObj.exercises.push({
+            name: selectedExercise.name,
+            sets: [{ reps: 0, weight: 0 }],
+        });
+        this.showExerciseSelection = false;
+    };
+
     ngOnInit(): void {
         const id = this.route.snapshot.params['editId'];
         if (id)
             this.getWorkout(id);
         this.getExercises()
     }
+
     ngOnDestroy(): void {
         clearInterval(this.timerInterval);
     }
+
     handleExerciseChange(updatedExercise: Exercise, index: number) {
         this.workoutObj.exercises[index] = updatedExercise;
-        console.log(this.workoutObj)
     }
+
     deleteExercise = (index: number) => {
         if (
             this.workoutObj.exercises[index].sets &&
@@ -49,25 +63,20 @@ export class CreateWorkoutComponent implements OnInit, OnDestroy {
         ) {
             this.workoutObj.exercises.splice(index, 1);
         } else {
-            console.log('ERROR');
+            this.errorService.setError('Error Deleting Exercise')
         }
     };
+
     create = async () => {
         let response;
         if (!this.editing)
             response = await this.workoutService.sendWorkout(this.workoutObj);
         else
             response = await this.workoutService.updateWorkoutById(this.workoutObj);
-
         if (response === true)
             this.router.navigate(['/'])
     };
-    addExercise = () => {
-        this.workoutObj.exercises.push({
-            name: 'Exercise',
-            sets: [{ reps: 0, weight: 0 }],
-        });
-    };
+
     getWorkout = (id: string | null) => {
         if (id) {
             this.workoutService.getWorkoutById(id).subscribe({
@@ -81,57 +90,33 @@ export class CreateWorkoutComponent implements OnInit, OnDestroy {
             })
         }
     };
+
     submitName = (form: NgForm) => {
         const { title } = form.value;
         this.workoutObj.title = title;
     };
+
     getExercises = async () => {
         this.exerciseSelection = await this.workoutService.getExercises();
     }
-
-    get formattedDuration(): string {
-        const hours = Math.floor(this.workoutDuration / 3600);
-        const minutes = Math.floor((this.workoutDuration % 3600) / 60);
-        const seconds = this.workoutDuration % 60;
-
-        let result = '';
-        if (hours > 0) {
-            result += `${hours}h `;
-        }
-        if (minutes > 0) {
-            result += `${minutes}m `;
-        }
-        if (seconds > 0 || result === '') {
-            result += `${seconds}s`;
-        }
-
-        return result.trim();
-    }
-
+    
     toggleDurationInput() {
         this.isEditingDuration = !this.isEditingDuration;
         if (this.isEditingDuration) {
             // Parse current duration from time string
-            if (this.workoutObj.duration) {
-                const timeParts = this.workoutObj.duration.split(':');
-                this.tempHours = parseInt(timeParts[0]) || 0;
-                this.tempMinutes = parseInt(timeParts[1]) || 0;
-                this.tempSeconds = parseInt(timeParts[2]) || 0;
-            } else {
-                this.tempHours = 0;
-                this.tempMinutes = 0;
-                this.tempSeconds = 0;
-            }
+            this.tempHours = Math.floor(this.workoutObj.duration / 3600)
+            this.tempMinutes = Math.floor((this.workoutObj.duration % 3600) / 60);
+            this.tempSeconds = 0;
         }
     }
 
     saveDuration() {
-        // Convert hours, minutes, and seconds to time string format (HH:MM:SS)
-        const hours = this.tempHours.toString().padStart(2, '0');
-        const minutes = this.tempMinutes.toString().padStart(2, '0');
-        const seconds = this.tempSeconds.toString().padStart(2, '0');
-        this.workoutObj.duration = `${hours}:${minutes}:${seconds}`;
-        this.isEditingDuration = false;
+        if (this.tempHours < 24 && this.tempMinutes < 60) {
+            this.workoutObj.duration = this.tempHours * 3600 + this.tempMinutes * 60
+            this.isEditingDuration = false;
+        } else {
+            this.errorService.setError("Exceeding max hours on minutes")
+        }
     }
 
     cancelDurationEdit() {
@@ -145,24 +130,7 @@ export class CreateWorkoutComponent implements OnInit, OnDestroy {
         title: '',
         ownerId: '',
         exercises: [
-            {
-                name: '',
-                sets: [
-                    {
-                        weight: 0,
-                        reps: 0,
-                    },
-                ],
-            },
-            {
-                name: '',
-                sets: [
-                    {
-                        weight: 0,
-                        reps: 0,
-                    },
-                ],
-            },
         ],
+        duration: 0
     };
 }

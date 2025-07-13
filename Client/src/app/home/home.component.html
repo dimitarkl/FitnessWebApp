@@ -6,7 +6,11 @@
 </div>
 
 @for(workout of workouts; track workout.id) {
-<app-post [workout]="workout"></app-post>
+<app-post
+	[workout]="workout"
+	(workoutDeleted)="onWorkoutDeleted($event)"
+	(postLiked)="onPostLiked($event)">
+</app-post>
 }
 
 <div class="fixed bottom-8 left-1/2 transform -translate-x-1/2 animate-fade-in">
