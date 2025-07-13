@@ -7,13 +7,14 @@ export const registerRoute = async (req: Request, res: Response) => {
     if (!email || !password) {
         res.sendStatus(400)
     }
-    try {
-        const token = await register({ email, password })
+    const token = await register({ email, password })
+
+    if (token)
         res.sendStatus(200)
-    } catch (err) {
-        console.log("Error registering: ", (err as Error).message)
-        res.status(400).json({ message: (err as Error).message })
+    else {
+        res.status(400).json({ message: "Error Registering" })
     }
+
 }
 export const loginRoute = async (req: Request, res: Response) => {
     const { email, password } = req.body;
@@ -21,19 +22,20 @@ export const loginRoute = async (req: Request, res: Response) => {
     if (!email || !password) {
         res.sendStatus(400)
     }
-    try {
-        const token = await login({ email, password })
+
+    const token = await login({ email, password })
+    if (token) {
         setCookie(res, token)
         res.status(200).json({ message: "Login Succesful" })
-    } catch (err) {
-        console.log("Error login: ", (err as Error).message)
-        res.sendStatus(400)
     }
+    else {
+        res.status(400).json({ message: "Error login" })
+    }
+
 }
 export const logout = (req: Request, res: Response) => {
     console.log("GET: auth/logout");
     try {
-
         res.clearCookie('fitness-auth');
         res.status(200).json({ message: "Logout successful" });
     } catch (err) {

@@ -48,7 +48,7 @@ export const login = async (userData: {
         return token;
     } catch (err) {
         console.log(errString, (err as Error).message)
-        return ''
+        return null
     }
 }
 function tokenCreation(user: {

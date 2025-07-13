@@ -1,5 +1,4 @@
 import { bigint, decimal, integer, pgTable, real, time, timestamp, varchar } from "drizzle-orm/pg-core";
-//TODO Likes not implemented
 
 export const likeTable = pgTable("likes", {
     id: bigint({ mode: 'bigint' }).primaryKey().generatedAlwaysAsIdentity(),
