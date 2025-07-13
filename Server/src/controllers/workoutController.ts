@@ -83,7 +83,7 @@ export const getUserWorkouts = async (req: Request, res: Response) => {
     }
 
     const userId = req.user.id;
-    let workouts = await findByOwner(userId);
+    let workouts = await findByOwner(userId,5);
 
     if (workouts) {
         if (req.user) {

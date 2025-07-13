@@ -58,9 +58,13 @@ const getExercises = async () => {
     }
 }
 
-const findByOwner = async (ownerId: string) => {
+const findByOwner = async (ownerId: string,numWorkouts:number) => {
     try {
-        const workoutsToGet = await db.select().from(workoutTable).where(eq(workoutTable.ownerId, BigInt(Number(ownerId))))
+        const workoutsToGet = await db.select()
+            .from(workoutTable)
+            .orderBy(desc(workoutTable.created_at))
+            .limit(numWorkouts)
+            .where(eq(workoutTable.ownerId, BigInt(Number(ownerId))))
         const workoutIds = workoutsToGet.map(workout => workout.id.toString());
 
         const workouts = workoutIds.map(async id => {
@@ -138,8 +142,8 @@ const findWorkoutById = async (id: string) => {
                 })
             });
         }
-        const likes = await db.select().from(likeTable).where(eq(likeTable.workout_id,workout.id))
-        
+        const likes = await db.select().from(likeTable).where(eq(likeTable.workout_id, workout.id))
+
         const finalWorkout: Workout = {
             id: workout.id.toString(),
             title: workout.title,
@@ -147,7 +151,7 @@ const findWorkoutById = async (id: string) => {
             createdAt: workout.created_at instanceof Date ? workout.created_at.toISOString() : undefined,
             exercises: Array.from(exercisesMap.values()),
             duration: workout.duration,
-            likes:likes.map((like)=>String(like.user_id))
+            likes: likes.map((like) => String(like.user_id))
         };
         return finalWorkout;
     } catch (err) {
