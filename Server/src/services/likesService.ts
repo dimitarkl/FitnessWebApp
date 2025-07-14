@@ -11,7 +11,7 @@ export const likeWorkout = async (userId: string, workoutId: string) => {
         }).returning({ id: likeTable.id })
         return true
     } catch (err) {
-        console.log(errString, 'Error liking workout:', (err as Error).message);
+        console.log(errString, 'Error liking workout:', err);
         return false;
     }
 }
@@ -25,7 +25,7 @@ export const unlikeWorkout = async (userId: string, workoutId: string) => {
 
         return true;
     } catch (err) {
-        console.log(errString, 'Error unliking workout:', (err as Error).message);
+        console.log(errString, 'Error unliking workout:', err);
         return false;
     }
 };

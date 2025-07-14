@@ -1,5 +1,5 @@
 {
-  "id": "4d3f6976-7ff4-4710-9a28-650b56ae04c5",
+  "id": "6c682f7e-2345-4e6b-8851-635b6a322857",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -33,7 +33,7 @@
         },
         "weight": {
           "name": "weight",
-          "type": "integer",
+          "type": "numeric",
           "primaryKey": false,
           "notNull": true
         },
@@ -102,6 +102,82 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
+    "public.likes": {
+      "name": "likes",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "bigint",
+          "primaryKey": true,
+          "notNull": true,
+          "identity": {
+            "type": "always",
+            "name": "likes_id_seq",
+            "schema": "public",
+            "increment": "1",
+            "startWith": "1",
+            "minValue": "1",
+            "maxValue": "9223372036854775807",
+            "cache": "1",
+            "cycle": false
+          }
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "workout_id": {
+          "name": "workout_id",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "likes_user_id_users_id_fk": {
+          "name": "likes_user_id_users_id_fk",
+          "tableFrom": "likes",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "likes_workout_id_workout_id_fk": {
+          "name": "likes_workout_id_workout_id_fk",
+          "tableFrom": "likes",
+          "tableTo": "workout",
+          "columnsFrom": [
+            "workout_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
     "public.users": {
       "name": "users",
       "schema": "",
@@ -135,35 +211,29 @@
           "primaryKey": false,
           "notNull": true
         },
-        "preferredWeightUnit": {
-          "name": "preferredWeightUnit",
+        "preferred_weight_unit": {
+          "name": "preferred_weight_unit",
           "type": "varchar",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true,
+          "default": "'kg'"
         },
         "username": {
           "name": "username",
           "type": "varchar",
           "primaryKey": false,
           "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
         }
       },
       "indexes": {},
-      "foreignKeys": {
-        "users_preferredWeightUnit_weight_units_unit_fk": {
-          "name": "users_preferredWeightUnit_weight_units_unit_fk",
-          "tableFrom": "users",
-          "tableTo": "weight_units",
-          "columnsFrom": [
-            "preferredWeightUnit"
-          ],
-          "columnsTo": [
-            "unit"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
+      "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "users_email_unique": {
@@ -171,50 +241,6 @@
           "nullsNotDistinct": false,
           "columns": [
             "email"
-          ]
-        }
-      },
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.weight_units": {
-      "name": "weight_units",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "bigint",
-          "primaryKey": true,
-          "notNull": true,
-          "identity": {
-            "type": "always",
-            "name": "weight_units_id_seq",
-            "schema": "public",
-            "increment": "1",
-            "startWith": "1",
-            "minValue": "1",
-            "maxValue": "9223372036854775807",
-            "cache": "1",
-            "cycle": false
-          }
-        },
-        "unit": {
-          "name": "unit",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "weight_units_unit_unique": {
-          "name": "weight_units_unit_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "unit"
           ]
         }
       },
@@ -243,14 +269,14 @@
             "cycle": false
           }
         },
-        "workoutId": {
-          "name": "workoutId",
+        "workout_id": {
+          "name": "workout_id",
           "type": "bigint",
           "primaryKey": false,
           "notNull": true
         },
-        "exerciseId": {
-          "name": "exerciseId",
+        "exercise_id": {
+          "name": "exercise_id",
           "type": "bigint",
           "primaryKey": false,
           "notNull": true
@@ -258,12 +284,12 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "workout_exercise_workoutId_workout_id_fk": {
-          "name": "workout_exercise_workoutId_workout_id_fk",
+        "workout_exercise_workout_id_workout_id_fk": {
+          "name": "workout_exercise_workout_id_workout_id_fk",
           "tableFrom": "workout_exercise",
           "tableTo": "workout",
           "columnsFrom": [
-            "workoutId"
+            "workout_id"
           ],
           "columnsTo": [
             "id"
@@ -271,12 +297,12 @@
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
-        "workout_exercise_exerciseId_exercise_id_fk": {
-          "name": "workout_exercise_exerciseId_exercise_id_fk",
+        "workout_exercise_exercise_id_exercise_id_fk": {
+          "name": "workout_exercise_exercise_id_exercise_id_fk",
           "tableFrom": "workout_exercise",
           "tableTo": "exercise",
           "columnsFrom": [
-            "exerciseId"
+            "exercise_id"
           ],
           "columnsTo": [
             "id"
@@ -312,8 +338,8 @@
             "cycle": false
           }
         },
-        "ownerId": {
-          "name": "ownerId",
+        "owner_id": {
+          "name": "owner_id",
           "type": "bigint",
           "primaryKey": false,
           "notNull": false
@@ -330,16 +356,23 @@
           "primaryKey": false,
           "notNull": false,
           "default": "now()"
+        },
+        "duration": {
+          "name": "duration",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
         }
       },
       "indexes": {},
       "foreignKeys": {
-        "workout_ownerId_users_id_fk": {
-          "name": "workout_ownerId_users_id_fk",
+        "workout_owner_id_users_id_fk": {
+          "name": "workout_owner_id_users_id_fk",
           "tableFrom": "workout",
           "tableTo": "users",
           "columnsFrom": [
-            "ownerId"
+            "owner_id"
           ],
           "columnsTo": [
             "id"

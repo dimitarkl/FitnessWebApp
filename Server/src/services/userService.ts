@@ -1,5 +1,5 @@
 import { eq } from 'drizzle-orm/sql/expressions/conditions';
-import { User } from '../../../shared/types/user';
+import { User } from '@shared/types/user';
 import db from '../db';
 import { usersTable } from '../db/schema';
 
@@ -7,7 +7,7 @@ export const updateUser = async (userId: string, username: string, weightUnit: s
     try {
         return await db.update(usersTable).set({
             username: username || null,
-            preferredWeightUnit: weightUnit || 'kg',
+            preferred_weight_unit: weightUnit || 'kg',
         }).where(eq(usersTable.id, BigInt(userId)))
             .returning({
                 id: usersTable.id
@@ -25,6 +25,6 @@ export const getUser = async (userId: string): Promise<User> => {
         id: String(user.id),
         username: user.username,
         email: user.email,
-        preferredWeightUnit: user.preferredWeightUnit
+        preferredWeightUnit: user.preferred_weight_unit
     }
 }

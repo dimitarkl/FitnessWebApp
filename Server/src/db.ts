@@ -1,10 +1,11 @@
-import 'dotenv/config';
-import { pgTable, serial, text, varchar } from "drizzle-orm/pg-core";
-import { drizzle } from "drizzle-orm/node-postgres";
-import { Pool } from "pg";
+import { drizzle } from 'drizzle-orm/node-postgres';
+import pg from 'pg';
 
-const pool = new Pool({
-    connectionString: process.env.DATABASE_URL!,
+const pool = new pg.Pool({
+  connectionString: process.env.DATABASE_URL!,
+  // ssl: {
+  //   rejectUnauthorized: false,
+  // },
 });
-const db = drizzle({ client: pool });
-export default db;
+const db = drizzle(pool);
+export default db

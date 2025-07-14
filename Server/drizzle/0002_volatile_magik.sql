@@ -1,1 +1,0 @@
-ALTER TABLE "exercise_set" ALTER COLUMN "weight" SET DATA TYPE numeric;

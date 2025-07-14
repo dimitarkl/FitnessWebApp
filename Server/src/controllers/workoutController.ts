@@ -1,6 +1,6 @@
 import { Request, Response } from "express"
 import { convertWorkoutToPounds, createWorkout, deleteWorkoutById, editWorkout, findByOwner, findWorkoutById, getExercises, getWorkouts } from "../services/workoutService"
-import { ExerciseType, Workout } from "../../../shared/types/workout"
+import { ExerciseType, Workout } from "@shared/types/Workout"
 import { create } from "domain"
 import { sanitazeInputs } from "../utils/util"
 import { error } from "console"
@@ -132,7 +132,7 @@ export const updateWorkout = async (req: Request, res: Response) => {
 
     const workoutId = req.params.id
     const user = req.user
-    let { workout } = req.body
+    // Extract and type workout input
     if (!user) {
         res.sendStatus(401)
         return;
@@ -141,12 +141,13 @@ export const updateWorkout = async (req: Request, res: Response) => {
     if (!workoutExistance) {
         res.status(404).json({ error: "Workout doesnt exist" })
         return
-    } else if (workout.ownerId !== String(user.id)) {
+    } else if (workoutExistance.ownerId !== String(user.id)) {
         res.sendStatus(401)
         return;
     }
-    workout = sanitazeInputs(req.body.workout, user.preferredWeightUnit)
-    const result = await editWorkout(workoutId, workout)
+    const workoutInput = req.body.workout as Workout;
+    const workoutData = sanitazeInputs(workoutInput, user.preferredWeightUnit)
+    const result = await editWorkout(workoutId, workoutData)
     if (result)
         res.status(200).json({ message: "Workout updated successfully" })
     else

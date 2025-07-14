@@ -1,4 +1,4 @@
-import { Workout } from "../../../shared/types/workout";
+import { Workout } from "@shared/types/Workout";
 import { convertWorkoutToKg } from "../services/workoutService";
 
 export const errString = '\x1b[31m[ERROR]:\x1b[0m';

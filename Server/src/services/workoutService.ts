@@ -1,16 +1,16 @@
 import db from "../db"
 import { exerciseSetTable, exerciseTable, likeTable, workoutExerciseTable, workoutTable } from "../db/schema"
-import { Exercise, Workout } from "../../../shared/types/workout"
+import { Exercise, Workout } from "@shared/types/Workout"
 import { desc, eq, inArray } from "drizzle-orm"
 import { getUser } from "./userService";
 import { errString, kgToPounds, poundsToKg } from "../utils/util";
-import { User } from "../../../shared/types/user";
+import { User } from "@shared/types/user";
 
 const createWorkout = async (workoutData: Workout, ownerId: string) => {
     try {
         const [newWorkout] = await db.insert(workoutTable).values({
             title: workoutData.title,
-            ownerId: BigInt(ownerId),
+            owner_id: BigInt(ownerId),
             duration: workoutData.duration
         }).returning({ id: workoutTable.id })
 
@@ -19,8 +19,8 @@ const createWorkout = async (workoutData: Workout, ownerId: string) => {
             if (!existingExercise) throw new Error("Exercise Not Found")
 
             const [workoutExerciseRelation] = await db.insert(workoutExerciseTable).values({
-                workoutId: newWorkout.id,
-                exerciseId: existingExercise.id,
+                workout_id: newWorkout.id,
+                exercise_id: existingExercise.id,
             }).returning({ id: workoutExerciseTable.id })
 
             if (exercise.sets && exercise.sets.length > 0) {
@@ -36,7 +36,7 @@ const createWorkout = async (workoutData: Workout, ownerId: string) => {
         return newWorkout.id.toString();
 
     } catch (err) {
-        console.log(errString, (err as Error).message)
+        console.log(errString, err)
         return null
     }
 }
@@ -53,7 +53,7 @@ const getExercises = async () => {
         return exercises;
 
     } catch (err) {
-        console.log(errString, (err as Error).message)
+        console.log(errString, err)
         return null
     }
 }
@@ -64,7 +64,7 @@ const findByOwner = async (ownerId: string,numWorkouts:number) => {
             .from(workoutTable)
             .orderBy(desc(workoutTable.created_at))
             .limit(numWorkouts)
-            .where(eq(workoutTable.ownerId, BigInt(Number(ownerId))))
+            .where(eq(workoutTable.owner_id, BigInt(Number(ownerId))))
         const workoutIds = workoutsToGet.map(workout => workout.id.toString());
 
         const workouts = workoutIds.map(async id => {
@@ -75,7 +75,7 @@ const findByOwner = async (ownerId: string,numWorkouts:number) => {
         return Promise.all(workouts)
 
     } catch (err) {
-        console.log(errString, (err as Error).message)
+        console.log(errString, err)
     }
 }
 
@@ -94,7 +94,7 @@ const getWorkouts = async (numWorkouts: number) => {
 
         return Promise.all(workouts)
     } catch (err) {
-        console.log(errString, (err as Error).message)
+        console.log(errString, err)
         return [];
     }
 }
@@ -110,8 +110,8 @@ const findWorkoutById = async (id: string) => {
             exerciseName: exerciseTable.name
         })
             .from(workoutExerciseTable)
-            .innerJoin(exerciseTable, eq(workoutExerciseTable.exerciseId, exerciseTable.id))
-            .where(eq(workoutExerciseTable.workoutId, workout.id));
+            .innerJoin(exerciseTable, eq(workoutExerciseTable.exercise_id, exerciseTable.id))
+            .where(eq(workoutExerciseTable.workout_id, workout.id));
 
         const workoutExerciseIds = exercises.map(e => e.workoutExerciseId);
         let setsResult: { id: bigint; reps: number; weight: string; w_e_id: bigint | null }[] = [];
@@ -147,7 +147,7 @@ const findWorkoutById = async (id: string) => {
         const finalWorkout: Workout = {
             id: workout.id.toString(),
             title: workout.title,
-            ownerId: workout.ownerId ? workout.ownerId.toString() : 'Unknown Owner',
+            ownerId: workout.owner_id ? workout.owner_id.toString() : 'Unknown Owner',
             createdAt: workout.created_at instanceof Date ? workout.created_at.toISOString() : undefined,
             exercises: Array.from(exercisesMap.values()),
             duration: workout.duration,
@@ -155,7 +155,7 @@ const findWorkoutById = async (id: string) => {
         };
         return finalWorkout;
     } catch (err) {
-        console.log(errString, (err as Error).message)
+        console.log(errString, err)
     }
 }
 
@@ -163,7 +163,7 @@ const deleteWorkoutById = async (id: string) => {
     try {
         const workoutExercises = await db.select({ id: workoutExerciseTable.id })
             .from(workoutExerciseTable)
-            .where(eq(workoutExerciseTable.workoutId, BigInt(id)))
+            .where(eq(workoutExerciseTable.workout_id, BigInt(id)))
 
         const workoutExerciseIds = workoutExercises.map(we => we.id)
 
@@ -191,7 +191,7 @@ const deleteWorkoutById = async (id: string) => {
         return true;
     }
     catch (err) {
-        console.log(errString, (err as Error).message)
+        console.log(errString, err)
         return null
     }
 }
@@ -207,7 +207,7 @@ const editWorkout = async (id: string, newWorkout: Workout) => {
 
         const workoutExercises = await db.select({ id: workoutExerciseTable.id })
             .from(workoutExerciseTable)
-            .where(eq(workoutExerciseTable.workoutId, BigInt(id)))
+            .where(eq(workoutExerciseTable.workout_id, BigInt(id)))
         const workoutExerciseIds = workoutExercises.map(we => we.id)
 
         if (workoutExerciseIds.length > 0) {
@@ -227,8 +227,8 @@ const editWorkout = async (id: string, newWorkout: Workout) => {
             if (!existingExercise) throw new Error("Exercise Not Found")
 
             const [workoutExerciseRelation] = await db.insert(workoutExerciseTable).values({
-                workoutId: BigInt(id),
-                exerciseId: existingExercise.id,
+                workout_id: BigInt(id),
+                exercise_id: existingExercise.id,
             }).returning({ id: workoutExerciseTable.id })
 
             if (exercise.sets && exercise.sets.length > 0) {
@@ -242,7 +242,7 @@ const editWorkout = async (id: string, newWorkout: Workout) => {
         }
         return true;
     } catch (err) {
-        console.log(errString, (err as Error).message)
+        console.log(errString, err)
     }
 
 }

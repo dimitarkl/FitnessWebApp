@@ -11,14 +11,14 @@ export const usersTable = pgTable("users", {
     id: bigint({ mode: 'bigint' }).primaryKey().generatedAlwaysAsIdentity(),
     email: varchar().unique().notNull(),
     password: varchar().notNull(),
-    preferredWeightUnit: varchar().notNull().default('kg'),
+    preferred_weight_unit: varchar().notNull().default('kg'),
     username: varchar(),
     created_at: timestamp({ withTimezone: true }).defaultNow()
 })
 
 export const workoutTable = pgTable("workout", {
     id: bigint({ mode: 'bigint' }).primaryKey().generatedAlwaysAsIdentity(),
-    ownerId: bigint({ mode: 'bigint' }).references(() => usersTable.id),
+    owner_id: bigint({ mode: 'bigint' }).references(() => usersTable.id),
     title: varchar().notNull(),
     created_at: timestamp({ withTimezone: true }).defaultNow(),
     duration: integer().notNull().default(0),
@@ -37,10 +37,10 @@ export const exerciseSetTable = pgTable('exercise_set', {
 })
 export const workoutExerciseTable = pgTable('workout_exercise', {
     id: bigint({ mode: 'bigint' }).primaryKey().generatedAlwaysAsIdentity(),
-    workoutId: bigint({ mode: 'bigint' })
+    workout_id: bigint({ mode: 'bigint' })
         .notNull()
         .references(() => workoutTable.id, { onDelete: 'cascade' }),
-    exerciseId: bigint({ mode: 'bigint' })
+    exercise_id: bigint({ mode: 'bigint' })
         .notNull()
         .references(() => exerciseTable.id, { onDelete: 'cascade' })
 });

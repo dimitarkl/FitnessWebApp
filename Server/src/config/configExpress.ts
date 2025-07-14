@@ -8,7 +8,10 @@ import { authMiddleware } from "../middlewares/authMiddleware";
 const configExpress = (app: Express) => {
     app.use(express.json());
     app.use(cors({
-        origin: 'http://localhost:4200',
+        origin: [
+            'http://localhost:4200',
+            'https://workoutrec.dimitarkl.me'
+        ],
         credentials: true,
     }));
     app.use(CookieParser());

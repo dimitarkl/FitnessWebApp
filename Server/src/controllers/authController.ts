@@ -39,7 +39,7 @@ export const logout = (req: Request, res: Response) => {
         res.clearCookie('fitness-auth');
         res.status(200).json({ message: "Logout successful" });
     } catch (err) {
-        console.log("Error logging out: ", (err as Error).message)
+        console.log("Error logging out: ", err)
         res.sendStatus(400)
     }
 }

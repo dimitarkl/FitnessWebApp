@@ -1,0 +1,6 @@
+ {
+     "scripts": {
+       "postinstall": "npm install --prefix Server && npm run build --prefix Server",
+       "start": "node Server/dist/Server/src/app.js"
+     }
+   }

@@ -26,7 +26,7 @@ export const register = async (userData: {
         console.log("Register Succesful")
         return token
     } catch (err) {
-        console.log(errString, (err as Error).message)
+        console.log(errString, err)
         return null
     }
 };
@@ -47,7 +47,7 @@ export const login = async (userData: {
         console.log('Login Succesful')
         return token;
     } catch (err) {
-        console.log(errString, (err as Error).message)
+        console.log(errString, err)
         return null
     }
 }
