@@ -1,12 +1,14 @@
-// filepath: c:\Users\nekav\Documents\GitHub\FitnessWebApp\Server\src\seed.ts
+import dotenv from "dotenv";
+dotenv.config();
+
 import db from './db';
 import { exerciseTable } from './db/schema';
 import { standardExercises } from './seed-data/exercises';
 import { eq } from 'drizzle-orm';
 
+
 async function seedDatabase() {
     console.log('Seeding database...');
-
     for (const exercise of standardExercises) {
         try {
             // Check if exercise already exists by name

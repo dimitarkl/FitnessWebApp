@@ -2,6 +2,7 @@ import { Injectable, OnDestroy } from "@angular/core";
 import { BehaviorSubject, filter, map, Observable, tap, } from "rxjs";
 import { ErrorService } from "../error/error.service";
 import { HttpClient } from "@angular/common/http";
+import { environment } from '../../environments/environment';
 import { User } from "../../../../shared/types/user";
 import { NavigationEnd, Router } from "@angular/router";
 
@@ -19,8 +20,8 @@ export class UserService implements OnDestroy {
     private isAuthenticated = new BehaviorSubject<boolean | null>(null);
     isAuthenticated$ = this.isAuthenticated.asObservable();
 
-    private apiUrl = 'http://localhost:5000';
-    private authUrl = `${this.apiUrl}/auth`;
+    private apiUrl = environment.apiUrl;
+    private authUrl = `${environment.apiUrl}/auth`;
 
     constructor(
         private errorService: ErrorService,
@@ -40,7 +41,7 @@ export class UserService implements OnDestroy {
     }
     checkUser = async () => {
         this.http.get(
-            `${this.apiUrl}/api/users/me`,
+            `${this.apiUrl}/users/me`,
             { withCredentials: true }
         ).subscribe({
             next: (data: any) => {
@@ -107,7 +108,7 @@ export class UserService implements OnDestroy {
     }
 
     updateUser = (username: string, weightUnit: string) => {
-        return this.http.put(`${this.apiUrl}/api/users/update`, {
+        return this.http.put(`${this.apiUrl}/users/update`, {
             username,
             weightUnit
         }, { withCredentials: true }).pipe(
@@ -124,7 +125,7 @@ export class UserService implements OnDestroy {
     };
 
     getUser = (id: string) => {
-        return this.http.get<User>(`${this.apiUrl}/api/users/${id}`, { withCredentials: true })
+        return this.http.get<User>(`${this.apiUrl}/users/${id}`, { withCredentials: true })
             .pipe(
                 map(user => user.username)
             );

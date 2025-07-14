@@ -6,6 +6,7 @@ import { ErrorService } from '../error/error.service';
 import { catchError, firstValueFrom, map, of } from 'rxjs';
 import { User } from '../../../../shared/types/user';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 
 @Injectable({
     providedIn: 'root',
@@ -16,7 +17,7 @@ export class WorkoutService {
         private errorService: ErrorService,
         private http: HttpClient,
     ) { }
-    private apiUrl = 'http://localhost:5000';
+    private apiUrl = environment.apiUrl;
     sendWorkout = async (workout: Workout) => {
         const filteredWorkout = {
             ...workout,
@@ -30,11 +31,10 @@ export class WorkoutService {
         let user: User | null = await firstValueFrom(this.userService.user$)
         if (!user) {
             this.errorService.setError('User not found or invalid');
-            console.log(user)
             return;
         }
         try {
-            await firstValueFrom(this.http.post(`${this.apiUrl}` + '/api/create-workout', {
+            await firstValueFrom(this.http.post(`${this.apiUrl}` + '/create-workout', {
                 workout: workout
             }, { withCredentials: true }))
             return true
@@ -47,19 +47,19 @@ export class WorkoutService {
 
     };
     getLastWorkouts = () => {
-        return this.http.get(`${this.apiUrl}/api/workouts`,
+        return this.http.get(`${this.apiUrl}/workouts`,
             { withCredentials: true })
     };
 
     getUserWorkouts = () => {
-        return this.http.get(`${this.apiUrl}/api/user/workouts`, { withCredentials: true })
+        return this.http.get(`${this.apiUrl}/user/workouts`, { withCredentials: true })
     };
 
     deteleteWorkout = async (workoutId: string) => {
-        this.http.delete(`${this.apiUrl}/api/workouts/${workoutId}`
+        this.http.delete(`${this.apiUrl}/workouts/${workoutId}`
             , { withCredentials: true }).subscribe({
                 error: (err) => {
-                    console.log('Erorr while deleting workout', (err as Error).message)
+                    console.log('Erorr while deleting workout', err)
                     this.errorService.setError('Erorr while deleting workout')
                 }
             })
@@ -69,12 +69,11 @@ export class WorkoutService {
         let user: User | null = await firstValueFrom(this.userService.user$)
         if (!user) {
             this.errorService.setError('User not found or invalid');
-            console.log(user)
             return;
         }
         try {
             await firstValueFrom(
-                this.http.post(`${this.apiUrl}/api/workouts/${workoutId}/like`, {}, { withCredentials: true })
+                this.http.post(`${this.apiUrl}/workouts/${workoutId}/like`, {}, { withCredentials: true })
             );
             return true;
         } catch (err) {
@@ -82,7 +81,7 @@ export class WorkoutService {
         }
     };
     getWorkoutById = (id: string) => {
-        return this.http.get(`${this.apiUrl}/api/workouts/${id}`,
+        return this.http.get(`${this.apiUrl}/workouts/${id}`,
             { withCredentials: true })
 
     };
@@ -99,12 +98,11 @@ export class WorkoutService {
         let user: User | null = await firstValueFrom(this.userService.user$)
         if (!user) {
             this.errorService.setError('User not found or invalid');
-            console.log(user)
             return;
         }
         try {
             await firstValueFrom(
-                this.http.put(`${this.apiUrl}/api/workouts/${workout.id}`, {
+                this.http.put(`${this.apiUrl}/workouts/${workout.id}`, {
                     workout: workout,
                 }, { withCredentials: true })
             );

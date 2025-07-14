@@ -6,6 +6,7 @@ export const registerRoute = async (req: Request, res: Response) => {
     const { email, password } = req.body;
     if (!email || !password) {
         res.sendStatus(400)
+        return;
     }
     const token = await register({ email, password })
 
@@ -21,6 +22,7 @@ export const loginRoute = async (req: Request, res: Response) => {
     console.log("POST: Login")
     if (!email || !password) {
         res.sendStatus(400)
+        return;
     }
 
     const token = await login({ email, password })
