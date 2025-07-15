@@ -1,47 +1,188 @@
-# Fitness App
+# Fitness Web Application
 
-[Visit FitnessWebApp](https://fitnesswebapp-40085.web.app/catalog)
+[🌐 Visit Live Application](https://workoutrec.dimitarkl.me/)
 
-A web application designed to help you log, plan, and track your workouts. With this app, you can create custom exercise routines, record sets and reps, and manage your fitness progress all in one place.
+A full-stack web application for creating, managing, and sharing workout routines. Built with Angular frontend and Node.js/Express backend.
 
 ## Features
 
--   **User Profiles:**  
-    Sign up, log in, and manage your personal profile. View your own workouts, track your progress, and edit personal information.
+### User Management
+- **Authentication**: Secure user registration and login system
+- **User Profiles**: Personal profiles with customizable usernames and weight unit preferences
+- **Session Management**: JWT-based authentication with secure cookie handling
 
--   **Workout Creation & Management:**  
-    Create new workouts and add exercises (e.g., bench press, pull-ups, push-ups).  
-    Assign sets, reps, and any relevant details.  
-    Easily update or delete existing workouts.
+### Workout Management
+- **Create Workouts**: Design custom workout routines with multiple exercises
+- **Exercise Tracking**: Add sets, reps, and weights for each exercise
+- **Duration Tracking**: Set and track workout duration
+- **Edit & Delete**: Full CRUD operations for your workouts
 
--   **Progress Tracking:**  
-    Keep track of how many sets and reps you complete and update as you get stronger.  
-    Optionally "like" or interact with community workouts (if expanded to a social experience).
+### Social Features
+- **Workout Feed**: Browse workouts from other users
+- **Like System**: Like and interact with community workouts
+- **User Profiles**: View other users' workout collections
 
--   **Responsive UI:**  
-    Built with **Tailwind CSS** for a clean, modern, and responsive interface.  
-    Works seamlessly across desktop and mobile devices.
+### Responsive Design
+- **Mobile-First**: Optimized for all device sizes
+- **Modern UI**: Clean, dark-themed interface with green accent colors
+- **Tailwind CSS**: Utility-first styling for consistent design
 
-## Technologies Used
+## Technology Stack
 
--   **Frontend:** [Angular](https://angular.io/) for building a dynamic, component-driven UI.
--   **Backend & Database:** [Firebase](https://firebase.google.com/) for hosting, authentication, and real-time database functionality.
--   **Styling:** [Tailwind CSS](https://tailwindcss.com/) for a utility-first, responsive design approach.
+### Frontend
+- **Angular 18.2**: Modern TypeScript framework
+- **Tailwind CSS**: Utility-first CSS framework
+- **RxJS**: Reactive programming for state management
+- **Angular Router**: Client-side routing
 
-## Usage
+### Backend
+- **Node.js**: JavaScript runtime
+- **Express.js**: Web application framework
+- **TypeScript**: Type-safe development
+- **Drizzle ORM**: Type-safe database queries
+- **JWT**: JSON Web Tokens for authentication
 
-### Register or Log In:
+### Database
+- **PostgreSQL**: Relational database for data storage
+- **Drizzle**: Database migrations and schema management
 
-Use your email and password (or other configured providers) to create an account or log in.
+## Project Structure
 
-### Create a Workout:
+```
+FitnessWebApp/
+├── Client/                 # Angular frontend application
+│   ├── src/
+│   │   ├── app/
+│   │   │   ├── home/       # Home page and workout components
+│   │   │   ├── user/       # Authentication components
+│   │   │   ├── account/    # User profile management
+│   │   │   └── shared/     # Shared components and services
+│   │   └── styles.css      # Global styles and CSS variables
+├── Server/                 # Node.js backend API
+│   ├── src/
+│   │   ├── controllers/    # Route handlers
+│   │   ├── services/       # Business logic
+│   │   ├── middlewares/    # Custom middleware
+│   │   └── db/            # Database configuration
+└── shared/                 # Shared TypeScript types
+    └── types/             # Common interfaces and types
+```
 
-From the main dashboard or a dedicated "New Workout" section, add exercises, sets, and reps.
+## API Endpoints
 
-### Edit or Delete Workouts:
+### Authentication
+- `POST /auth/register` - User registration
+- `POST /auth/login` - User login
+- `GET /auth/logout` - User logout
 
-Navigate to your profile or workout list and manage your workouts as needed.
+### Users
+- `GET /users/me` - Get current user profile
+- `PUT /users/update` - Update user profile
+- `GET /users/:id` - Get user by ID
+- `GET /user/workouts` - Get current user's workouts
 
-### View Workouts:
+### Workouts
+- `GET /workouts` - Get recent workouts
+- `GET /workouts/:id` - Get specific workout
+- `POST /create-workout` - Create new workout
+- `PUT /workouts/:id` - Update workout
+- `DELETE /workouts/:id` - Delete workout
+- `POST /workouts/:id/like` - Like/unlike workout
 
-Browse through existing workouts you’ve created. (If expanded to a social feature, you could view community workouts as well.)
+### Exercises
+- `GET /exercises` - Get available exercises
+
+## Key Components
+
+### Frontend Components
+- **PostComponent**: Display workout cards with like/edit/delete functionality
+- **CreateWorkoutComponent**: Form for creating and editing workouts
+- **WorkoutDetailsComponent**: Full workout view with all exercises
+- **SetInputComponent**: Input fields for exercise sets (reps/weight)
+- **NavigationComponent**: Main navigation with authentication state
+
+### Backend Services
+- **AuthService**: Handle user authentication and JWT tokens
+- **WorkoutService**: Manage workout CRUD operations
+- **UserService**: User profile management
+
+## Styling
+
+The application uses a dark theme with:
+- **Primary Colors**: Dark blues and grays (`#111827`, `#1f2937`)
+- **Accent Color**: Bright green (`#22c55e`) for buttons and highlights
+- **Text**: Light gray (`#f5f5f5`) for readability
+- **Custom CSS Variables**: Defined in styles.css for consistent theming
+
+## Getting Started
+
+### Prerequisites
+- Node.js (v18 or higher)
+- PostgreSQL database
+- Angular CLI
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/dimitarkl/FitnessWebApp.git
+   cd FitnessWebApp
+   ```
+
+2. **Install dependencies**
+   ```bash
+   # Install server dependencies
+   cd Server
+   npm install
+   
+   # Install client dependencies
+   cd ../Client
+   npm install
+   ```
+
+3. **Set up environment variables**
+   Create a `.env` file in the Server directory with:
+   ```env
+   DATABASE_URL=your_postgresql_connection_string
+   JWT_SECRET=your_jwt_secret_key
+   ```
+
+4. **Run database migrations**
+   ```bash
+   cd Server
+   npx drizzle-kit migrate
+   ```
+
+5. **Start the applications**
+   ```bash
+   # Start the server (from Server directory)
+   npm run dev
+   
+   # Start the client (from Client directory)
+   npm start
+   ```
+
+6. **Access the application**
+   - **Live Application**: https://workoutrec.dimitarkl.me/
+   - **Local Development**:
+     - Frontend: http://localhost:4200
+     - Backend API: http://localhost:5000
+
+## Development
+
+- **Frontend**: Angular development server with hot reload
+- **Backend**: Express server with TypeScript compilation
+- **Database**: Drizzle ORM for type-safe database operations
+- **Authentication**: JWT tokens stored in secure HTTP-only cookies
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test thoroughly
+5. Submit a pull request
+
+## License
+
+This project is for educational and personal use.
