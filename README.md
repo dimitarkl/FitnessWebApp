@@ -175,14 +175,6 @@ The application uses a dark theme with:
 - **Database**: Drizzle ORM for type-safe database operations
 - **Authentication**: JWT tokens stored in secure HTTP-only cookies
 
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
-
 ## License
 
 This project is for educational and personal use.
