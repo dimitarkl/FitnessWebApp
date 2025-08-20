@@ -34,7 +34,6 @@ export class WorkoutDetailsComponent implements OnInit {
     showDeleteConfirm: boolean = false;
     isDeleting: boolean = false;
     ngOnInit(): void {
-        const id = this.route.snapshot.params['detailsId'];
         this.getWorkout();
         this.getPrefUnit();
         this.getCurrentUser();

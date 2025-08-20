@@ -21,7 +21,7 @@ export class RegisterComponent {
 		if (form.invalid) {
 			console.error('Invalid Register Form!');
 		}
-		
+		//this.userService.isAuthenticated$.subscribe((isAuthenticated) => { console.log('isAuthenticated:', isAuthenticated) })
 
 		const { email, password, rePassword } = form.value;
 		if (rePassword != password)
